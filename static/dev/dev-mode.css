@@ -1,0 +1,139 @@
+/* Developer mode: see dev-mode.js.
+   The first part is what an edited viewer needs with developer mode off; the rest is the editing chrome, shown only
+   while <body> has .pv-dev. Same rules as gv-viewer.css: tokens only, space on the --space-N ladder. */
+
+/* ------------------------------------------------------------ the edited viewer -- */
+.gvv-tool[hidden], .gvv-chips[hidden], .pv-note[hidden] { display: none; }
+
+/* a moved or resized box: dev-mode.js sets --pv-x/y/w/h in % of the box's offset parent.
+   Not on a phone, where the text box sits under the scene (gv-viewer.css). */
+@media (min-width: 768px) {
+  .gvv .pv-placed {
+    position: absolute; left: var(--pv-x); top: var(--pv-y); right: auto; bottom: auto;
+    box-sizing: border-box;
+    width: var(--pv-w); max-width: none; height: var(--pv-h, auto);
+    overflow: hidden;
+  }
+}
+
+/* notes: under the canvas like every box; the lines to their residues above it */
+.pv-notes { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.pv-note {
+  position: absolute;
+  display: flex; flex-direction: column; gap: var(--space-1);
+  box-sizing: border-box;
+  width: max-content; max-width: 16rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-box);
+  background: color-mix(in srgb, var(--clr-body) 90%, transparent);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.pv-leaders { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
+.pv-leaders line { stroke: var(--gv-pine); stroke-width: 1.5; }
+.pv-leaders circle { fill: var(--gv-pine); }
+
+/* ------------------------------------------------------------- developer mode -- */
+.pv-panel, .pv-frames { display: none; }
+.pv-dev { padding-right: 20rem; }                    /* room for the panel */
+.pv-dev .pv-panel {
+  position: fixed; z-index: 10; top: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; gap: var(--space-3);
+  box-sizing: border-box; width: 20rem;
+  padding: var(--space-3);
+  overflow-y: auto;
+  background: var(--clr-body);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-family-primary);
+  font-size: calc(var(--fs-body) * .8);
+  line-height: var(--lh-snug);
+  color: var(--clr-text);
+}
+.pv-panel [hidden] { display: none; }
+.pv-panel h2, .pv-panel h3 { margin: 0; line-height: var(--lh-tight); }
+.pv-panel h2 { font-size: var(--fs-h5); font-weight: var(--fw-heading); color: var(--clr-title); }
+.pv-panel h3 {
+  align-self: flex-start;
+  padding-inline: var(--space-1);
+  background: linear-gradient(transparent 55%, var(--clr-light-cyan) 55%);
+  font-size: var(--fs-eyebrow); font-weight: var(--fw-bold);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--clr-pine-blue);
+}
+.pv-panel section { display: flex; flex-direction: column; gap: var(--space-2); }
+.pv-help { margin: 0; font-size: calc(var(--fs-body) * .72); color: var(--clr-muted); }
+.pv-help code { padding: 0 var(--space-1); border-radius: var(--radius); background: var(--clr-light-cyan); color: var(--clr-ink); }
+.pv-row { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.pv-check { display: flex; align-items: center; gap: var(--space-2); }
+.pv-panel textarea {
+  box-sizing: border-box; width: 100%;
+  padding: var(--space-2);
+  border: 1px solid var(--clr-frosted-blue); border-radius: var(--radius-box);
+  font: inherit; color: inherit;
+  resize: vertical;
+}
+.pv-panel button {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--clr-pine-blue); border-radius: var(--radius-box);
+  background: var(--clr-body);
+  font: inherit; font-weight: var(--fw-bold);
+  color: var(--clr-pine-blue);
+  cursor: pointer;
+}
+.pv-panel button:hover { background: var(--clr-light-cyan); }
+.pv-panel button[aria-pressed="true"] { background: var(--clr-pine-blue); color: var(--clr-on-dark); }
+.pv-panel .pv-swatch { width: calc(var(--fs-body) * 1.6); height: calc(var(--fs-body) * 1.6); padding: 0; border-radius: 50%; }
+.pv-panel .pv-swatch:hover { transform: scale(1.12); }
+
+/* a frame per box: the tab moves and picks it, the corner resizes it; the rest lets the pointer through to the scene */
+.pv-dev .pv-frames { position: absolute; inset: 0; z-index: 5; display: block; pointer-events: none; }
+.pv-frame { position: absolute; outline: 1px dashed var(--clr-pine-blue); border-radius: var(--radius-box); }
+.pv-frame[hidden] { display: none; }
+.pv-frame.is-picked { outline: 2px solid var(--clr-ring-core); }
+.pv-grip {
+  position: absolute; left: 0; bottom: 100%;
+  padding: 0 var(--space-2);
+  border: 0; border-radius: var(--radius-box) var(--radius-box) 0 0;
+  background: var(--clr-pine-blue);
+  font: var(--fw-bold) var(--fs-eyebrow) var(--font-family-primary);
+  color: var(--clr-on-dark);
+  white-space: nowrap;
+  cursor: move; pointer-events: auto; touch-action: none;
+}
+.pv-frame.is-picked .pv-grip { background: var(--clr-ring-core); }
+.pv-corner {
+  position: absolute; right: calc(var(--space-1) * -1); bottom: calc(var(--space-1) * -1);
+  width: var(--space-3); height: var(--space-3);
+  border-radius: 50%;
+  background: var(--clr-pine-blue);
+  cursor: nwse-resize; pointer-events: auto; touch-action: none;
+}
+
+/* the sequence view, under the viewer */
+.pv-seq { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-3); }
+.pv-seq[hidden] { display: none; }
+.pv-seq-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-2); }
+.pv-seq-name {
+  padding: 0 var(--space-1);
+  border: 0; border-bottom: 1px solid var(--clr-frosted-blue);
+  font: var(--fw-heading) var(--fs-h5) var(--font-family-primary);
+  color: var(--clr-title);
+}
+.pv-seq-res {
+  flex-basis: 100%;
+  font-family: ui-monospace, monospace; font-size: calc(var(--fs-body) * .8); line-height: 2.4;
+  overflow-wrap: anywhere;
+  cursor: text; user-select: none; touch-action: none;
+}
+.pv-seq-res span { position: relative; padding: var(--space-1) 1px; }
+.pv-seq-res span[data-n]::before {                     /* every tenth residue carries its number */
+  content: attr(data-n);
+  position: absolute; right: 0; bottom: 100%;
+  font-size: .7em; line-height: 1; white-space: nowrap;
+  color: var(--clr-muted);
+}
+.pv-seq-res .is-sel { box-shadow: inset 0 calc(var(--space-1) * -1) 0 var(--clr-ring-core); }
+.pv-seq-res .is-pre { background: var(--clr-title-shadow); color: var(--clr-ink); }
+
+/* a legend key outside the legend (in the text box, in a note) keeps the legend's size */
+.gvv-card .gvv-key, .pv-note .gvv-key { font-size: calc(var(--fs-body) * .72); line-height: var(--lh-snug); }

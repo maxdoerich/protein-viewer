@@ -1,0 +1,1770 @@
+data_7R1C
+_entry.id 7R1C
+
+_pdbx_database_status.entry_id 7R1C
+_pdbx_database_status.recvd_initial_deposition_date 2022-02-02
+
+loop_
+_audit_author.pdbx_ordinal
+_audit_author.name
+1 'Huber, S.T.'
+2 'Evers, W.'
+3 'Jakobi, A.J.'
+
+_cell.entry_id 7R1C
+_cell.length_a 1
+_cell.length_b 1
+_cell.length_c 1
+_cell.angle_alpha 90
+_cell.angle_beta 90
+_cell.angle_gamma 90
+
+_symmetry.entry_id 7R1C
+_symmetry.space_group_name_H-M ''
+
+loop_
+_entity.id
+_entity.type
+1 polymer
+
+loop_
+_entity_poly.entity_id
+_entity_poly.type
+_entity_poly.pdbx_strand_id
+_entity_poly.pdbx_seq_one_letter_code
+1 polypeptide(L) N MSIQKSTNSSSLAEVIDRILDKGIVIDAFARVSVVGIEILTIEARVVIASVDTWLRYAEAVGLLRDDVEENGLPERSNSSEGQPRFSI
+
+loop_
+_struct_ref.id
+_struct_ref.entity_id
+_struct_ref.db_name
+_struct_ref.db_code
+_struct_ref.pdbx_db_accession
+_struct_ref.pdbx_db_isoform
+1 1 UNP 'A0A0B6AAV2_BACMB' A0A0B6AAV2 ?
+
+loop_
+_struct_ref_seq.align_id
+_struct_ref_seq.ref_id
+_struct_ref_seq.pdbx_strand_id
+_struct_ref_seq.pdbx_PDB_id_code
+_struct_ref_seq.seq_align_beg
+_struct_ref_seq.seq_align_end
+_struct_ref_seq.pdbx_db_accession
+_struct_ref_seq.db_align_beg
+_struct_ref_seq.db_align_end
+_struct_ref_seq.pdbx_auth_seq_align_beg
+_struct_ref_seq.pdbx_seq_align_beg_ins_code
+_struct_ref_seq.pdbx_auth_seq_align_end
+_struct_ref_seq.pdbx_seq_align_end_ins_code
+1 1 N 7R1C 1 88 A0A0B6AAV2 1 88 1 ? 88 ?
+
+loop_
+_chem_comp.id
+_chem_comp.type
+ALA .
+ARG .
+ASN .
+ASP .
+GLN .
+GLU .
+GLY .
+ILE .
+LEU .
+LYS .
+MET .
+PHE .
+PRO .
+SER .
+THR .
+TRP .
+TYR .
+VAL .
+
+loop_
+_exptl.entry_id
+_exptl.method
+_exptl.crystals_number
+7R1C 'ELECTRON MICROSCOPY' ?
+
+loop_
+_reflns.entry_id
+_reflns.pdbx_ordinal
+_reflns.pdbx_diffrn_id
+_reflns.number_obs
+_reflns.d_resolution_high
+_reflns.d_resolution_low
+_reflns.percent_possible_obs
+_reflns.pdbx_redundancy
+_reflns.pdbx_Rmerge_I_obs
+_reflns.pdbx_Rsym_value
+_reflns.pdbx_netI_over_sigmaI
+7R1C 1 . ? ? ? ? ? ? ? ?
+
+_struct.entry_id 7R1C
+_struct.title 'Cryo-EM structure of Bacillus megaterium gas vesicles'
+
+_struct_keywords.entry_id 7R1C
+_struct_keywords.pdbx_keywords 'STRUCTURAL PROTEIN'
+_struct_keywords.text 'gas vesicle, buoyancy, helical, microbial motility, STRUCTURAL PROTEIN'
+
+loop_
+_struct_asym.id
+_struct_asym.entity_id
+A 1
+
+loop_
+_struct_conf.conf_type_id
+_struct_conf.id
+_struct_conf.beg_auth_asym_id
+_struct_conf.beg_label_asym_id
+_struct_conf.beg_label_comp_id
+_struct_conf.beg_label_seq_id
+_struct_conf.beg_auth_seq_id
+_struct_conf.pdbx_beg_PDB_ins_code
+_struct_conf.end_auth_asym_id
+_struct_conf.end_label_asym_id
+_struct_conf.end_label_comp_id
+_struct_conf.end_label_seq_id
+_struct_conf.end_auth_seq_id
+_struct_conf.pdbx_end_PDB_ins_code
+_struct_conf.pdbx_PDB_helix_class
+_struct_conf.pdbx_PDB_helix_length
+HELX_P HELX_P1 N A SER 11 11 ? N A ASP 21 21 ? 1 11
+HELX_P HELX_P2 N A SER 50 50 ? N A GLY 62 62 ? 1 13
+
+_struct_conf_type.id HELX_P
+
+loop_
+_struct_sheet.id
+_struct_sheet.number_strands
+AA1 2
+
+loop_
+_struct_sheet_order.sheet_id
+_struct_sheet_order.range_id_1
+_struct_sheet_order.range_id_2
+_struct_sheet_order.sense
+AA1 1 2 anti-parallel
+
+loop_
+_struct_sheet_range.sheet_id
+_struct_sheet_range.id
+_struct_sheet_range.beg_auth_asym_id
+_struct_sheet_range.beg_label_asym_id
+_struct_sheet_range.beg_label_comp_id
+_struct_sheet_range.beg_label_seq_id
+_struct_sheet_range.beg_auth_seq_id
+_struct_sheet_range.pdbx_beg_PDB_ins_code
+_struct_sheet_range.end_auth_asym_id
+_struct_sheet_range.end_label_asym_id
+_struct_sheet_range.end_label_comp_id
+_struct_sheet_range.end_label_seq_id
+_struct_sheet_range.end_auth_seq_id
+_struct_sheet_range.pdbx_end_PDB_ins_code
+AA1 1 N A ILE 24 24 ? N A VAL 34 34 ?
+AA1 2 N A ILE 37 37 ? N A ILE 48 48 ?
+
+loop_
+_pdbx_struct_sheet_hbond.sheet_id
+_pdbx_struct_sheet_hbond.range_id_1
+_pdbx_struct_sheet_hbond.range_id_2
+_pdbx_struct_sheet_hbond.range_1_auth_asym_id
+_pdbx_struct_sheet_hbond.range_1_label_asym_id
+_pdbx_struct_sheet_hbond.range_1_label_comp_id
+_pdbx_struct_sheet_hbond.range_1_label_seq_id
+_pdbx_struct_sheet_hbond.range_1_auth_seq_id
+_pdbx_struct_sheet_hbond.range_1_PDB_ins_code
+_pdbx_struct_sheet_hbond.range_1_label_atom_id
+_pdbx_struct_sheet_hbond.range_2_auth_asym_id
+_pdbx_struct_sheet_hbond.range_2_label_asym_id
+_pdbx_struct_sheet_hbond.range_2_label_comp_id
+_pdbx_struct_sheet_hbond.range_2_label_seq_id
+_pdbx_struct_sheet_hbond.range_2_auth_seq_id
+_pdbx_struct_sheet_hbond.range_2_PDB_ins_code
+_pdbx_struct_sheet_hbond.range_2_label_atom_id
+AA1 1 2 N A VAL 34 34 ? N N A ILE 37 37 ? O
+
+loop_
+_pdbx_struct_assembly.id
+_pdbx_struct_assembly.details
+_pdbx_struct_assembly.method_details
+_pdbx_struct_assembly.oligomeric_details
+_pdbx_struct_assembly.oligomeric_count
+1 author_defined_assembly ? 'example of gas vesicle rib formed by lateral connections of gvpb/a2 monomers' 5
+2 author_defined_assembly ? 'single helical turn of a gas vesicle formed by lateral connections and rib-to-rib connections of gvpb/a2 monomers' 100
+3 author_defined_assembly ? 'cylinder made from 930 monomers of gvpb/a2 formed by helical repetition' 930
+
+
+loop_
+_pdbx_struct_assembly_gen.assembly_id
+_pdbx_struct_assembly_gen.oper_expression
+_pdbx_struct_assembly_gen.asym_id_list
+1 1,2,3,4,5 A
+2 1,6,7,8,9,10,11,12,13,14,15,16,2,17,18,19,20,21,22,23,24,25,26,3,27,28,29,30,31,32,33,34,35,36,4,37,38,39,40,41,42,43,44,45,46,5,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 A
+3 1,6,7,101,102,103,104,105,106,107,108,109,8,110,111,112,113,114,115,116,117,118,119,9,120,121,122,123,124,125,126,127,128,129,10,130,131,132,133,134,135,136,137,138,139,11,140,141,142,143,144,145,146,147,148,149,12,150,151,152,153,154,155,156,157,158,159,13,160,161,162,163,164,165,166,167,168,169,14,170,171,172,173,174,175,176,177,178,179,15,180,181,182,183,184,185,186,187,188,189,16,190,191,192,193,194,195,196,197,198,199,2,17,200,201,202,203,204,205,206,207,208,209,18,210,211,212,213,214,215,216,217,218,219,19,220,221,222,223,224,225,226,227,228,229,20,230,231,232,233,234,235,236,237,238,239,21,240,241,242,243,244,245,246,247,248,249,22,250,251,252,253,254,255,256,257,258,259,23,260,261,262,263,264,265,266,267,268,269,24,270,271,272,273,274,275,276,277,278,279,25,280,281,282,283,284,285,286,287,288,289,26,290,291,292,293,294,295,296,297,298,299,3,27,300,301,302,303,304,305,306,307,308,309,28,310,311,312,313,314,315,316,317,318,319,29,320,321,322,323,324,325,326,327,328,329,30,330,331,332,333,334,335,336,337,338,339,31,340,341,342,343,344,345,346,347,348,349,32,350,351,352,353,354,355,356,357,358,359,33,360,361,362,363,364,365,366,367,368,369,34,370,371,372,373,374,375,376,377,378,379,35,380,381,382,383,384,385,386,387,388,389,36,390,391,392,393,394,395,396,397,398,399,4,37,400,401,402,403,404,405,406,407,408,409,38,410,411,412,413,414,415,416,417,418,419,39,420,421,422,423,424,425,426,427,428,429,40,430,431,432,433,434,435,436,437,438,439,41,440,441,442,443,444,445,446,447,448,449,42,450,451,452,453,454,455,456,457,458,459,43,460,461,462,463,464,465,466,467,468,469,44,470,471,472,473,474,475,476,477,478,479,45,480,481,482,483,484,485,486,487,488,489,46,490,491,492,493,494,495,496,497,498,499,5,47,500,501,502,503,504,505,506,507,508,509,48,510,511,512,513,514,515,516,517,518,519,49,520,521,522,523,524,525,526,527,528,529,50,530,531,532,533,534,535,536,537,538,539,51,540,541,542,543,544,545,546,547,548,549,52,550,551,552,553,554,555,556,557,558,559,53,560,561,562,563,564,565,566,567,568,569,54,570,571,572,573,574,575,576,577,578,579,55,580,581,582,583,584,585,586,587,588,589,56,590,591,592,593,594,595,596,597,598,599,57,58,600,601,602,603,604,605,606,607,608,609,59,610,611,612,613,614,615,616,617,618,619,60,620,621,622,623,624,625,626,627,628,629,61,630,631,632,633,634,635,636,637,638,639,62,640,641,642,643,644,645,646,647,648,649,63,650,651,652,653,654,655,656,657,658,659,64,660,661,662,663,664,665,666,667,668,669,65,670,671,672,673,674,675,676,677,678,679,66,680,681,682,683,684,685,686,687,688,689,67,690,691,692,693,694,695,696,697,698,699,68,69,700,701,702,703,704,705,706,707,708,709,70,710,711,712,713,714,715,716,717,718,719,71,720,721,722,723,724,725,726,727,728,729,72,730,731,732,733,734,735,736,737,738,739,73,740,741,742,743,744,745,746,747,748,749,74,750,751,752,753,754,755,756,757,758,759,75,760,761,762,763,764,765,766,767,768,769,76,770,771,772,773,774,775,776,777,778,779,77,780,781,782,783,784,785,786,787,788,789,78,790,791,792,793,794,795,796,797,798,799,79,80,800,801,802,803,804,805,806,807,808,809,81,810,811,812,813,814,815,816,817,818,819,82,820,821,822,823,824,825,826,827,828,829,83,830,831,832,833,834,835,836,837,838,839,84,840,841,842,843,844,845,846,847,848,849,85,850,851,852,853,854,855,856,857,858,859,86,860,861,862,863,864,865,866,867,868,869,87,870,871,872,873,874,875,876,877,878,879,88,880,881,882,883,884,885,886,887,888,889,89,890,891,892,893,894,895,896,897,898,899,90,91,900,901,902,903,904,905,906,907,908,909,92,910,911,912,913,914,915,916,917,918,919,93,920,921,922,923,924,925,926,927,928,929,94,930,95,96,97,98,99,100 A
+
+loop_
+_pdbx_struct_oper_list.id
+_pdbx_struct_oper_list.type
+_pdbx_struct_oper_list.matrix[1][1]
+_pdbx_struct_oper_list.matrix[1][2]
+_pdbx_struct_oper_list.matrix[1][3]
+_pdbx_struct_oper_list.vector[1]
+_pdbx_struct_oper_list.matrix[2][1]
+_pdbx_struct_oper_list.matrix[2][2]
+_pdbx_struct_oper_list.matrix[2][3]
+_pdbx_struct_oper_list.vector[2]
+_pdbx_struct_oper_list.matrix[3][1]
+_pdbx_struct_oper_list.matrix[3][2]
+_pdbx_struct_oper_list.matrix[3][3]
+_pdbx_struct_oper_list.vector[3]
+1 'identity operation' 1 -0 0 0 -0 1 0 0 0 0 1 0
+2 'point symmetry operation' 0.997715 0.067562 0 0 -0.067562 0.997715 0 0 0 0 1 0.5257
+3 'point symmetry operation' 0.990871 0.134816 0 0 -0.134816 0.990871 0 0 0 0 1 1.0514
+4 'point symmetry operation' 0.979498 0.201454 0 0 -0.201454 0.979498 -0 0 0 0 1 1.5771
+5 'point symmetry operation' 0.963649 0.26717 0 0 -0.26717 0.963649 -0 0 0 0 1 2.1028
+6 'point symmetry operation' 0.820492 0.571658 0 -0 -0.571658 0.820492 -0 0 0 0 1 4.7313
+7 'point symmetry operation' 0.916886 0.399149 0 0 -0.399149 0.916886 -0 0 0 0 1 52.0443
+8 'point symmetry operation' 0.779995 0.625786 0 -0 -0.625786 0.779995 -0 0 0 0 1 5.257
+9 'point symmetry operation' 0.735933 0.677054 0 -0 -0.677054 0.735933 -0 0 0 0 1 5.7827
+10 'point symmetry operation' 0.688508 0.725229 0 -0 -0.725229 0.688508 -0 0 0 0 1 6.3084
+11 'point symmetry operation' 0.637937 0.770089 0 -0 -0.770089 0.637937 -0 0 0 0 1 6.8341
+12 'point symmetry operation' 0.58445 0.81143 0 -0 -0.81143 0.58445 -0 0 0 0 1 7.3598
+13 'point symmetry operation' 0.528292 0.849063 0 -0 -0.849063 0.528292 -0 0 0 0 1 7.8855
+14 'point symmetry operation' 0.469721 0.882815 0 -0 -0.882815 0.469721 -0 0 0 0 1 8.4112
+15 'point symmetry operation' 0.409002 0.912533 0 -0 -0.912533 0.409002 -0 0 0 0 1 8.9369
+16 'point symmetry operation' 0.346415 0.938081 0 -0 -0.938081 0.346415 -0 0 0 0 1 9.4626
+17 'point symmetry operation' 0.282244 0.959343 0 -0 -0.959343 0.282244 -0 0 0 0 1 9.9883
+18 'point symmetry operation' 0.216784 0.97622 0 -0 -0.97622 0.216784 -0 0 0 0 1 10.514
+19 'point symmetry operation' 0.150333 0.988635 0 -0 -0.988635 0.150333 -0 0 0 0 1 11.0397
+20 'point symmetry operation' 0.083195 0.996533 0 -0 -0.996533 0.083195 -0 0 0 0 1 11.5654
+21 'point symmetry operation' 0.015676 0.999877 0 -0 -0.999877 0.015676 -0 0 0 0 1 12.0911
+22 'point symmetry operation' -0.051913 0.998652 0 -0 -0.998652 -0.051913 -0 0 0 0 1 12.6168
+23 'point symmetry operation' -0.119266 0.992862 0 -0 -0.992862 -0.119266 -0 0 0 0 1 13.1425
+24 'point symmetry operation' -0.186074 0.982536 0 -0 -0.982536 -0.186074 -0 0 0 0 1 13.6682
+25 'point symmetry operation' -0.252031 0.967719 0 -0 -0.967719 -0.252031 -0 0 0 0 1 14.1939
+26 'point symmetry operation' -0.316837 0.94848 0 -0 -0.94848 -0.316837 -0 0 0 0 1 14.7196
+27 'point symmetry operation' -0.380194 0.924907 0 -0 -0.924907 -0.380194 -0 0 0 0 1 15.2453
+28 'point symmetry operation' -0.441814 0.897107 0 -0 -0.897107 -0.441814 -0 0 0 0 1 15.771
+29 'point symmetry operation' -0.501415 0.865207 0 -0 -0.865207 -0.501415 -0 0 0 0 1 16.2967
+30 'point symmetry operation' -0.558725 0.829353 0 -0 -0.829353 -0.558725 -0 0 0 0 1 16.8224
+31 'point symmetry operation' -0.613482 0.789709 0 -0 -0.789709 -0.613482 -0 0 0 0 1 17.3481
+32 'point symmetry operation' -0.665434 0.746456 0 -0 -0.746456 -0.665434 -0 0 0 0 1 17.8738
+33 'point symmetry operation' -0.714346 0.699792 0 0 -0.699792 -0.714346 -0 0 0 0 1 18.3995
+34 'point symmetry operation' -0.759994 0.64993 0 0 -0.64993 -0.759994 -0 0 0 0 1 18.9252
+35 'point symmetry operation' -0.802168 0.597098 0 0 -0.597098 -0.802168 -0 0 0 0 1 19.4509
+36 'point symmetry operation' -0.840676 0.541538 0 0 -0.541538 -0.840676 -0 0 0 0 1 19.9766
+37 'point symmetry operation' -0.875343 0.483502 0 0 -0.483502 -0.875343 -0 0 0 0 1 20.5023
+38 'point symmetry operation' -0.90601 0.423257 0 0 -0.423257 -0.90601 -0 0 0 0 1 21.028
+39 'point symmetry operation' -0.932536 0.361078 0 0 -0.361078 -0.932536 -0 0 0 0 1 21.5537
+40 'point symmetry operation' -0.9548 0.297249 0 0 -0.297249 -0.9548 -0 0 0 0 1 22.0794
+41 'point symmetry operation' -0.972701 0.232061 0 0 -0.232061 -0.972701 -0 0 0 0 1 22.6051
+42 'point symmetry operation' -0.986157 0.165813 0 0 -0.165813 -0.986157 -0 0 -0 0 1 23.1308
+43 'point symmetry operation' -0.995107 0.098807 0 0 -0.098807 -0.995107 -0 0 -0 0 1 23.6565
+44 'point symmetry operation' -0.999508 0.031349 0 0 -0.031349 -0.999508 -0 0 -0 0 1 24.1822
+45 'point symmetry operation' -0.999343 -0.036252 -0 0 0.036252 -0.999343 0 0 0 -0 1 24.7079
+46 'point symmetry operation' -0.99461 -0.103687 -0 0 0.103687 -0.99461 0 0 0 -0 1 25.2336
+47 'point symmetry operation' -0.985332 -0.170648 -0 0 0.170648 -0.985332 0 0 0 -0 1 25.7593
+48 'point symmetry operation' -0.971551 -0.23683 0 0 0.23683 -0.971551 0 0 0 -0 1 26.285
+49 'point symmetry operation' -0.95333 -0.301929 0 0 0.301929 -0.95333 0 0 0 -0 1 26.8107
+50 'point symmetry operation' -0.930753 -0.365648 0 0 0.365648 -0.930753 0 0 0 -0 1 27.3364
+51 'point symmetry operation' -0.903922 -0.427697 0 0 0.427697 -0.903922 0 0 0 -0 1 27.8621
+52 'point symmetry operation' -0.872961 -0.48779 0 0 0.48779 -0.872961 0 0 0 -0 1 28.3878
+53 'point symmetry operation' -0.83801 -0.545655 0 0 0.545655 -0.83801 0 0 0 -0 1 28.9135
+54 'point symmetry operation' -0.799229 -0.601026 0 0 0.601026 -0.799229 0 0 0 -0 1 29.4392
+55 'point symmetry operation' -0.756796 -0.653651 0 0 0.653651 -0.756796 0 0 0 -0 1 29.9649
+56 'point symmetry operation' -0.710905 -0.703288 0 0 0.703288 -0.710905 0 0 0 -0 1 30.4906
+57 'point symmetry operation' 0.943397 0.331666 0 -0 -0.331666 0.943397 -0 0 0 0 1 2.6285
+58 'point symmetry operation' -0.661765 -0.749712 0 0 0.749712 -0.661765 0 0 0 -0 1 31.0163
+59 'point symmetry operation' -0.6096 -0.792709 0 0 0.792709 -0.6096 0 0 0 -0 1 31.542
+60 'point symmetry operation' -0.55465 -0.832084 0 0 0.832084 -0.55465 0 0 0 -0 1 32.0677
+61 'point symmetry operation' -0.497165 -0.867656 0 0 0.867656 -0.497165 0 0 0 -0 1 32.5934
+62 'point symmetry operation' -0.437408 -0.899263 0 0 0.899263 -0.437408 0 0 0 -0 1 33.1191
+63 'point symmetry operation' -0.375652 -0.926761 0 0 0.926761 -0.375652 0 0 0 -0 1 33.6448
+64 'point symmetry operation' -0.31218 -0.950023 0 0 0.950023 -0.31218 0 0 0 -0 1 34.1705
+65 'point symmetry operation' -0.247281 -0.968944 0 0 0.968944 -0.247281 0 0 0 -0 1 34.6962
+66 'point symmetry operation' -0.181252 -0.983437 0 0 0.983437 -0.181252 0 0 0 -0 1 35.2219
+67 'point symmetry operation' -0.114394 -0.993435 0 0 0.993435 -0.114394 0 0 0 -0 1 35.7476
+68 'point symmetry operation' 0.918833 0.394647 0 -0 -0.394647 0.918833 -0 0 0 0 1 3.1542
+69 'point symmetry operation' -0.047014 -0.998894 0 0 0.998894 -0.047014 0 0 0 -0 1 36.2733
+70 'point symmetry operation' 0.020581 -0.999788 0 0 0.999788 0.020581 0 0 0 -0 1 36.799
+71 'point symmetry operation' 0.088082 -0.996113 0 0 0.996113 0.088082 0 0 0 -0 1 37.3247
+72 'point symmetry operation' 0.155181 -0.987886 0 0 0.987886 0.155181 0 0 0 -0 1 37.8504
+73 'point symmetry operation' 0.22157 -0.975144 0 0 0.975144 0.22157 0 0 0 -0 1 38.3761
+74 'point symmetry operation' 0.286947 -0.957946 0 0 0.957946 0.286947 0 0 0 -0 1 38.9018
+75 'point symmetry operation' 0.351012 -0.936371 0 0 0.936371 0.351012 0 0 0 -0 1 39.4275
+76 'point symmetry operation' 0.413474 -0.910516 0 0 0.910516 0.413474 0 0 0 -0 1 39.9532
+77 'point symmetry operation' 0.474046 -0.8805 0 0 0.8805 0.474046 0 0 0 -0 1 40.4789
+78 'point symmetry operation' 0.532451 -0.846461 0 0 0.846461 0.532451 0 0 0 -0 1 41.0046
+79 'point symmetry operation' 0.89007 0.455823 0 -0 -0.455823 0.89007 -0 0 0 0 1 3.6799
+80 'point symmetry operation' 0.588423 -0.808553 0 0 0.808553 0.588423 0 0 0 -0 1 41.5303
+81 'point symmetry operation' 0.641707 -0.76695 0 0 0.76695 0.641707 0 0 0 -0 1 42.056
+82 'point symmetry operation' 0.692057 -0.721842 0 0 0.721842 0.692057 0 0 0 -0 1 42.5817
+83 'point symmetry operation' 0.739245 -0.673436 0 0 0.673436 0.739245 0 0 0 -0 1 43.1074
+84 'point symmetry operation' 0.783055 -0.621952 0 0 0.621952 0.783055 0 0 0 -0 1 43.6331
+85 'point symmetry operation' 0.823287 -0.567626 0 0 0.567626 0.823287 0 0 0 -0 1 44.1588
+86 'point symmetry operation' 0.859756 -0.510706 0 0 0.510706 0.859756 0 0 0 -0 1 44.6845
+87 'point symmetry operation' 0.892296 -0.451452 0 0 0.451452 0.892296 0 0 0 -0 1 45.2102
+88 'point symmetry operation' 0.920758 -0.390135 0 0 0.390135 0.920758 0 0 0 -0 1 45.7359
+89 'point symmetry operation' 0.945012 -0.327034 0 0 0.327034 0.945012 0 0 0 -0 1 46.2616
+90 'point symmetry operation' 0.85724 0.514917 0 -0 -0.514917 0.85724 -0 0 0 0 1 4.2056
+91 'point symmetry operation' 0.964948 -0.26244 0 0 0.26244 0.964948 0 0 0 -0 1 46.7873
+92 'point symmetry operation' 0.980475 -0.196646 0 0 0.196646 0.980475 0 0 0 0 1 47.313
+93 'point symmetry operation' 0.99152 -0.129954 0 0 0.129954 0.99152 0 0 0 0 1 47.8387
+94 'point symmetry operation' 0.998034 -0.062667 0 0 0.062667 0.998034 0 0 0 0 1 48.3644
+95 'point symmetry operation' 0.999988 0.004906 0 0 -0.004906 0.999988 0 0 0 0 1 48.8901
+96 'point symmetry operation' 0.997372 0.072456 0 0 -0.072456 0.997372 0 0 0 0 1 49.4158
+97 'point symmetry operation' 0.990197 0.139675 0 0 -0.139675 0.990197 0 0 0 0 1 49.9415
+98 'point symmetry operation' 0.978498 0.206256 0 0 -0.206256 0.978498 -0 0 0 0 1 50.4672
+99 'point symmetry operation' 0.962327 0.271894 0 0 -0.271894 0.962327 -0 0 0 0 1 50.9929
+100 'point symmetry operation' 0.941758 0.33629 0 0 -0.33629 0.941758 -0 0 0 0 1 51.5186
+101 'point symmetry operation' 0.887823 0.460184 -0 -0 -0.460184 0.887823 0 0 -0 -0 1 52.57
+102 'point symmetry operation' 0.854704 0.519116 -0 -0 -0.519116 0.854704 0 0 -0 -0 1 53.0957
+103 'point symmetry operation' 0.817678 0.575676 -0 -0 -0.575676 0.817678 0 0 -0 -0 1 53.6214
+104 'point symmetry operation' 0.776916 0.629605 -0 -0 -0.629605 0.776916 0 0 -0 -0 1 54.1471
+105 'point symmetry operation' 0.732603 0.680656 -0 -0 -0.680656 0.732603 0 0 -0 -0 1 54.6728
+106 'point symmetry operation' 0.684942 0.728598 -0 -0 -0.728598 0.684942 0 0 -0 -0 1 55.1985
+107 'point symmetry operation' 0.634151 0.773209 -0 -0 -0.773209 0.634151 0 0 -0 -0 1 55.7242
+108 'point symmetry operation' 0.580462 0.814287 -0 -0 -0.814287 0.580462 0 0 -0 -0 1 56.2499
+109 'point symmetry operation' 0.524121 0.851644 -0 -0 -0.851644 0.524121 0 0 -0 -0 1 56.7756
+110 'point symmetry operation' 0.465384 0.885109 -0 -0 -0.885109 0.465384 0 0 -0 -0 1 57.3013
+111 'point symmetry operation' 0.404521 0.914529 -0 -0 -0.914529 0.404521 0 0 -0 -0 1 57.827
+112 'point symmetry operation' 0.341809 0.93977 -0 -0 -0.93977 0.341809 0 0 -0 -0 1 58.3527
+113 'point symmetry operation' 0.277535 0.960716 -0 -0 -0.960716 0.277535 0 0 -0 -0 1 58.8784
+114 'point symmetry operation' 0.211992 0.977271 -0 -0 -0.977271 0.211992 0 0 -0 -0 1 59.4041
+115 'point symmetry operation' 0.145481 0.989361 -0 -0 -0.989361 0.145481 0 0 -0 -0 1 59.9298
+116 'point symmetry operation' 0.078305 0.996929 -0 -0 -0.996929 0.078305 0 0 -0 -0 1 60.4555
+117 'point symmetry operation' 0.010771 0.999942 -0 -0 -0.999942 0.010771 0 0 -0 -0 1 60.9812
+118 'point symmetry operation' -0.056812 0.998385 -0 -0 -0.998385 -0.056812 0 0 -0 -0 1 61.5069
+119 'point symmetry operation' -0.124135 0.992265 -0 -0 -0.992265 -0.124135 0 0 -0 -0 1 62.0326
+120 'point symmetry operation' -0.190891 0.981611 -0 -0 -0.981611 -0.190891 0 0 -0 -0 1 62.5583
+121 'point symmetry operation' -0.256775 0.966471 -0 -0 -0.966471 -0.256775 0 0 -0 -0 1 63.084
+122 'point symmetry operation' -0.321486 0.946914 -0 -0 -0.946914 -0.321486 0 0 -0 -0 1 63.6097
+123 'point symmetry operation' -0.384727 0.92303 -0 -0 -0.92303 -0.384727 0 0 -0 -0 1 64.1354
+124 'point symmetry operation' -0.44621 0.894928 -0 -0 -0.894928 -0.44621 0 0 -0 -0 1 64.6611
+125 'point symmetry operation' -0.505654 0.862737 -0 -0 -0.862737 -0.505654 0 0 -0 -0 1 65.1868
+126 'point symmetry operation' -0.562787 0.826602 -0 -0 -0.826602 -0.562787 0 0 -0 -0 1 65.7125
+127 'point symmetry operation' -0.617348 0.78669 -0 -0 -0.78669 -0.617348 0 0 -0 -0 1 66.2382
+128 'point symmetry operation' -0.669088 0.743183 -0 0 -0.743183 -0.669088 0 0 -0 -0 1 66.7639
+129 'point symmetry operation' -0.717771 0.69628 -0 0 -0.69628 -0.717771 0 0 -0 -0 1 67.2896
+130 'point symmetry operation' -0.763173 0.646194 -0 0 -0.646194 -0.763173 0 0 -0 -0 1 67.8153
+131 'point symmetry operation' -0.805087 0.593156 -0 0 -0.593156 -0.805087 0 0 -0 -0 1 68.341
+132 'point symmetry operation' -0.843323 0.537407 -0 0 -0.537407 -0.843323 0 0 -0 -0 1 68.8667
+133 'point symmetry operation' -0.877704 0.479202 -0 0 -0.479202 -0.877704 0 0 -0 -0 1 69.3924
+134 'point symmetry operation' -0.908075 0.418808 -0 0 -0.418808 -0.908075 0 0 -0 -0 1 69.9181
+135 'point symmetry operation' -0.934296 0.356499 -0 0 -0.356499 -0.934296 0 0 -0 -0 1 70.4438
+136 'point symmetry operation' -0.956247 0.292561 -0 0 -0.292561 -0.956247 0 0 -0 -0 1 70.9695
+137 'point symmetry operation' -0.973828 0.227286 -0 0 -0.227286 -0.973828 0 0 -0 -0 1 71.4952
+138 'point symmetry operation' -0.986959 0.160973 -0 0 -0.160973 -0.986959 0 0 -0 -0 1 72.0209
+139 'point symmetry operation' -0.995579 0.093924 -0 0 -0.093924 -0.995579 0 0 0 -0 1 72.5466
+140 'point symmetry operation' -0.99965 0.026445 -0 0 -0.026445 -0.99965 0 0 0 -0 1 73.0723
+141 'point symmetry operation' -0.999153 -0.041154 0 0 0.041154 -0.999153 -0 0 -0 0 1 73.598
+142 'point symmetry operation' -0.994089 -0.108565 0 0 0.108565 -0.994089 -0 0 -0 0 1 74.1237
+143 'point symmetry operation' -0.984483 -0.17548 -0 0 0.17548 -0.984483 -0 -0 -0 0 1 74.6494
+144 'point symmetry operation' -0.970378 -0.241593 -0 0 0.241593 -0.970378 -0 -0 -0 0 1 75.1751
+145 'point symmetry operation' -0.951838 -0.306602 -0 0 0.306602 -0.951838 -0 -0 -0 0 1 75.7008
+146 'point symmetry operation' -0.928948 -0.37021 -0 0 0.37021 -0.928948 -0 -0 -0 0 1 76.2265
+147 'point symmetry operation' -0.901813 -0.432126 -0 0 0.432126 -0.901813 -0 -0 -0 0 1 76.7522
+148 'point symmetry operation' -0.870557 -0.492067 -0 0 0.492067 -0.870557 -0 -0 -0 0 1 77.2779
+149 'point symmetry operation' -0.835323 -0.54976 -0 0 0.54976 -0.835323 -0 -0 -0 0 1 77.8036
+150 'point symmetry operation' -0.796271 -0.60494 -0 0 0.60494 -0.796271 -0 -0 -0 0 1 78.3293
+151 'point symmetry operation' -0.753581 -0.657356 -0 -0 0.657356 -0.753581 -0 -0 -0 0 1 78.855
+152 'point symmetry operation' -0.707446 -0.706767 -0 -0 0.706767 -0.707446 -0 -0 -0 0 1 79.3807
+153 'point symmetry operation' -0.658079 -0.752949 -0 -0 0.752949 -0.658079 -0 -0 -0 0 1 79.9064
+154 'point symmetry operation' -0.605704 -0.79569 -0 -0 0.79569 -0.605704 -0 -0 -0 0 1 80.4321
+155 'point symmetry operation' -0.550561 -0.834795 -0 -0 0.834795 -0.550561 -0 -0 -0 0 1 80.9578
+156 'point symmetry operation' -0.492903 -0.870084 -0 -0 0.870084 -0.492903 -0 -0 -0 0 1 81.4835
+157 'point symmetry operation' -0.432992 -0.901398 -0 -0 0.901398 -0.432992 -0 -0 -0 0 1 82.0092
+158 'point symmetry operation' -0.371102 -0.928592 -0 -0 0.928592 -0.371102 -0 -0 -0 0 1 82.5349
+159 'point symmetry operation' -0.307516 -0.951543 -0 -0 0.951543 -0.307516 -0 -0 -0 0 1 83.0606
+160 'point symmetry operation' -0.242525 -0.970145 -0 -0 0.970145 -0.242525 -0 -0 -0 0 1 83.5863
+161 'point symmetry operation' -0.176425 -0.984314 -0 -0 0.984314 -0.176425 -0 -0 -0 0 1 84.112
+162 'point symmetry operation' -0.109519 -0.993985 -0 -0 0.993985 -0.109519 -0 -0 -0 0 1 84.6377
+163 'point symmetry operation' -0.042113 -0.999113 -0 -0 0.999113 -0.042113 -0 -0 -0 0 1 85.1634
+164 'point symmetry operation' 0.025486 -0.999675 -0 -0 0.999675 0.025486 -0 -0 -0 0 1 85.6891
+165 'point symmetry operation' 0.092968 -0.995669 -0 -0 0.995669 0.092968 -0 -0 -0 0 1 86.2148
+166 'point symmetry operation' 0.160025 -0.987113 -0 -0 0.987113 0.160025 -0 -0 -0 0 1 86.7405
+167 'point symmetry operation' 0.226351 -0.974046 -0 -0 0.974046 0.226351 -0 -0 -0 0 1 87.2662
+168 'point symmetry operation' 0.291643 -0.956527 -0 -0 0.956527 0.291643 -0 -0 -0 0 1 87.7919
+169 'point symmetry operation' 0.355602 -0.934638 -0 -0 0.934638 0.355602 -0 -0 -0 0 1 88.3176
+170 'point symmetry operation' 0.417935 -0.908477 -0 -0 0.908477 0.417935 -0 -0 -0 0 1 88.8433
+171 'point symmetry operation' 0.478359 -0.878164 -0 -0 0.878164 0.478359 -0 -0 -0 0 1 89.369
+172 'point symmetry operation' 0.536597 -0.843839 -0 -0 0.843839 0.536597 -0 -0 -0 0 1 89.8947
+173 'point symmetry operation' 0.592383 -0.805657 -0 -0 0.805657 0.592383 -0 -0 -0 0 1 90.4204
+174 'point symmetry operation' 0.645461 -0.763793 -0 -0 0.763793 0.645461 -0 -0 -0 0 1 90.9461
+175 'point symmetry operation' 0.69559 -0.718439 -0 -0 0.718439 0.69559 -0 -0 -0 0 1 91.4718
+176 'point symmetry operation' 0.74254 -0.669802 -0 -0 0.669802 0.74254 -0 -0 -0 0 1 91.9975
+177 'point symmetry operation' 0.786097 -0.618103 -0 -0 0.618103 0.786097 -0 -0 -0 0 1 92.5232
+178 'point symmetry operation' 0.826061 -0.56358 -0 -0 0.56358 0.826061 -0 -0 -0 0 1 93.0489
+179 'point symmetry operation' 0.862251 -0.506482 -0 -0 0.506482 0.862251 -0 -0 -0 0 1 93.5746
+180 'point symmetry operation' 0.894499 -0.447069 -0 -0 0.447069 0.894499 -0 -0 -0 0 1 94.1003
+181 'point symmetry operation' 0.922661 -0.385613 -0 -0 0.385613 0.922661 -0 -0 -0 0 1 94.626
+182 'point symmetry operation' 0.946605 -0.322395 -0 -0 0.322395 0.946605 -0 -0 -0 0 1 95.1517
+183 'point symmetry operation' 0.966224 -0.257703 -0 -0 0.257703 0.966224 -0 -0 -0 0 1 95.6774
+184 'point symmetry operation' 0.981427 -0.191834 -0 -0 0.191834 0.981427 -0 -0 -0 0 1 96.2031
+185 'point symmetry operation' 0.992146 -0.125088 -0 -0 0.125088 0.992146 -0 -0 -0 0 1 96.7288
+186 'point symmetry operation' 0.99833 -0.057771 -0 -0 0.057771 0.99833 -0 -0 -0 -0 1 97.2545
+187 'point symmetry operation' 0.999952 0.009811 -0 -0 -0.009811 0.999952 -0 -0 -0 -0 1 97.7802
+188 'point symmetry operation' 0.997004 0.077348 -0 -0 -0.077348 0.997004 -0 -0 -0 -0 1 98.3059
+189 'point symmetry operation' 0.9895 0.144531 -0 -0 -0.144531 0.9895 0 0 -0 -0 1 98.8316
+190 'point symmetry operation' 0.977474 0.211054 -0 -0 -0.211054 0.977474 0 0 -0 -0 1 99.3573
+191 'point symmetry operation' 0.960982 0.276612 -0 -0 -0.276612 0.960982 0 0 -0 -0 1 99.883
+192 'point symmetry operation' 0.940097 0.340906 -0 -0 -0.340906 0.940097 0 0 -0 -0 1 100.4087
+193 'point symmetry operation' 0.914917 0.403642 -0 -0 -0.403642 0.914917 0 0 -0 -0 1 100.9344
+194 'point symmetry operation' 0.885555 0.464534 -0 -0 -0.464534 0.885555 0 0 -0 -0 1 101.4601
+195 'point symmetry operation' 0.852147 0.523303 -0 -0 -0.523303 0.852147 0 0 -0 -0 1 101.9858
+196 'point symmetry operation' 0.814844 0.57968 -0 -0 -0.57968 0.814844 0 0 -0 -0 1 102.5115
+197 'point symmetry operation' 0.773818 0.633408 -0 -0 -0.633408 0.773818 0 0 -0 -0 1 103.0372
+198 'point symmetry operation' 0.729255 0.684242 -0 -0 -0.684242 0.729255 0 0 -0 -0 1 103.5629
+199 'point symmetry operation' 0.68136 0.731949 -0 -0 -0.731949 0.68136 0 0 -0 -0 1 104.0886
+200 'point symmetry operation' 0.630351 0.776311 -0 -0 -0.776311 0.630351 0 0 -0 -0 1 104.6143
+201 'point symmetry operation' 0.576461 0.817125 -0 -0 -0.817125 0.576461 0 0 -0 -0 1 105.14
+202 'point symmetry operation' 0.519937 0.854205 -0 -0 -0.854205 0.519937 0 0 -0 -0 1 105.6657
+203 'point symmetry operation' 0.461037 0.887381 -0 -0 -0.887381 0.461037 0 0 -0 -0 1 106.1914
+204 'point symmetry operation' 0.40003 0.916502 -0 -0 -0.916502 0.40003 0 0 -0 -0 1 106.7171
+205 'point symmetry operation' 0.337195 0.941435 -0 -0 -0.941435 0.337195 0 0 -0 -0 1 107.2428
+206 'point symmetry operation' 0.272818 0.962066 -0 -0 -0.962066 0.272818 0 0 -0 -0 1 107.7685
+207 'point symmetry operation' 0.207196 0.9783 -0 -0 -0.9783 0.207196 0 0 -0 -0 1 108.2942
+208 'point symmetry operation' 0.140626 0.990063 -0 -0 -0.990063 0.140626 0 0 -0 -0 1 108.8199
+209 'point symmetry operation' 0.073414 0.997302 -0 -0 -0.997302 0.073414 0 0 -0 -0 1 109.3456
+210 'point symmetry operation' 0.005866 0.999983 -0 -0 -0.999983 0.005866 0 0 -0 -0 1 109.8713
+211 'point symmetry operation' -0.061709 0.998094 -0 -0 -0.998094 -0.061709 0 0 -0 -0 1 110.397
+212 'point symmetry operation' -0.129001 0.991644 -0 -0 -0.991644 -0.129001 0 0 -0 -0 1 110.9227
+213 'point symmetry operation' -0.195704 0.980663 -0 -0 -0.980663 -0.195704 0 0 -0 -0 1 111.4484
+214 'point symmetry operation' -0.261513 0.9652 -0 -0 -0.9652 -0.261513 0 0 -0 -0 1 111.9741
+215 'point symmetry operation' -0.326127 0.945326 -0 -0 -0.945326 -0.326127 0 0 -0 -0 1 112.4998
+216 'point symmetry operation' -0.38925 0.921132 -0 -0 -0.921132 -0.38925 0 0 -0 -0 1 113.0255
+217 'point symmetry operation' -0.450595 0.892729 -0 -0 -0.892729 -0.450595 0 0 -0 -0 1 113.5512
+218 'point symmetry operation' -0.50988 0.860246 -0 -0 -0.860246 -0.50988 0 0 -0 -0 1 114.0769
+219 'point symmetry operation' -0.566835 0.823831 -0 -0 -0.823831 -0.566835 0 0 -0 -0 1 114.6026
+220 'point symmetry operation' -0.6212 0.783652 -0 -0 -0.783652 -0.6212 0 0 -0 -0 1 115.1283
+221 'point symmetry operation' -0.672726 0.739892 -0 -0 -0.739892 -0.672726 0 0 -0 -0 1 115.654
+222 'point symmetry operation' -0.721178 0.69275 -0 -0 -0.69275 -0.721178 0 0 -0 -0 1 116.1797
+223 'point symmetry operation' -0.766334 0.642443 -0 -0 -0.642443 -0.766334 0 0 -0 -0 1 116.7054
+224 'point symmetry operation' -0.807988 0.5892 -0 -0 -0.5892 -0.807988 0 0 -0 -0 1 117.2311
+225 'point symmetry operation' -0.845949 0.533264 -0 -0 -0.533264 -0.845949 0 0 -0 -0 1 117.7568
+226 'point symmetry operation' -0.880045 0.474891 -0 -0 -0.474891 -0.880045 0 0 -0 -0 1 118.2825
+227 'point symmetry operation' -0.910119 0.414348 -0 -0 -0.414348 -0.910119 0 0 -0 -0 1 118.8082
+228 'point symmetry operation' -0.936033 0.351911 -0 -0 -0.351911 -0.936033 0 0 -0 -0 1 119.3339
+229 'point symmetry operation' -0.95767 0.287867 -0 -0 -0.287867 -0.95767 0 0 -0 -0 1 119.8596
+230 'point symmetry operation' -0.974931 0.222506 -0 -0 -0.222506 -0.974931 0 0 -0 -0 1 120.3853
+231 'point symmetry operation' -0.987737 0.156129 -0 -0 -0.156129 -0.987737 0 0 -0 -0 1 120.911
+232 'point symmetry operation' -0.996028 0.089039 -0 -0 -0.089039 -0.996028 0 0 0 -0 1 121.4367
+233 'point symmetry operation' -0.999768 0.021541 -0 -0 -0.021541 -0.999768 0 0 0 -0 1 121.9624
+234 'point symmetry operation' -0.998939 -0.046055 0 -0 0.046055 -0.998939 -0 0 -0 0 1 122.4881
+235 'point symmetry operation' -0.993545 -0.11344 0 -0 0.11344 -0.993545 -0 -0 -0 0 1 123.0138
+236 'point symmetry operation' -0.98361 -0.180307 -0 -0 0.180307 -0.98361 -0 -0 -0 0 1 123.5395
+237 'point symmetry operation' -0.969181 -0.24635 -0 -0 0.24635 -0.969181 -0 -0 -0 0 1 124.0652
+238 'point symmetry operation' -0.950322 -0.311267 -0 -0 0.311267 -0.950322 -0 -0 -0 0 1 124.5909
+239 'point symmetry operation' -0.927121 -0.374762 -0 -0 0.374762 -0.927121 -0 -0 -0 0 1 125.1166
+240 'point symmetry operation' -0.899683 -0.436544 -0 -0 0.436544 -0.899683 -0 -0 -0 0 1 125.6423
+241 'point symmetry operation' -0.868133 -0.496332 -0 -0 0.496332 -0.868133 -0 -0 -0 0 1 126.168
+242 'point symmetry operation' -0.832616 -0.553851 -0 -0 0.553851 -0.832616 -0 -0 -0 0 1 126.6937
+243 'point symmetry operation' -0.793294 -0.608839 -0 -0 0.608839 -0.793294 -0 -0 -0 0 1 127.2194
+244 'point symmetry operation' -0.750347 -0.661044 -0 -0 0.661044 -0.750347 -0 -0 -0 0 1 127.7451
+245 'point symmetry operation' -0.703971 -0.710229 -0 -0 0.710229 -0.703971 -0 -0 -0 0 1 128.2708
+246 'point symmetry operation' -0.654377 -0.756168 -0 -0 0.756168 -0.654377 -0 -0 -0 0 1 128.7965
+247 'point symmetry operation' -0.601794 -0.798652 -0 -0 0.798652 -0.601794 -0 -0 -0 0 1 129.3222
+248 'point symmetry operation' -0.54646 -0.837485 -0 -0 0.837485 -0.54646 -0 -0 -0 0 1 129.8479
+249 'point symmetry operation' -0.488629 -0.872492 -0 -0 0.872492 -0.488629 -0 -0 -0 0 1 130.3736
+250 'point symmetry operation' -0.428564 -0.903511 -0 -0 0.903511 -0.428564 -0 -0 -0 0 1 130.8993
+251 'point symmetry operation' -0.366542 -0.930402 -0 -0 0.930402 -0.366542 -0 -0 -0 0 1 131.425
+252 'point symmetry operation' -0.302844 -0.95304 -0 -0 0.95304 -0.302844 -0 -0 -0 0 1 131.9507
+253 'point symmetry operation' -0.237763 -0.971323 -0 -0 0.971323 -0.237763 -0 -0 -0 0 1 132.4764
+254 'point symmetry operation' -0.171594 -0.985168 -0 -0 0.985168 -0.171594 -0 -0 -0 0 1 133.0021
+255 'point symmetry operation' -0.104642 -0.99451 -0 -0 0.99451 -0.104642 -0 -0 -0 0 1 133.5278
+256 'point symmetry operation' -0.037211 -0.999307 -0 -0 0.999307 -0.037211 -0 -0 -0 0 1 134.0535
+257 'point symmetry operation' 0.030389 -0.999538 -0 -0 0.999538 0.030389 -0 -0 -0 0 1 134.5792
+258 'point symmetry operation' 0.097851 -0.995201 -0 -0 0.995201 0.097851 -0 -0 -0 0 1 135.1049
+259 'point symmetry operation' 0.164865 -0.986316 -0 -0 0.986316 0.164865 -0 -0 -0 0 1 135.6306
+260 'point symmetry operation' 0.231127 -0.972924 -0 -0 0.972924 0.231127 -0 -0 -0 0 1 136.1563
+261 'point symmetry operation' 0.296332 -0.955085 -0 -0 0.955085 0.296332 -0 -0 -0 0 1 136.682
+262 'point symmetry operation' 0.360182 -0.932882 -0 -0 0.932882 0.360182 -0 -0 -0 0 1 137.2077
+263 'point symmetry operation' 0.422387 -0.906416 -0 -0 0.906416 0.422387 -0 -0 -0 0 1 137.7334
+264 'point symmetry operation' 0.482661 -0.875807 -0 -0 0.875807 0.482661 -0 -0 -0 0 1 138.2591
+265 'point symmetry operation' 0.54073 -0.841196 -0 -0 0.841196 0.54073 -0 -0 -0 0 1 138.7848
+266 'point symmetry operation' 0.596328 -0.802741 -0 -0 0.802741 0.596328 -0 -0 -0 0 1 139.3105
+267 'point symmetry operation' 0.6492 -0.760617 -0 -0 0.760617 0.6492 -0 -0 -0 0 1 139.8362
+268 'point symmetry operation' 0.699106 -0.715018 -0 -0 0.715018 0.699106 -0 -0 -0 0 1 140.3619
+269 'point symmetry operation' 0.745817 -0.666151 -0 -0 0.666151 0.745817 -0 -0 -0 0 1 140.8876
+270 'point symmetry operation' 0.78912 -0.61424 -0 -0 0.61424 0.78912 -0 -0 -0 0 1 141.4133
+271 'point symmetry operation' 0.828816 -0.559521 -0 -0 0.559521 0.828816 -0 -0 -0 0 1 141.939
+272 'point symmetry operation' 0.864725 -0.502246 -0 -0 0.502246 0.864725 -0 -0 -0 0 1 142.4647
+273 'point symmetry operation' 0.896682 -0.442676 -0 -0 0.442676 0.896682 -0 -0 -0 0 1 142.9904
+274 'point symmetry operation' 0.924541 -0.381082 -0 -0 0.381082 0.924541 -0 -0 -0 0 1 143.5161
+275 'point symmetry operation' 0.948175 -0.317747 -0 -0 0.317747 0.948175 -0 -0 -0 0 1 144.0418
+276 'point symmetry operation' 0.967477 -0.25296 -0 -0 0.25296 0.967477 -0 -0 -0 0 1 144.5675
+277 'point symmetry operation' 0.982357 -0.187017 -0 -0 0.187017 0.982357 -0 -0 -0 0 1 145.0932
+278 'point symmetry operation' 0.992747 -0.120219 -0 -0 0.120219 0.992747 -0 -0 -0 -0 1 145.6189
+279 'point symmetry operation' 0.998601 -0.052872 -0 -0 0.052872 0.998601 -0 -0 -0 -0 1 146.1446
+280 'point symmetry operation' 0.999892 0.014716 -0 -0 -0.014716 0.999892 -0 -0 -0 -0 1 146.6703
+281 'point symmetry operation' 0.996613 0.082238 -0 -0 -0.082238 0.996613 -0 -0 -0 -0 1 147.196
+282 'point symmetry operation' 0.988779 0.149383 -0 -0 -0.149383 0.988779 0 -0 -0 -0 1 147.7217
+283 'point symmetry operation' 0.976427 0.215846 -0 -0 -0.215846 0.976427 0 0 -0 -0 1 148.2474
+284 'point symmetry operation' 0.959613 0.281323 -0 -0 -0.281323 0.959613 0 0 -0 -0 1 148.7731
+285 'point symmetry operation' 0.938414 0.345514 -0 -0 -0.345514 0.938414 0 0 -0 -0 1 149.2988
+286 'point symmetry operation' 0.912926 0.408126 -0 -0 -0.408126 0.912926 0 0 -0 -0 1 149.8245
+287 'point symmetry operation' 0.883266 0.468873 -0 -0 -0.468873 0.883266 0 0 -0 -0 1 150.3502
+288 'point symmetry operation' 0.849569 0.527477 -0 -0 -0.527477 0.849569 0 0 -0 -0 1 150.8759
+289 'point symmetry operation' 0.811991 0.58367 -0 -0 -0.58367 0.811991 0 0 -0 -0 1 151.4016
+290 'point symmetry operation' 0.770701 0.637197 -0 -0 -0.637197 0.770701 0 0 -0 -0 1 151.9273
+291 'point symmetry operation' 0.72589 0.687811 -0 -0 -0.687811 0.72589 0 0 -0 -0 1 152.453
+292 'point symmetry operation' 0.677761 0.735282 -0 -0 -0.735282 0.677761 0 0 -0 -0 1 152.9787
+293 'point symmetry operation' 0.626535 0.779394 -0 -0 -0.779394 0.626535 0 0 -0 -0 1 153.5044
+294 'point symmetry operation' 0.572445 0.819943 -0 -0 -0.819943 0.572445 0 0 -0 -0 1 154.0301
+295 'point symmetry operation' 0.51574 0.856745 -0 -0 -0.856745 0.51574 0 0 -0 -0 1 154.5558
+296 'point symmetry operation' 0.456678 0.889632 -0 -0 -0.889632 0.456678 0 0 -0 -0 1 155.0815
+297 'point symmetry operation' 0.395529 0.918454 -0 -0 -0.918454 0.395529 0 0 -0 -0 1 155.6072
+298 'point symmetry operation' 0.332572 0.943078 -0 -0 -0.943078 0.332572 0 0 -0 -0 1 156.1329
+299 'point symmetry operation' 0.268096 0.963392 -0 -0 -0.963392 0.268096 0 0 -0 -0 1 156.6586
+300 'point symmetry operation' 0.202394 0.979304 -0 -0 -0.979304 0.202394 0 0 -0 -0 1 157.1843
+301 'point symmetry operation' 0.135767 0.990741 -0 -0 -0.990741 0.135767 0 0 -0 -0 1 157.71
+302 'point symmetry operation' 0.06852 0.99765 -0 -0 -0.99765 0.06852 0 0 -0 -0 1 158.2357
+303 'point symmetry operation' 0.00096 1 -0 -0 -1 0.00096 0 0 -0 -0 1 158.7614
+304 'point symmetry operation' -0.066604 0.997779 -0 -0 -0.997779 -0.066604 0 0 -0 -0 1 159.2871
+305 'point symmetry operation' -0.133864 0.991 -0 -0 -0.991 -0.133864 0 0 -0 -0 1 159.8128
+306 'point symmetry operation' -0.200513 0.979691 -0 -0 -0.979691 -0.200513 0 0 -0 -0 1 160.3385
+307 'point symmetry operation' -0.266245 0.963905 -0 -0 -0.963905 -0.266245 0 0 -0 -0 1 160.8642
+308 'point symmetry operation' -0.33076 0.943715 -0 -0 -0.943715 -0.33076 0 0 -0 -0 1 161.3899
+309 'point symmetry operation' -0.393764 0.919212 -0 -0 -0.919212 -0.393764 0 0 -0 -0 1 161.9156
+310 'point symmetry operation' -0.454969 0.890508 -0 -0 -0.890508 -0.454969 0 0 -0 -0 1 162.4413
+311 'point symmetry operation' -0.514094 0.857734 -0 -0 -0.857734 -0.514094 0 0 -0 -0 1 162.967
+312 'point symmetry operation' -0.57087 0.821041 -0 -0 -0.821041 -0.57087 0 0 -0 -0 1 163.4927
+313 'point symmetry operation' -0.625037 0.780595 -0 -0 -0.780595 -0.625037 0 0 -0 -0 1 164.0184
+314 'point symmetry operation' -0.676347 0.736583 -0 -0 -0.736583 -0.676347 0 0 -0 -0 1 164.5441
+315 'point symmetry operation' -0.724567 0.689204 -0 -0 -0.689204 -0.724567 0 0 -0 -0 1 165.0698
+316 'point symmetry operation' -0.769476 0.638676 -0 -0 -0.638676 -0.769476 0 0 -0 -0 1 165.5955
+317 'point symmetry operation' -0.810868 0.585229 -0 -0 -0.585229 -0.810868 0 0 -0 -0 1 166.1212
+318 'point symmetry operation' -0.848555 0.529107 -0 -0 -0.529107 -0.848555 0 0 -0 -0 1 166.6469
+319 'point symmetry operation' -0.882364 0.470568 -0 -0 -0.470568 -0.882364 0 0 -0 -0 1 167.1726
+320 'point symmetry operation' -0.91214 0.409878 -0 -0 -0.409878 -0.91214 0 0 -0 -0 1 167.6983
+321 'point symmetry operation' -0.937748 0.347315 -0 -0 -0.347315 -0.937748 0 0 -0 -0 1 168.224
+322 'point symmetry operation' -0.959071 0.283165 -0 -0 -0.283165 -0.959071 0 0 -0 -0 1 168.7497
+323 'point symmetry operation' -0.976011 0.217721 -0 -0 -0.217721 -0.976011 0 0 -0 -0 1 169.2754
+324 'point symmetry operation' -0.988491 0.151282 -0 -0 -0.151282 -0.988491 0 0 -0 -0 1 169.8011
+325 'point symmetry operation' -0.996453 0.084152 -0 -0 -0.084152 -0.996453 0 0 0 -0 1 170.3268
+326 'point symmetry operation' -0.999862 0.016637 -0 -0 -0.016637 -0.999862 0 0 0 -0 1 170.8525
+327 'point symmetry operation' -0.998701 -0.050954 0 -0 0.050954 -0.998701 -0 -0 -0 0 1 171.3782
+328 'point symmetry operation' -0.992976 -0.118313 0 -0 0.118313 -0.992976 -0 -0 -0 0 1 171.9039
+329 'point symmetry operation' -0.982714 -0.18513 -0 -0 0.18513 -0.982714 -0 -0 -0 0 1 172.4296
+330 'point symmetry operation' -0.967961 -0.251102 -0 -0 0.251102 -0.967961 -0 -0 -0 0 1 172.9553
+331 'point symmetry operation' -0.948784 -0.315926 -0 -0 0.315926 -0.948784 -0 -0 -0 0 1 173.481
+332 'point symmetry operation' -0.925271 -0.379306 -0 -0 0.379306 -0.925271 -0 -0 -0 0 1 174.0067
+333 'point symmetry operation' -0.89753 -0.440953 -0 -0 0.440953 -0.89753 -0 -0 -0 0 1 174.5324
+334 'point symmetry operation' -0.865688 -0.500584 -0 -0 0.500584 -0.865688 -0 -0 -0 0 1 175.0581
+335 'point symmetry operation' -0.829889 -0.557928 -0 -0 0.557928 -0.829889 -0 -0 -0 0 1 175.5838
+336 'point symmetry operation' -0.790298 -0.612723 -0 -0 0.612723 -0.790298 -0 -0 -0 0 1 176.1095
+337 'point symmetry operation' -0.747095 -0.664717 -0 -0 0.664717 -0.747095 -0 -0 -0 0 1 176.6352
+338 'point symmetry operation' -0.700478 -0.713674 -0 -0 0.713674 -0.700478 -0 -0 -0 0 1 177.1609
+339 'point symmetry operation' -0.65066 -0.759369 -0 -0 0.759369 -0.65066 -0 -0 -0 0 1 177.6866
+340 'point symmetry operation' -0.597868 -0.801594 -0 -0 0.801594 -0.597868 -0 -0 -0 0 1 178.2123
+341 'point symmetry operation' -0.542345 -0.840156 -0 -0 0.840156 -0.542345 -0 -0 -0 0 1 178.738
+342 'point symmetry operation' -0.484343 -0.874878 -0 -0 0.874878 -0.484343 -0 -0 -0 0 1 179.2637
+343 'point symmetry operation' -0.424127 -0.905603 -0 -0 0.905603 -0.424127 -0 -0 -0 0 1 179.7894
+344 'point symmetry operation' -0.361973 -0.932188 -0 -0 0.932188 -0.361973 -0 -0 -0 0 1 180.3151
+345 'point symmetry operation' -0.298165 -0.954514 -0 -0 0.954514 -0.298165 -0 -0 -0 0 1 180.8408
+346 'point symmetry operation' -0.232995 -0.972478 -0 -0 0.972478 -0.232995 -0 -0 -0 0 1 181.3665
+347 'point symmetry operation' -0.166759 -0.985998 -0 -0 0.985998 -0.166759 -0 -0 -0 0 1 181.8922
+348 'point symmetry operation' -0.099762 -0.995011 -0 -0 0.995011 -0.099762 -0 -0 -0 0 1 182.4179
+349 'point symmetry operation' -0.032309 -0.999478 -0 -0 0.999478 -0.032309 -0 -0 -0 0 1 182.9436
+350 'point symmetry operation' 0.035292 -0.999377 -0 -0 0.999377 0.035292 -0 -0 -0 0 1 183.4693
+351 'point symmetry operation' 0.102732 -0.994709 -0 -0 0.994709 0.102732 -0 -0 -0 0 1 183.995
+352 'point symmetry operation' 0.169702 -0.985495 -0 -0 0.985495 0.169702 -0 -0 -0 0 1 184.5207
+353 'point symmetry operation' 0.235897 -0.971778 -0 -0 0.971778 0.235897 -0 -0 -0 0 1 185.0464
+354 'point symmetry operation' 0.301013 -0.95362 -0 -0 0.95362 0.301013 -0 -0 -0 0 1 185.5721
+355 'point symmetry operation' 0.364754 -0.931104 -0 -0 0.931104 0.364754 -0 -0 -0 0 1 186.0978
+356 'point symmetry operation' 0.426828 -0.904333 -0 -0 0.904333 0.426828 -0 -0 -0 0 1 186.6235
+357 'point symmetry operation' 0.486952 -0.873429 -0 -0 0.873429 0.486952 -0 -0 -0 0 1 187.1492
+358 'point symmetry operation' 0.54485 -0.838533 -0 -0 0.838533 0.54485 -0 -0 -0 0 1 187.6749
+359 'point symmetry operation' 0.600259 -0.799806 -0 -0 0.799806 0.600259 -0 -0 -0 0 1 188.2006
+360 'point symmetry operation' 0.652924 -0.757424 -0 -0 0.757424 0.652924 -0 -0 -0 0 1 188.7263
+361 'point symmetry operation' 0.702605 -0.71158 -0 -0 0.71158 0.702605 -0 -0 -0 0 1 189.252
+362 'point symmetry operation' 0.749076 -0.662484 -0 -0 0.662484 0.749076 -0 -0 -0 0 1 189.7777
+363 'point symmetry operation' 0.792123 -0.610361 -0 -0 0.610361 0.792123 -0 -0 -0 0 1 190.3034
+364 'point symmetry operation' 0.831551 -0.555449 -0 -0 0.555449 0.831551 -0 -0 -0 0 1 190.8291
+365 'point symmetry operation' 0.867178 -0.497998 -0 -0 0.497998 0.867178 -0 -0 -0 0 1 191.3548
+366 'point symmetry operation' 0.898843 -0.438272 -0 -0 0.438272 0.898843 -0 -0 -0 0 1 191.8805
+367 'point symmetry operation' 0.926399 -0.376542 -0 -0 0.376542 0.926399 -0 -0 -0 0 1 192.4062
+368 'point symmetry operation' 0.949723 -0.313092 -0 -0 0.313092 0.949723 -0 -0 -0 0 1 192.9319
+369 'point symmetry operation' 0.968706 -0.248211 -0 -0 0.248211 0.968706 -0 -0 -0 0 1 193.4576
+370 'point symmetry operation' 0.983262 -0.182196 -0 -0 0.182196 0.983262 -0 -0 -0 0 1 193.9833
+371 'point symmetry operation' 0.993325 -0.115348 -0 -0 0.115348 0.993325 -0 -0 -0 -0 1 194.509
+372 'point symmetry operation' 0.998849 -0.047973 -0 -0 0.047973 0.998849 -0 -0 -0 -0 1 195.0347
+373 'point symmetry operation' 0.999807 0.019621 -0 -0 -0.019621 0.999807 -0 -0 -0 -0 1 195.5604
+374 'point symmetry operation' 0.996197 0.087126 -0 -0 -0.087126 0.996197 -0 -0 -0 -0 1 196.0861
+375 'point symmetry operation' 0.988035 0.154232 -0 -0 -0.154232 0.988035 0 -0 -0 -0 1 196.6118
+376 'point symmetry operation' 0.975357 0.220634 -0 -0 -0.220634 0.975357 0 -0 -0 -0 1 197.1375
+377 'point symmetry operation' 0.958222 0.286027 -0 -0 -0.286027 0.958222 0 0 -0 -0 1 197.6632
+378 'point symmetry operation' 0.936707 0.350113 -0 -0 -0.350113 0.936707 0 0 -0 -0 1 198.1889
+379 'point symmetry operation' 0.910913 0.412599 -0 -0 -0.412599 0.910913 0 0 -0 -0 1 198.7146
+380 'point symmetry operation' 0.880955 0.4732 -0 -0 -0.4732 0.880955 0 0 -0 -0 1 199.2403
+381 'point symmetry operation' 0.846972 0.531638 -0 -0 -0.531638 0.846972 0 0 -0 -0 1 199.766
+382 'point symmetry operation' 0.809118 0.587647 -0 -0 -0.587647 0.809118 0 0 -0 -0 1 200.2917
+383 'point symmetry operation' 0.767566 0.64097 -0 -0 -0.64097 0.767566 0 0 -0 -0 1 200.8174
+384 'point symmetry operation' 0.722507 0.691364 -0 -0 -0.691364 0.722507 0 0 -0 -0 1 201.3431
+385 'point symmetry operation' 0.674146 0.738598 -0 -0 -0.738598 0.674146 0 0 -0 -0 1 201.8688
+386 'point symmetry operation' 0.622704 0.782458 -0 -0 -0.782458 0.622704 0 0 -0 -0 1 202.3945
+387 'point symmetry operation' 0.568416 0.822741 -0 -0 -0.822741 0.568416 0 0 -0 -0 1 202.9202
+388 'point symmetry operation' 0.511531 0.859265 -0 -0 -0.859265 0.511531 0 0 -0 -0 1 203.4459
+389 'point symmetry operation' 0.452308 0.891862 -0 -0 -0.891862 0.452308 0 0 -0 -0 1 203.9716
+390 'point symmetry operation' 0.391019 0.920383 -0 -0 -0.920383 0.391019 0 0 -0 -0 1 204.4973
+391 'point symmetry operation' 0.327942 0.944698 -0 -0 -0.944698 0.327942 0 0 -0 -0 1 205.023
+392 'point symmetry operation' 0.263366 0.964696 -0 -0 -0.964696 0.263366 0 0 -0 -0 1 205.5487
+393 'point symmetry operation' 0.197588 0.980285 -0 -0 -0.980285 0.197588 0 0 -0 -0 1 206.0744
+394 'point symmetry operation' 0.130906 0.991395 -0 -0 -0.991395 0.130906 0 0 -0 -0 1 206.6001
+395 'point symmetry operation' 0.063626 0.997974 -0 -0 -0.997974 0.063626 0 0 -0 -0 1 207.1258
+396 'point symmetry operation' -0.003945 0.999992 -0 -0 -0.999992 -0.003945 0 0 -0 -0 1 207.6515
+397 'point symmetry operation' -0.071498 0.997441 -0 -0 -0.997441 -0.071498 0 0 -0 -0 1 208.1772
+398 'point symmetry operation' -0.138724 0.990331 -0 -0 -0.990331 -0.138724 0 0 -0 -0 1 208.7029
+399 'point symmetry operation' -0.205316 0.978696 -0 -0 -0.978696 -0.205316 0 0 -0 -0 1 209.2286
+400 'point symmetry operation' -0.27097 0.962588 -0 -0 -0.962588 -0.27097 0 0 -0 -0 1 209.7543
+401 'point symmetry operation' -0.335386 0.942081 -0 -0 -0.942081 -0.335386 0 0 -0 -0 1 210.28
+402 'point symmetry operation' -0.398269 0.917269 -0 -0 -0.917269 -0.398269 0 0 -0 -0 1 210.8057
+403 'point symmetry operation' -0.459332 0.888265 -0 -0 -0.888265 -0.459332 0 0 -0 -0 1 211.3314
+404 'point symmetry operation' -0.518295 0.855202 -0 -0 -0.855202 -0.518295 0 0 -0 -0 1 211.8571
+405 'point symmetry operation' -0.57489 0.81823 -0 -0 -0.81823 -0.57489 0 0 -0 -0 1 212.3828
+406 'point symmetry operation' -0.628858 0.77752 -0 -0 -0.77752 -0.628858 0 0 -0 -0 1 212.9085
+407 'point symmetry operation' -0.679953 0.733256 -0 -0 -0.733256 -0.679953 0 0 -0 -0 1 213.4342
+408 'point symmetry operation' -0.727939 0.685641 -0 -0 -0.685641 -0.727939 0 0 -0 -0 1 213.9599
+409 'point symmetry operation' -0.7726 0.634893 -0 -0 -0.634893 -0.7726 0 0 -0 -0 1 214.4856
+410 'point symmetry operation' -0.813729 0.581244 -0 -0 -0.581244 -0.813729 0 0 -0 -0 1 215.0113
+411 'point symmetry operation' -0.85114 0.524938 -0 -0 -0.524938 -0.85114 0 0 -0 -0 1 215.537
+412 'point symmetry operation' -0.884661 0.466234 -0 -0 -0.466234 -0.884661 0 0 -0 -0 1 216.0627
+413 'point symmetry operation' -0.91414 0.405399 -0 -0 -0.405399 -0.91414 0 0 -0 -0 1 216.5884
+414 'point symmetry operation' -0.939441 0.342711 -0 -0 -0.342711 -0.939441 0 0 -0 -0 1 217.1141
+415 'point symmetry operation' -0.960449 0.278457 -0 -0 -0.278457 -0.960449 0 0 -0 -0 1 217.6398
+416 'point symmetry operation' -0.977067 0.212931 -0 -0 -0.212931 -0.977067 0 0 -0 -0 1 218.1655
+417 'point symmetry operation' -0.989221 0.146431 -0 -0 -0.146431 -0.989221 0 0 -0 -0 1 218.6912
+418 'point symmetry operation' -0.996854 0.079262 -0 -0 -0.079262 -0.996854 0 0 0 -0 1 219.2169
+419 'point symmetry operation' -0.999931 0.011731 -0 -0 -0.011731 -0.999931 0 -0 0 -0 1 219.7426
+420 'point symmetry operation' -0.998439 -0.055853 0 -0 0.055853 -0.998439 -0 -0 -0 0 1 220.2683
+421 'point symmetry operation' -0.992384 -0.123182 0 -0 0.123182 -0.992384 -0 -0 -0 0 1 220.794
+422 'point symmetry operation' -0.981794 -0.189949 -0 -0 0.189949 -0.981794 -0 -0 -0 0 1 221.3197
+423 'point symmetry operation' -0.966717 -0.255847 -0 -0 0.255847 -0.966717 -0 -0 -0 0 1 221.8454
+424 'point symmetry operation' -0.947223 -0.320576 -0 -0 0.320576 -0.947223 -0 -0 -0 0 1 222.3711
+425 'point symmetry operation' -0.9234 -0.38384 -0 -0 0.38384 -0.9234 -0 -0 -0 0 1 222.8968
+426 'point symmetry operation' -0.895356 -0.44535 -0 -0 0.44535 -0.895356 -0 -0 -0 0 1 223.4225
+427 'point symmetry operation' -0.863222 -0.504825 -0 -0 0.504825 -0.863222 -0 -0 -0 0 1 223.9482
+428 'point symmetry operation' -0.827142 -0.561993 -0 -0 0.561993 -0.827142 -0 -0 -0 0 1 224.4739
+429 'point symmetry operation' -0.787283 -0.616592 -0 -0 0.616592 -0.787283 -0 -0 -0 0 1 224.9996
+430 'point symmetry operation' -0.743825 -0.668374 -0 -0 0.668374 -0.743825 -0 -0 -0 0 1 225.5253
+431 'point symmetry operation' -0.696969 -0.717102 -0 -0 0.717102 -0.696969 -0 -0 -0 0 1 226.051
+432 'point symmetry operation' -0.646927 -0.762552 -0 -0 0.762552 -0.646927 -0 -0 -0 0 1 226.5767
+433 'point symmetry operation' -0.593929 -0.804517 -0 -0 0.804517 -0.593929 -0 -0 -0 0 1 227.1024
+434 'point symmetry operation' -0.538217 -0.842806 -0 -0 0.842806 -0.538217 -0 -0 -0 0 1 227.6281
+435 'point symmetry operation' -0.480045 -0.877244 -0 -0 0.877244 -0.480045 -0 -0 -0 0 1 228.1538
+436 'point symmetry operation' -0.419679 -0.907672 -0 -0 0.907672 -0.419679 -0 -0 -0 0 1 228.6795
+437 'point symmetry operation' -0.357396 -0.933953 -0 -0 0.933953 -0.357396 -0 -0 -0 0 1 229.2052
+438 'point symmetry operation' -0.293479 -0.955965 -0 -0 0.955965 -0.293479 -0 -0 -0 0 1 229.7309
+439 'point symmetry operation' -0.228221 -0.973609 -0 -0 0.973609 -0.228221 -0 -0 -0 0 1 230.2566
+440 'point symmetry operation' -0.161921 -0.986804 -0 -0 0.986804 -0.161921 -0 -0 -0 0 1 230.7823
+441 'point symmetry operation' -0.09488 -0.995489 -0 -0 0.995489 -0.09488 -0 -0 -0 0 1 231.308
+442 'point symmetry operation' -0.027405 -0.999624 -0 -0 0.999624 -0.027405 -0 -0 -0 0 1 231.8337
+443 'point symmetry operation' 0.040194 -0.999192 -0 -0 0.999192 0.040194 -0 -0 -0 0 1 232.3594
+444 'point symmetry operation' 0.10761 -0.994193 -0 -0 0.994193 0.10761 -0 -0 -0 0 1 232.8851
+445 'point symmetry operation' 0.174534 -0.984651 -0 -0 0.984651 0.174534 -0 -0 -0 0 1 233.4108
+446 'point symmetry operation' 0.240661 -0.970609 -0 -0 0.970609 0.240661 -0 -0 -0 0 1 233.9365
+447 'point symmetry operation' 0.305688 -0.952132 -0 -0 0.952132 0.305688 -0 -0 -0 0 1 234.4622
+448 'point symmetry operation' 0.369317 -0.929303 -0 -0 0.929303 0.369317 -0 -0 -0 0 1 234.9879
+449 'point symmetry operation' 0.43126 -0.902228 -0 -0 0.902228 0.43126 -0 -0 -0 0 1 235.5136
+450 'point symmetry operation' 0.491231 -0.871029 -0 -0 0.871029 0.491231 -0 -0 -0 0 1 236.0393
+451 'point symmetry operation' 0.548957 -0.83585 -0 -0 0.83585 0.548957 -0 -0 -0 0 1 236.565
+452 'point symmetry operation' 0.604175 -0.796852 -0 -0 0.796852 0.604175 -0 -0 -0 0 1 237.0907
+453 'point symmetry operation' 0.656632 -0.754211 -0 -0 0.754211 0.656632 -0 -0 -0 0 1 237.6164
+454 'point symmetry operation' 0.706088 -0.708125 -0 -0 0.708125 0.706088 -0 -0 -0 0 1 238.1421
+455 'point symmetry operation' 0.752317 -0.658802 -0 -0 0.658802 0.752317 -0 -0 -0 0 1 238.6678
+456 'point symmetry operation' 0.795108 -0.606468 -0 -0 0.606468 0.795108 -0 -0 -0 0 1 239.1935
+457 'point symmetry operation' 0.834266 -0.551363 -0 -0 0.551363 0.834266 -0 -0 -0 0 1 239.7192
+458 'point symmetry operation' 0.869611 -0.493738 -0 -0 0.493738 0.869611 -0 -0 -0 0 1 240.2449
+459 'point symmetry operation' 0.900982 -0.433857 -0 -0 0.433857 0.900982 -0 -0 -0 0 1 240.7706
+460 'point symmetry operation' 0.928235 -0.371993 -0 -0 0.371993 0.928235 -0 -0 -0 0 1 241.2963
+461 'point symmetry operation' 0.951247 -0.308429 -0 -0 0.308429 0.951247 -0 -0 -0 0 1 241.822
+462 'point symmetry operation' 0.969912 -0.243456 -0 -0 0.243456 0.969912 -0 -0 -0 0 1 242.3477
+463 'point symmetry operation' 0.984144 -0.17737 -0 -0 0.17737 0.984144 -0 -0 -0 0 1 242.8734
+464 'point symmetry operation' 0.993879 -0.110474 -0 -0 0.110474 0.993879 -0 -0 -0 -0 1 243.3991
+465 'point symmetry operation' 0.999072 -0.043073 -0 -0 0.043073 0.999072 -0 -0 -0 -0 1 243.9248
+466 'point symmetry operation' 0.999699 0.024526 -0 -0 -0.024526 0.999699 -0 -0 -0 -0 1 244.4505
+467 'point symmetry operation' 0.995758 0.092012 -0 -0 -0.092012 0.995758 -0 -0 -0 -0 1 244.9762
+468 'point symmetry operation' 0.987266 0.159077 -0 -0 -0.159077 0.987266 0 -0 -0 -0 1 245.5019
+469 'point symmetry operation' 0.974263 0.225416 -0 -0 -0.225416 0.974263 0 -0 -0 -0 1 246.0276
+470 'point symmetry operation' 0.956807 0.290724 -0 -0 -0.290724 0.956807 0 -0 -0 -0 1 246.5533
+471 'point symmetry operation' 0.934979 0.354704 -0 -0 -0.354704 0.934979 0 0 -0 -0 1 247.079
+472 'point symmetry operation' 0.908878 0.417063 -0 -0 -0.417063 0.908878 0 0 -0 -0 1 247.6047
+473 'point symmetry operation' 0.878623 0.477516 -0 -0 -0.477516 0.878623 0 0 -0 -0 1 248.1304
+474 'point symmetry operation' 0.844353 0.535787 -0 -0 -0.535787 0.844353 0 0 -0 -0 1 248.6561
+475 'point symmetry operation' 0.806225 0.591609 -0 -0 -0.591609 0.806225 0 0 -0 -0 1 249.1818
+476 'point symmetry operation' 0.764412 0.644728 -0 -0 -0.644728 0.764412 0 0 -0 -0 1 249.7075
+477 'point symmetry operation' 0.719106 0.6949 -0 -0 -0.6949 0.719106 0 0 -0 -0 1 250.2332
+478 'point symmetry operation' 0.670514 0.741897 -0 -0 -0.741897 0.670514 0 0 -0 -0 1 250.7589
+479 'point symmetry operation' 0.618858 0.785503 -0 -0 -0.785503 0.618858 0 0 -0 -0 1 251.2846
+480 'point symmetry operation' 0.564373 0.82552 -0 -0 -0.82552 0.564373 0 0 -0 -0 1 251.8103
+481 'point symmetry operation' 0.50731 0.861764 -0 -0 -0.861764 0.50731 0 0 -0 -0 1 252.336
+482 'point symmetry operation' 0.447928 0.89407 -0 -0 -0.89407 0.447928 0 0 -0 -0 1 252.8617
+483 'point symmetry operation' 0.386499 0.92229 -0 -0 -0.92229 0.386499 0 0 -0 -0 1 253.3874
+484 'point symmetry operation' 0.323304 0.946295 -0 -0 -0.946295 0.323304 0 0 -0 -0 1 253.9131
+485 'point symmetry operation' 0.258631 0.965976 -0 -0 -0.965976 0.258631 0 0 -0 -0 1 254.4388
+486 'point symmetry operation' 0.192776 0.981243 -0 -0 -0.981243 0.192776 0 0 -0 -0 1 254.9645
+487 'point symmetry operation' 0.126041 0.992025 -0 -0 -0.992025 0.126041 0 0 -0 -0 1 255.4902
+488 'point symmetry operation' 0.058729 0.998274 -0 -0 -0.998274 0.058729 0 0 -0 -0 1 256.0159
+489 'point symmetry operation' -0.008851 0.999961 -0 -0 -0.999961 -0.008851 0 0 -0 -0 1 256.5416
+490 'point symmetry operation' -0.07639 0.997078 -0 -0 -0.997078 -0.07639 0 0 -0 -0 1 257.0673
+491 'point symmetry operation' -0.143581 0.989639 -0 -0 -0.989639 -0.143581 0 0 -0 -0 1 257.593
+492 'point symmetry operation' -0.210115 0.977677 -0 -0 -0.977677 -0.210115 0 0 -0 -0 1 258.1187
+493 'point symmetry operation' -0.275689 0.961247 -0 -0 -0.961247 -0.275689 0 0 -0 -0 1 258.6444
+494 'point symmetry operation' -0.340003 0.940424 -0 -0 -0.940424 -0.340003 0 0 -0 -0 1 259.1701
+495 'point symmetry operation' -0.402764 0.915304 -0 -0 -0.915304 -0.402764 0 0 -0 -0 1 259.6958
+496 'point symmetry operation' -0.463683 0.886001 -0 -0 -0.886001 -0.463683 0 0 -0 -0 1 260.2215
+497 'point symmetry operation' -0.522484 0.852649 -0 -0 -0.852649 -0.522484 0 0 -0 -0 1 260.7472
+498 'point symmetry operation' -0.578897 0.8154 -0 -0 -0.8154 -0.578897 0 0 -0 -0 1 261.2729
+499 'point symmetry operation' -0.632665 0.774426 -0 -0 -0.774426 -0.632665 0 0 -0 -0 1 261.7986
+500 'point symmetry operation' -0.683541 0.729912 -0 -0 -0.729912 -0.683541 0 0 -0 -0 1 262.3243
+501 'point symmetry operation' -0.731294 0.682062 -0 -0 -0.682062 -0.731294 0 0 -0 -0 1 262.85
+502 'point symmetry operation' -0.775705 0.631096 -0 -0 -0.631096 -0.775705 0 0 -0 -0 1 263.3757
+503 'point symmetry operation' -0.816571 0.577245 -0 -0 -0.577245 -0.816571 0 0 -0 -0 1 263.9014
+504 'point symmetry operation' -0.853705 0.520757 -0 -0 -0.520757 -0.853705 0 0 -0 -0 1 264.4271
+505 'point symmetry operation' -0.886938 0.461889 -0 -0 -0.461889 -0.886938 0 0 -0 -0 1 264.9528
+506 'point symmetry operation' -0.916118 0.40091 -0 -0 -0.40091 -0.916118 0 0 -0 -0 1 265.4785
+507 'point symmetry operation' -0.941111 0.338098 -0 -0 -0.338098 -0.941111 0 0 -0 -0 1 266.0042
+508 'point symmetry operation' -0.961803 0.273742 -0 -0 -0.273742 -0.961803 0 0 -0 -0 1 266.5299
+509 'point symmetry operation' -0.9781 0.208135 -0 -0 -0.208135 -0.9781 0 0 -0 -0 1 267.0556
+510 'point symmetry operation' -0.989927 0.141577 -0 -0 -0.141577 -0.989927 0 -0 -0 -0 1 267.5813
+511 'point symmetry operation' -0.997231 0.074371 -0 -0 -0.074371 -0.997231 0 -0 0 -0 1 268.107
+512 'point symmetry operation' -0.999977 0.006826 -0 -0 -0.006826 -0.999977 0 -0 0 -0 1 268.6327
+513 'point symmetry operation' -0.998153 -0.06075 0 -0 0.06075 -0.998153 -0 -0 -0 0 1 269.1584
+514 'point symmetry operation' -0.991768 -0.128049 -0 -0 0.128049 -0.991768 -0 -0 -0 0 1 269.6841
+515 'point symmetry operation' -0.98085 -0.194763 -0 -0 0.194763 -0.98085 -0 -0 -0 0 1 270.2098
+516 'point symmetry operation' -0.965451 -0.260586 -0 -0 0.260586 -0.965451 -0 -0 -0 0 1 270.7355
+517 'point symmetry operation' -0.945639 -0.325219 -0 -0 0.325219 -0.945639 -0 -0 -0 0 1 271.2612
+518 'point symmetry operation' -0.921505 -0.388365 -0 -0 0.388365 -0.921505 -0 -0 -0 0 1 271.7869
+519 'point symmetry operation' -0.893161 -0.449737 -0 -0 0.449737 -0.893161 -0 -0 -0 0 1 272.3126
+520 'point symmetry operation' -0.860735 -0.509054 -0 -0 0.509054 -0.860735 -0 -0 -0 0 1 272.8383
+521 'point symmetry operation' -0.824375 -0.566044 -0 -0 0.566044 -0.824375 -0 -0 -0 0 1 273.364
+522 'point symmetry operation' -0.784248 -0.620447 -0 -0 0.620447 -0.784248 -0 -0 -0 0 1 273.8897
+523 'point symmetry operation' -0.740537 -0.672015 -0 -0 0.672015 -0.740537 -0 -0 -0 0 1 274.4154
+524 'point symmetry operation' -0.693442 -0.720512 -0 -0 0.720512 -0.693442 -0 -0 -0 0 1 274.9411
+525 'point symmetry operation' -0.643178 -0.765716 -0 -0 0.765716 -0.643178 -0 -0 -0 0 1 275.4668
+526 'point symmetry operation' -0.589975 -0.807421 -0 -0 0.807421 -0.589975 -0 -0 -0 0 1 275.9925
+527 'point symmetry operation' -0.534076 -0.845437 -0 -0 0.845437 -0.534076 -0 -0 -0 0 1 276.5182
+528 'point symmetry operation' -0.475736 -0.879588 -0 -0 0.879588 -0.475736 -0 -0 -0 0 1 277.0439
+529 'point symmetry operation' -0.415222 -0.90972 -0 -0 0.90972 -0.415222 -0 -0 -0 0 1 277.5696
+530 'point symmetry operation' -0.35281 -0.935695 -0 -0 0.935695 -0.35281 -0 -0 -0 0 1 278.0953
+531 'point symmetry operation' -0.288786 -0.957394 -0 -0 0.957394 -0.288786 -0 -0 -0 0 1 278.621
+532 'point symmetry operation' -0.223443 -0.974717 -0 -0 0.974717 -0.223443 -0 -0 -0 0 1 279.1467
+533 'point symmetry operation' -0.157078 -0.987586 -0 -0 0.987586 -0.157078 -0 -0 -0 0 1 279.6724
+534 'point symmetry operation' -0.089995 -0.995942 -0 -0 0.995942 -0.089995 -0 -0 -0 0 1 280.1981
+535 'point symmetry operation' -0.022501 -0.999747 -0 -0 0.999747 -0.022501 -0 -0 -0 0 1 280.7238
+536 'point symmetry operation' 0.045095 -0.998983 -0 -0 0.998983 0.045095 -0 -0 -0 0 1 281.2495
+537 'point symmetry operation' 0.112486 -0.993653 -0 -0 0.993653 0.112486 -0 -0 -0 0 1 281.7752
+538 'point symmetry operation' 0.179363 -0.983783 -0 -0 0.983783 0.179363 -0 -0 -0 0 1 282.3009
+539 'point symmetry operation' 0.245419 -0.969417 -0 -0 0.969417 0.245419 -0 -0 -0 0 1 282.8266
+540 'point symmetry operation' 0.310355 -0.950621 -0 -0 0.950621 0.310355 -0 -0 -0 0 1 283.3523
+541 'point symmetry operation' 0.373872 -0.92748 -0 -0 0.92748 0.373872 -0 -0 -0 0 1 283.878
+542 'point symmetry operation' 0.43568 -0.900101 -0 -0 0.900101 0.43568 -0 -0 -0 0 1 284.4037
+543 'point symmetry operation' 0.495498 -0.868609 -0 -0 0.868609 0.495498 -0 -0 -0 0 1 284.9294
+544 'point symmetry operation' 0.553051 -0.833147 -0 -0 0.833147 0.553051 -0 -0 -0 0 1 285.4551
+545 'point symmetry operation' 0.608077 -0.793878 -0 -0 0.793878 0.608077 -0 -0 -0 0 1 285.9808
+546 'point symmetry operation' 0.660324 -0.750981 -0 -0 0.750981 0.660324 -0 -0 -0 0 1 286.5065
+547 'point symmetry operation' 0.709553 -0.704652 -0 -0 0.704652 0.709553 -0 -0 -0 0 1 287.0322
+548 'point symmetry operation' 0.755539 -0.655103 -0 -0 0.655103 0.755539 -0 -0 -0 0 1 287.5579
+549 'point symmetry operation' 0.798073 -0.60256 -0 -0 0.60256 0.798073 -0 -0 -0 0 1 288.0836
+550 'point symmetry operation' 0.83696 -0.547264 -0 -0 0.547264 0.83696 -0 -0 -0 0 1 288.6093
+551 'point symmetry operation' 0.872022 -0.489466 -0 -0 0.489466 0.872022 -0 -0 -0 0 1 289.135
+552 'point symmetry operation' 0.903099 -0.429432 -0 -0 0.429432 0.903099 -0 -0 -0 0 1 289.6607
+553 'point symmetry operation' 0.930049 -0.367435 -0 -0 0.367435 0.930049 -0 -0 -0 0 1 290.1864
+554 'point symmetry operation' 0.952749 -0.303759 -0 -0 0.303759 0.952749 -0 -0 -0 0 1 290.7121
+555 'point symmetry operation' 0.971095 -0.238695 -0 -0 0.238695 0.971095 -0 -0 -0 0 1 291.2378
+556 'point symmetry operation' 0.985002 -0.17254 -0 -0 0.17254 0.985002 -0 -0 -0 0 1 291.7635
+557 'point symmetry operation' 0.994409 -0.105597 -0 -0 0.105597 0.994409 -0 -0 -0 -0 1 292.2892
+558 'point symmetry operation' 0.999271 -0.038171 -0 -0 0.038171 0.999271 -0 -0 -0 -0 1 292.8149
+559 'point symmetry operation' 0.999567 0.029429 -0 -0 -0.029429 0.999567 -0 -0 -0 -0 1 293.3406
+560 'point symmetry operation' 0.995295 0.096895 -0 -0 -0.096895 0.995295 -0 -0 -0 -0 1 293.8663
+561 'point symmetry operation' 0.986474 0.163918 -0 -0 -0.163918 0.986474 0 -0 -0 -0 1 294.392
+562 'point symmetry operation' 0.973145 0.230192 -0 -0 -0.230192 0.973145 0 -0 -0 -0 1 294.9177
+563 'point symmetry operation' 0.955369 0.295414 -0 -0 -0.295414 0.955369 0 -0 -0 -0 1 295.4434
+564 'point symmetry operation' 0.933227 0.359286 -0 -0 -0.359286 0.933227 0 -0 -0 -0 1 295.9691
+565 'point symmetry operation' 0.906821 0.421516 -0 -0 -0.421516 0.906821 0 -0 -0 -0 1 296.4948
+566 'point symmetry operation' 0.87627 0.48182 -0 -0 -0.48182 0.87627 0 0 -0 -0 1 297.0205
+567 'point symmetry operation' 0.841715 0.539922 -0 -0 -0.539922 0.841715 0 0 -0 -0 1 297.5462
+568 'point symmetry operation' 0.803313 0.595557 -0 -0 -0.595557 0.803313 0 0 -0 -0 1 298.0719
+569 'point symmetry operation' 0.76124 0.64847 -0 -0 -0.64847 0.76124 0 0 -0 -0 1 298.5976
+570 'point symmetry operation' 0.715689 0.698419 -0 -0 -0.698419 0.715689 0 0 -0 -0 1 299.1233
+571 'point symmetry operation' 0.666867 0.745177 -0 -0 -0.745177 0.666867 0 0 -0 -0 1 299.649
+572 'point symmetry operation' 0.614997 0.788529 -0 -0 -0.788529 0.614997 0 0 -0 -0 1 300.1747
+573 'point symmetry operation' 0.560317 0.828278 -0 -0 -0.828278 0.560317 0 0 -0 -0 1 300.7004
+574 'point symmetry operation' 0.503076 0.864242 -0 -0 -0.864242 0.503076 0 0 -0 -0 1 301.2261
+575 'point symmetry operation' 0.443536 0.896256 -0 -0 -0.896256 0.443536 0 0 -0 -0 1 301.7518
+576 'point symmetry operation' 0.38197 0.924175 -0 -0 -0.924175 0.38197 0 0 -0 -0 1 302.2775
+577 'point symmetry operation' 0.318658 0.94787 -0 -0 -0.94787 0.318658 0 0 -0 -0 1 302.8032
+578 'point symmetry operation' 0.253889 0.967233 -0 -0 -0.967233 0.253889 0 0 -0 -0 1 303.3289
+579 'point symmetry operation' 0.18796 0.982177 -0 -0 -0.982177 0.18796 0 0 -0 -0 1 303.8546
+580 'point symmetry operation' 0.121173 0.992631 -0 -0 -0.992631 0.121173 0 0 -0 -0 1 304.3803
+581 'point symmetry operation' 0.053831 0.99855 -0 -0 -0.99855 0.053831 0 0 -0 -0 1 304.906
+582 'point symmetry operation' -0.013756 0.999905 -0 -0 -0.999905 -0.013756 0 0 -0 -0 1 305.4317
+583 'point symmetry operation' -0.081281 0.996691 -0 -0 -0.996691 -0.081281 0 0 -0 -0 1 305.9574
+584 'point symmetry operation' -0.148434 0.988922 -0 -0 -0.988922 -0.148434 0 0 -0 -0 1 306.4831
+585 'point symmetry operation' -0.214909 0.976634 -0 -0 -0.976634 -0.214909 0 0 -0 -0 1 307.0088
+586 'point symmetry operation' -0.280401 0.959883 -0 -0 -0.959883 -0.280401 0 0 -0 -0 1 307.5345
+587 'point symmetry operation' -0.344612 0.938745 -0 -0 -0.938745 -0.344612 0 0 -0 -0 1 308.0602
+588 'point symmetry operation' -0.407249 0.913317 -0 -0 -0.913317 -0.407249 0 0 -0 -0 1 308.5859
+589 'point symmetry operation' -0.468024 0.883716 -0 -0 -0.883716 -0.468024 0 0 -0 -0 1 309.1116
+590 'point symmetry operation' -0.526661 0.850076 -0 -0 -0.850076 -0.526661 0 0 -0 -0 1 309.6373
+591 'point symmetry operation' -0.58289 0.812551 -0 -0 -0.812551 -0.58289 0 0 -0 -0 1 310.163
+592 'point symmetry operation' -0.636456 0.771313 -0 -0 -0.771313 -0.636456 0 0 -0 -0 1 310.6887
+593 'point symmetry operation' -0.687114 0.72655 -0 -0 -0.72655 -0.687114 0 0 -0 -0 1 311.2144
+594 'point symmetry operation' -0.734631 0.678467 -0 -0 -0.678467 -0.734631 0 0 -0 -0 1 311.7401
+595 'point symmetry operation' -0.778792 0.627283 -0 -0 -0.627283 -0.778792 0 0 -0 -0 1 312.2658
+596 'point symmetry operation' -0.819393 0.573233 -0 -0 -0.573233 -0.819393 0 0 -0 -0 1 312.7915
+597 'point symmetry operation' -0.856249 0.516563 -0 -0 -0.516563 -0.856249 0 0 -0 -0 1 313.3172
+598 'point symmetry operation' -0.889193 0.457532 -0 -0 -0.457532 -0.889193 0 0 -0 -0 1 313.8429
+599 'point symmetry operation' -0.918073 0.396411 -0 -0 -0.396411 -0.918073 0 0 -0 -0 1 314.3686
+600 'point symmetry operation' -0.942758 0.333478 -0 -0 -0.333478 -0.942758 0 0 -0 -0 1 314.8943
+601 'point symmetry operation' -0.963134 0.269021 -0 -0 -0.269021 -0.963134 0 0 -0 -0 1 315.42
+602 'point symmetry operation' -0.979109 0.203334 -0 -0 -0.203334 -0.979109 0 -0 -0 -0 1 315.9457
+603 'point symmetry operation' -0.99061 0.136719 -0 -0 -0.136719 -0.99061 0 -0 -0 -0 1 316.4714
+604 'point symmetry operation' -0.997583 0.069478 -0 -0 -0.069478 -0.997583 0 -0 0 -0 1 316.9971
+605 'point symmetry operation' -0.999998 0.001921 -0 -0 -0.001921 -0.999998 0 -0 0 -0 1 317.5228
+606 'point symmetry operation' -0.997843 -0.065646 0 -0 0.065646 -0.997843 -0 -0 -0 0 1 318.0485
+607 'point symmetry operation' -0.991128 -0.132913 -0 -0 0.132913 -0.991128 -0 -0 -0 0 1 318.5742
+608 'point symmetry operation' -0.979883 -0.199572 -0 -0 0.199572 -0.979883 -0 -0 -0 0 1 319.0999
+609 'point symmetry operation' -0.964161 -0.265319 -0 -0 0.265319 -0.964161 -0 -0 -0 0 1 319.6256
+610 'point symmetry operation' -0.944032 -0.329854 -0 -0 0.329854 -0.944032 -0 -0 -0 0 1 320.1513
+611 'point symmetry operation' -0.919589 -0.392881 -0 -0 0.392881 -0.919589 -0 -0 -0 0 1 320.677
+612 'point symmetry operation' -0.890944 -0.454113 -0 -0 0.454113 -0.890944 -0 -0 -0 0 1 321.2027
+613 'point symmetry operation' -0.858227 -0.51327 -0 -0 0.51327 -0.858227 -0 -0 -0 0 1 321.7284
+614 'point symmetry operation' -0.821589 -0.570081 -0 -0 0.570081 -0.821589 -0 -0 -0 0 1 322.2541
+615 'point symmetry operation' -0.781195 -0.624287 -0 -0 0.624287 -0.781195 -0 -0 -0 0 1 322.7798
+616 'point symmetry operation' -0.737232 -0.67564 -0 -0 0.67564 -0.737232 -0 -0 -0 0 1 323.3055
+617 'point symmetry operation' -0.6899 -0.723905 -0 -0 0.723905 -0.6899 -0 -0 -0 0 1 323.8312
+618 'point symmetry operation' -0.639414 -0.768862 -0 -0 0.768862 -0.639414 -0 -0 -0 0 1 324.3569
+619 'point symmetry operation' -0.586007 -0.810306 -0 -0 0.810306 -0.586007 -0 -0 -0 0 1 324.8826
+620 'point symmetry operation' -0.529922 -0.848046 -0 -0 0.848046 -0.529922 -0 -0 -0 0 1 325.4083
+621 'point symmetry operation' -0.471415 -0.881911 -0 -0 0.881911 -0.471415 -0 -0 -0 0 1 325.934
+622 'point symmetry operation' -0.410754 -0.911746 -0 -0 0.911746 -0.410754 -0 -0 -0 0 1 326.4597
+623 'point symmetry operation' -0.348216 -0.937414 -0 -0 0.937414 -0.348216 -0 -0 -0 0 1 326.9854
+624 'point symmetry operation' -0.284086 -0.958799 -0 -0 0.958799 -0.284086 -0 -0 -0 0 1 327.5111
+625 'point symmetry operation' -0.218658 -0.975801 -0 -0 0.975801 -0.218658 -0 -0 -0 0 1 328.0368
+626 'point symmetry operation' -0.152231 -0.988345 -0 -0 0.988345 -0.152231 -0 -0 -0 0 1 328.5625
+627 'point symmetry operation' -0.085108 -0.996372 -0 -0 0.996372 -0.085108 -0 -0 -0 0 1 329.0882
+628 'point symmetry operation' -0.017597 -0.999845 -0 -0 0.999845 -0.017597 -0 -0 -0 0 1 329.6139
+629 'point symmetry operation' 0.049995 -0.998749 -0 -0 0.998749 0.049995 -0 -0 -0 0 1 330.1396
+630 'point symmetry operation' 0.117359 -0.99309 -0 -0 0.99309 0.117359 -0 -0 -0 0 1 330.6653
+631 'point symmetry operation' 0.184186 -0.982891 -0 -0 0.982891 0.184186 -0 -0 -0 0 1 331.191
+632 'point symmetry operation' 0.250172 -0.968201 -0 -0 0.968201 0.250172 -0 -0 -0 0 1 331.7167
+633 'point symmetry operation' 0.315014 -0.949087 -0 -0 0.949087 0.315014 -0 -0 -0 0 1 332.2424
+634 'point symmetry operation' 0.378417 -0.925635 -0 -0 0.925635 0.378417 -0 -0 -0 0 1 332.7681
+635 'point symmetry operation' 0.440091 -0.897953 -0 -0 0.897953 0.440091 -0 -0 -0 0 1 333.2938
+636 'point symmetry operation' 0.499753 -0.866168 -0 -0 0.866168 0.499753 -0 -0 -0 0 1 333.8195
+637 'point symmetry operation' 0.557131 -0.830424 -0 -0 0.830424 0.557131 -0 -0 -0 0 1 334.3452
+638 'point symmetry operation' 0.611964 -0.790886 -0 -0 0.790886 0.611964 -0 -0 -0 0 1 334.8709
+639 'point symmetry operation' 0.664 -0.747733 -0 -0 0.747733 0.664 -0 -0 -0 0 1 335.3966
+640 'point symmetry operation' 0.713001 -0.701163 -0 -0 0.701163 0.713001 -0 -0 -0 0 1 335.9223
+641 'point symmetry operation' 0.758744 -0.651389 -0 -0 0.651389 0.758744 -0 -0 -0 0 1 336.448
+642 'point symmetry operation' 0.80102 -0.598638 -0 -0 0.598638 0.80102 -0 -0 -0 0 1 336.9737
+643 'point symmetry operation' 0.839635 -0.543151 -0 -0 0.543151 0.839635 -0 -0 -0 0 1 337.4994
+644 'point symmetry operation' 0.874413 -0.485182 -0 -0 0.485182 0.874413 -0 -0 -0 0 1 338.0251
+645 'point symmetry operation' 0.905195 -0.424996 -0 -0 0.424996 0.905195 -0 -0 -0 0 1 338.5508
+646 'point symmetry operation' 0.93184 -0.362868 -0 -0 0.362868 0.93184 -0 -0 -0 0 1 339.0765
+647 'point symmetry operation' 0.954227 -0.299082 -0 -0 0.299082 0.954227 -0 -0 -0 0 1 339.6022
+648 'point symmetry operation' 0.972254 -0.233929 -0 -0 0.233929 0.972254 -0 -0 -0 0 1 340.1279
+649 'point symmetry operation' 0.985837 -0.167706 -0 -0 0.167706 0.985837 -0 -0 -0 0 1 340.6536
+650 'point symmetry operation' 0.994915 -0.100718 -0 -0 0.100718 0.994915 -0 -0 -0 -0 1 341.1793
+651 'point symmetry operation' 0.999446 -0.033269 -0 -0 0.033269 0.999446 -0 -0 -0 -0 1 341.705
+652 'point symmetry operation' 0.99941 0.034332 -0 -0 -0.034332 0.99941 -0 -0 -0 -0 1 342.2307
+653 'point symmetry operation' 0.994807 0.101777 -0 -0 -0.101777 0.994807 -0 -0 -0 -0 1 342.7564
+654 'point symmetry operation' 0.985658 0.168756 -0 -0 -0.168756 0.985658 0 -0 -0 -0 1 343.2821
+655 'point symmetry operation' 0.972004 0.234963 -0 -0 -0.234963 0.972004 0 -0 -0 -0 1 343.8078
+656 'point symmetry operation' 0.953909 0.300097 -0 -0 -0.300097 0.953909 0 -0 -0 -0 1 344.3335
+657 'point symmetry operation' 0.931454 0.36386 -0 -0 -0.36386 0.931454 0 -0 -0 -0 1 344.8592
+658 'point symmetry operation' 0.904742 0.42596 -0 -0 -0.42596 0.904742 0 -0 -0 -0 1 345.3849
+659 'point symmetry operation' 0.873896 0.486113 -0 -0 -0.486113 0.873896 0 -0 -0 -0 1 345.9106
+660 'point symmetry operation' 0.839056 0.544045 -0 -0 -0.544045 0.839056 0 0 -0 -0 1 346.4363
+661 'point symmetry operation' 0.800382 0.59949 -0 -0 -0.59949 0.800382 0 0 -0 -0 1 346.962
+662 'point symmetry operation' 0.75805 0.652196 -0 -0 -0.652196 0.75805 0 0 -0 -0 1 347.4877
+663 'point symmetry operation' 0.712254 0.701922 -0 -0 -0.701922 0.712254 0 0 -0 -0 1 348.0134
+664 'point symmetry operation' 0.663203 0.748439 -0 -0 -0.748439 0.663203 0 0 -0 -0 1 348.5391
+665 'point symmetry operation' 0.611122 0.791537 -0 -0 -0.791537 0.611122 0 0 -0 -0 1 349.0648
+666 'point symmetry operation' 0.556247 0.831017 -0 -0 -0.831017 0.556247 0 0 -0 -0 1 349.5905
+667 'point symmetry operation' 0.498831 0.8667 -0 -0 -0.8667 0.498831 0 0 -0 -0 1 350.1162
+668 'point symmetry operation' 0.439134 0.898421 -0 -0 -0.898421 0.439134 0 0 -0 -0 1 350.6419
+669 'point symmetry operation' 0.377432 0.926037 -0 -0 -0.926037 0.377432 0 0 -0 -0 1 351.1676
+670 'point symmetry operation' 0.314004 0.949422 -0 -0 -0.949422 0.314004 0 0 -0 -0 1 351.6933
+671 'point symmetry operation' 0.249141 0.968467 -0 -0 -0.968467 0.249141 0 0 -0 -0 1 352.219
+672 'point symmetry operation' 0.18314 0.983087 -0 -0 -0.983087 0.18314 0 0 -0 -0 1 352.7447
+673 'point symmetry operation' 0.116302 0.993214 -0 -0 -0.993214 0.116302 0 0 -0 -0 1 353.2704
+674 'point symmetry operation' 0.048932 0.998802 -0 -0 -0.998802 0.048932 0 0 -0 -0 1 353.7961
+675 'point symmetry operation' -0.018661 0.999826 -0 -0 -0.999826 -0.018661 0 0 -0 -0 1 354.3218
+676 'point symmetry operation' -0.086169 0.996281 -0 -0 -0.996281 -0.086169 0 0 -0 -0 1 354.8475
+677 'point symmetry operation' -0.153283 0.988182 -0 -0 -0.988182 -0.153283 0 0 -0 -0 1 355.3732
+678 'point symmetry operation' -0.219697 0.975568 -0 -0 -0.975568 -0.219697 0 0 -0 -0 1 355.8989
+679 'point symmetry operation' -0.285107 0.958496 -0 -0 -0.958496 -0.285107 0 0 -0 -0 1 356.4246
+680 'point symmetry operation' -0.349213 0.937043 -0 -0 -0.937043 -0.349213 0 0 -0 -0 1 356.9503
+681 'point symmetry operation' -0.411724 0.911308 -0 -0 -0.911308 -0.411724 0 0 -0 -0 1 357.476
+682 'point symmetry operation' -0.472354 0.881409 -0 -0 -0.881409 -0.472354 0 0 -0 -0 1 358.0017
+683 'point symmetry operation' -0.530825 0.847482 -0 -0 -0.847482 -0.530825 0 0 -0 -0 1 358.5274
+684 'point symmetry operation' -0.586869 0.809682 -0 -0 -0.809682 -0.586869 0 0 -0 -0 1 359.0531
+685 'point symmetry operation' -0.640233 0.768181 -0 -0 -0.768181 -0.640233 0 0 -0 -0 1 359.5788
+686 'point symmetry operation' -0.69067 0.72317 -0 -0 -0.72317 -0.69067 0 0 -0 -0 1 360.1045
+687 'point symmetry operation' -0.737951 0.674855 -0 -0 -0.674855 -0.737951 0 0 -0 -0 1 360.6302
+688 'point symmetry operation' -0.781859 0.623455 -0 -0 -0.623455 -0.781859 0 0 -0 -0 1 361.1559
+689 'point symmetry operation' -0.822195 0.569206 -0 -0 -0.569206 -0.822195 0 0 -0 -0 1 361.6816
+690 'point symmetry operation' -0.858773 0.512356 -0 -0 -0.512356 -0.858773 0 0 -0 -0 1 362.2073
+691 'point symmetry operation' -0.891427 0.453165 -0 -0 -0.453165 -0.891427 0 0 -0 -0 1 362.733
+692 'point symmetry operation' -0.920007 0.391902 -0 -0 -0.391902 -0.920007 0 0 -0 -0 1 363.2587
+693 'point symmetry operation' -0.944383 0.328849 -0 -0 -0.328849 -0.944383 0 0 -0 -0 1 363.7844
+694 'point symmetry operation' -0.964443 0.264293 -0 -0 -0.264293 -0.964443 0 -0 -0 -0 1 364.3101
+695 'point symmetry operation' -0.980095 0.198529 -0 -0 -0.198529 -0.980095 0 -0 -0 -0 1 364.8358
+696 'point symmetry operation' -0.991269 0.131858 -0 -0 -0.131858 -0.991269 0 -0 -0 -0 1 365.3615
+697 'point symmetry operation' -0.997912 0.064584 -0 -0 -0.064584 -0.997912 0 -0 0 -0 1 365.8872
+698 'point symmetry operation' -0.999996 -0.002985 0 -0 0.002985 -0.999996 -0 -0 -0 0 1 366.4129
+699 'point symmetry operation' -0.997509 -0.07054 0 -0 0.07054 -0.997509 -0 -0 -0 0 1 366.9386
+700 'point symmetry operation' -0.990464 -0.137773 -0 -0 0.137773 -0.990464 -0 -0 -0 0 1 367.4643
+701 'point symmetry operation' -0.978892 -0.204376 -0 -0 0.204376 -0.978892 -0 -0 -0 0 1 367.99
+702 'point symmetry operation' -0.962847 -0.270046 -0 -0 0.270046 -0.962847 -0 -0 -0 0 1 368.5157
+703 'point symmetry operation' -0.942402 -0.334481 -0 -0 0.334481 -0.942402 -0 -0 -0 0 1 369.0414
+704 'point symmetry operation' -0.917651 -0.397388 -0 -0 0.397388 -0.917651 -0 -0 -0 0 1 369.5671
+705 'point symmetry operation' -0.888706 -0.458478 -0 -0 0.458478 -0.888706 -0 -0 -0 0 1 370.0928
+706 'point symmetry operation' -0.855699 -0.517474 -0 -0 0.517474 -0.855699 -0 -0 -0 0 1 370.6185
+707 'point symmetry operation' -0.818782 -0.574104 -0 -0 0.574104 -0.818782 -0 -0 -0 0 1 371.1442
+708 'point symmetry operation' -0.778123 -0.628112 -0 -0 0.628112 -0.778123 -0 -0 -0 0 1 371.6699
+709 'point symmetry operation' -0.733909 -0.679248 -0 -0 0.679248 -0.733909 -0 -0 -0 0 1 372.1956
+710 'point symmetry operation' -0.68634 -0.727281 -0 -0 0.727281 -0.68634 -0 -0 -0 0 1 372.7213
+711 'point symmetry operation' -0.635635 -0.77199 -0 -0 0.77199 -0.635635 -0 -0 -0 0 1 373.247
+712 'point symmetry operation' -0.582025 -0.813171 -0 -0 0.813171 -0.582025 -0 -0 -0 0 1 373.7727
+713 'point symmetry operation' -0.525756 -0.850636 -0 -0 0.850636 -0.525756 -0 -0 -0 0 1 374.2984
+714 'point symmetry operation' -0.467083 -0.884213 -0 -0 0.884213 -0.467083 -0 -0 -0 0 1 374.8241
+715 'point symmetry operation' -0.406276 -0.91375 -0 -0 0.91375 -0.406276 -0 -0 -0 0 1 375.3498
+716 'point symmetry operation' -0.343613 -0.939111 -0 -0 0.939111 -0.343613 -0 -0 -0 0 1 375.8755
+717 'point symmetry operation' -0.279379 -0.960181 -0 -0 0.960181 -0.279379 -0 -0 -0 0 1 376.4012
+718 'point symmetry operation' -0.213869 -0.976862 -0 -0 0.976862 -0.213869 -0 -0 -0 0 1 376.9269
+719 'point symmetry operation' -0.147381 -0.98908 -0 -0 0.98908 -0.147381 -0 -0 -0 0 1 377.4526
+720 'point symmetry operation' -0.08022 -0.996777 -0 -0 0.996777 -0.08022 -0 -0 -0 0 1 377.9783
+721 'point symmetry operation' -0.012692 -0.999919 -0 -0 0.999919 -0.012692 -0 -0 -0 0 1 378.504
+722 'point symmetry operation' 0.054894 -0.998492 -0 -0 0.998492 0.054894 -0 -0 -0 0 1 379.0297
+723 'point symmetry operation' 0.122229 -0.992502 -0 -0 0.992502 0.122229 -0 -0 -0 0 1 379.5554
+724 'point symmetry operation' 0.189006 -0.981976 -0 -0 0.981976 0.189006 -0 -0 -0 0 1 380.0811
+725 'point symmetry operation' 0.254919 -0.966963 -0 -0 0.966963 0.254919 -0 -0 -0 0 1 380.6068
+726 'point symmetry operation' 0.319666 -0.94753 -0 -0 0.94753 0.319666 -0 -0 -0 0 1 381.1325
+727 'point symmetry operation' 0.382953 -0.923768 -0 -0 0.923768 0.382953 -0 -0 -0 0 1 381.6582
+728 'point symmetry operation' 0.44449 -0.895784 -0 -0 0.895784 0.44449 -0 -0 -0 0 1 382.1839
+729 'point symmetry operation' 0.503996 -0.863706 -0 -0 0.863706 0.503996 -0 -0 -0 0 1 382.7096
+730 'point symmetry operation' 0.561198 -0.827681 -0 -0 0.827681 0.561198 -0 -0 -0 0 1 383.2353
+731 'point symmetry operation' 0.615836 -0.787874 -0 -0 0.787874 0.615836 -0 -0 -0 0 1 383.761
+732 'point symmetry operation' 0.66766 -0.744467 -0 -0 0.744467 0.66766 -0 -0 -0 0 1 384.2867
+733 'point symmetry operation' 0.716432 -0.697657 -0 -0 0.697657 0.716432 -0 -0 -0 0 1 384.8124
+734 'point symmetry operation' 0.76193 -0.647659 -0 -0 0.647659 0.76193 -0 -0 -0 0 1 385.3381
+735 'point symmetry operation' 0.803947 -0.594701 -0 -0 0.594701 0.803947 -0 -0 -0 0 1 385.8638
+736 'point symmetry operation' 0.842289 -0.539026 -0 -0 0.539026 0.842289 -0 -0 -0 0 1 386.3895
+737 'point symmetry operation' 0.876782 -0.480887 -0 -0 0.480887 0.876782 -0 -0 -0 0 1 386.9152
+738 'point symmetry operation' 0.907269 -0.420551 -0 -0 0.420551 0.907269 -0 -0 -0 0 1 387.4409
+739 'point symmetry operation' 0.933609 -0.358293 -0 -0 0.358293 0.933609 -0 -0 -0 0 1 387.9666
+740 'point symmetry operation' 0.955683 -0.294397 -0 -0 0.294397 0.955683 -0 -0 -0 0 1 388.4923
+741 'point symmetry operation' 0.97339 -0.229156 -0 -0 0.229156 0.97339 -0 -0 -0 0 1 389.018
+742 'point symmetry operation' 0.986648 -0.162868 -0 -0 0.162868 0.986648 -0 -0 -0 0 1 389.5437
+743 'point symmetry operation' 0.995397 -0.095836 -0 -0 0.095836 0.995397 -0 -0 -0 -0 1 390.0694
+744 'point symmetry operation' 0.999598 -0.028365 -0 -0 0.028365 0.999598 -0 -0 -0 -0 1 390.5951
+745 'point symmetry operation' 0.99923 0.039235 -0 -0 -0.039235 0.99923 -0 -0 -0 -0 1 391.1208
+746 'point symmetry operation' 0.994296 0.106655 -0 -0 -0.106655 0.994296 -0 -0 -0 -0 1 391.6465
+747 'point symmetry operation' 0.984818 0.173589 -0 -0 -0.173589 0.984818 0 -0 -0 -0 1 392.1722
+748 'point symmetry operation' 0.97084 0.239729 -0 -0 -0.239729 0.97084 0 -0 -0 -0 1 392.6979
+749 'point symmetry operation' 0.952425 0.304773 -0 -0 -0.304773 0.952425 0 -0 -0 -0 1 393.2236
+750 'point symmetry operation' 0.929658 0.368425 -0 -0 -0.368425 0.929658 0 -0 -0 -0 1 393.7493
+751 'point symmetry operation' 0.902642 0.430393 -0 -0 -0.430393 0.902642 0 -0 -0 -0 1 394.275
+752 'point symmetry operation' 0.871501 0.490394 -0 -0 -0.490394 0.871501 0 -0 -0 -0 1 394.8007
+753 'point symmetry operation' 0.836377 0.548154 -0 -0 -0.548154 0.836377 0 -0 -0 -0 1 395.3264
+754 'point symmetry operation' 0.797432 0.603409 -0 -0 -0.603409 0.797432 0 0 -0 -0 1 395.8521
+755 'point symmetry operation' 0.754842 0.655907 -0 -0 -0.655907 0.754842 0 0 -0 -0 1 396.3778
+756 'point symmetry operation' 0.708802 0.705407 -0 -0 -0.705407 0.708802 0 0 -0 -0 1 396.9035
+757 'point symmetry operation' 0.659524 0.751684 -0 -0 -0.751684 0.659524 0 0 -0 -0 1 397.4292
+758 'point symmetry operation' 0.607231 0.794525 -0 -0 -0.794525 0.607231 0 0 -0 -0 1 397.9549
+759 'point symmetry operation' 0.552164 0.833736 -0 -0 -0.833736 0.552164 0 0 -0 -0 1 398.4806
+760 'point symmetry operation' 0.494573 0.869136 -0 -0 -0.869136 0.494573 0 0 -0 -0 1 399.0063
+761 'point symmetry operation' 0.434722 0.900565 -0 -0 -0.900565 0.434722 0 0 -0 -0 1 399.532
+762 'point symmetry operation' 0.372884 0.927878 -0 -0 -0.927878 0.372884 0 0 -0 -0 1 400.0577
+763 'point symmetry operation' 0.309343 0.950951 -0 -0 -0.950951 0.309343 0 0 -0 -0 1 400.5834
+764 'point symmetry operation' 0.244387 0.969678 -0 -0 -0.969678 0.244387 0 0 -0 -0 1 401.1091
+765 'point symmetry operation' 0.178315 0.983973 -0 -0 -0.983973 0.178315 0 0 -0 -0 1 401.6348
+766 'point symmetry operation' 0.111428 0.993772 -0 -0 -0.993772 0.111428 0 0 -0 -0 1 402.1605
+767 'point symmetry operation' 0.044032 0.99903 -0 -0 -0.99903 0.044032 0 0 -0 -0 1 402.6862
+768 'point symmetry operation' -0.023566 0.999722 -0 -0 -0.999722 -0.023566 0 0 -0 -0 1 403.2119
+769 'point symmetry operation' -0.091055 0.995846 -0 -0 -0.995846 -0.091055 0 0 -0 -0 1 403.7376
+770 'point symmetry operation' -0.158129 0.987418 -0 -0 -0.987418 -0.158129 0 0 -0 -0 1 404.2633
+771 'point symmetry operation' -0.22448 0.974479 -0 -0 -0.974479 -0.22448 0 0 -0 -0 1 404.789
+772 'point symmetry operation' -0.289805 0.957086 -0 -0 -0.957086 -0.289805 0 0 -0 -0 1 405.3147
+773 'point symmetry operation' -0.353806 0.935319 -0 -0 -0.935319 -0.353806 0 0 -0 -0 1 405.8404
+774 'point symmetry operation' -0.41619 0.909278 -0 -0 -0.909278 -0.41619 0 0 -0 -0 1 406.3661
+775 'point symmetry operation' -0.476672 0.879081 -0 -0 -0.879081 -0.476672 0 0 -0 -0 1 406.8918
+776 'point symmetry operation' -0.534976 0.844868 -0 -0 -0.844868 -0.534976 0 0 -0 -0 1 407.4175
+777 'point symmetry operation' -0.590834 0.806793 -0 -0 -0.806793 -0.590834 0 0 -0 -0 1 407.9432
+778 'point symmetry operation' -0.643993 0.765031 -0 -0 -0.765031 -0.643993 0 0 -0 -0 1 408.4689
+779 'point symmetry operation' -0.694209 0.719773 -0 -0 -0.719773 -0.694209 0 0 -0 -0 1 408.9946
+780 'point symmetry operation' -0.741252 0.671226 -0 -0 -0.671226 -0.741252 0 0 -0 -0 1 409.5203
+781 'point symmetry operation' -0.784908 0.619612 -0 -0 -0.619612 -0.784908 0 0 -0 -0 1 410.046
+782 'point symmetry operation' -0.824977 0.565166 -0 -0 -0.565166 -0.824977 0 0 -0 -0 1 410.5717
+783 'point symmetry operation' -0.861276 0.508137 -0 -0 -0.508137 -0.861276 0 0 -0 -0 1 411.0974
+784 'point symmetry operation' -0.893639 0.448786 -0 -0 -0.448786 -0.893639 0 0 -0 -0 1 411.6231
+785 'point symmetry operation' -0.921918 0.387384 -0 -0 -0.387384 -0.921918 0 0 -0 -0 1 412.1488
+786 'point symmetry operation' -0.945984 0.324212 -0 -0 -0.324212 -0.945984 0 -0 -0 -0 1 412.6745
+787 'point symmetry operation' -0.965727 0.259558 -0 -0 -0.259558 -0.965727 0 -0 -0 -0 1 413.2002
+788 'point symmetry operation' -0.981057 0.193718 -0 -0 -0.193718 -0.981057 0 -0 -0 -0 1 413.7259
+789 'point symmetry operation' -0.991904 0.126993 -0 -0 -0.126993 -0.991904 0 -0 -0 -0 1 414.2516
+790 'point symmetry operation' -0.998217 0.059688 -0 -0 -0.059688 -0.998217 0 -0 0 -0 1 414.7773
+791 'point symmetry operation' -0.999969 -0.007891 0 -0 0.007891 -0.999969 -0 -0 -0 0 1 415.303
+792 'point symmetry operation' -0.997151 -0.075433 0 -0 0.075433 -0.997151 -0 -0 -0 0 1 415.8287
+793 'point symmetry operation' -0.989776 -0.14263 -0 -0 0.14263 -0.989776 -0 -0 -0 0 1 416.3544
+794 'point symmetry operation' -0.977878 -0.209176 -0 -0 0.209176 -0.977878 -0 -0 -0 0 1 416.8801
+795 'point symmetry operation' -0.961511 -0.274766 -0 -0 0.274766 -0.961511 -0 -0 -0 0 1 417.4058
+796 'point symmetry operation' -0.94075 -0.3391 -0 -0 0.3391 -0.94075 -0 -0 -0 0 1 417.9315
+797 'point symmetry operation' -0.91569 -0.401884 -0 -0 0.401884 -0.91569 -0 -0 -0 0 1 418.4572
+798 'point symmetry operation' -0.886446 -0.462832 -0 -0 0.462832 -0.886446 -0 -0 -0 0 1 418.9829
+799 'point symmetry operation' -0.85315 -0.521665 -0 -0 0.521665 -0.85315 -0 -0 -0 0 1 419.5086
+800 'point symmetry operation' -0.815956 -0.578114 -0 -0 0.578114 -0.815956 -0 -0 -0 0 1 420.0343
+801 'point symmetry operation' -0.775033 -0.631921 -0 -0 0.631921 -0.775033 -0 -0 -0 0 1 420.56
+802 'point symmetry operation' -0.730568 -0.68284 -0 -0 0.68284 -0.730568 -0 -0 -0 0 1 421.0857
+803 'point symmetry operation' -0.682764 -0.730639 -0 -0 0.730639 -0.682764 -0 -0 -0 0 1 421.6114
+804 'point symmetry operation' -0.63184 -0.775099 -0 -0 0.775099 -0.63184 -0 -0 -0 0 1 422.1371
+805 'point symmetry operation' -0.578029 -0.816016 -0 -0 0.816016 -0.578029 -0 -0 -0 0 1 422.6628
+806 'point symmetry operation' -0.521576 -0.853205 -0 -0 0.853205 -0.521576 -0 -0 -0 0 1 423.1885
+807 'point symmetry operation' -0.46274 -0.886494 -0 -0 0.886494 -0.46274 -0 -0 -0 0 1 423.7142
+808 'point symmetry operation' -0.401789 -0.915732 -0 -0 0.915732 -0.401789 -0 -0 -0 0 1 424.2399
+809 'point symmetry operation' -0.339002 -0.940786 -0 -0 0.940786 -0.339002 -0 -0 -0 0 1 424.7656
+810 'point symmetry operation' -0.274666 -0.96154 -0 -0 0.96154 -0.274666 -0 -0 -0 0 1 425.2913
+811 'point symmetry operation' -0.209074 -0.9779 -0 -0 0.9779 -0.209074 -0 -0 -0 0 1 425.817
+812 'point symmetry operation' -0.142527 -0.989791 -0 -0 0.989791 -0.142527 -0 -0 -0 0 1 426.3427
+813 'point symmetry operation' -0.075329 -0.997159 -0 -0 0.997159 -0.075329 -0 -0 -0 0 1 426.8684
+814 'point symmetry operation' -0.007786 -0.99997 -0 -0 0.99997 -0.007786 -0 -0 -0 0 1 427.3941
+815 'point symmetry operation' 0.059792 -0.998211 -0 -0 0.998211 0.059792 -0 -0 -0 0 1 427.9198
+816 'point symmetry operation' 0.127097 -0.99189 -0 -0 0.99189 0.127097 -0 -0 -0 0 1 428.4455
+817 'point symmetry operation' 0.193821 -0.981037 -0 -0 0.981037 0.193821 -0 -0 -0 0 1 428.9712
+818 'point symmetry operation' 0.259659 -0.9657 -0 -0 0.9657 0.259659 -0 -0 -0 0 1 429.4969
+819 'point symmetry operation' 0.324311 -0.945951 -0 -0 0.945951 0.324311 -0 -0 -0 0 1 430.0226
+820 'point symmetry operation' 0.38748 -0.921878 -0 -0 0.921878 0.38748 -0 -0 -0 0 1 430.5483
+821 'point symmetry operation' 0.448879 -0.893592 -0 -0 0.893592 0.448879 -0 -0 -0 0 1 431.074
+822 'point symmetry operation' 0.508227 -0.861223 -0 -0 0.861223 0.508227 -0 -0 -0 0 1 431.5997
+823 'point symmetry operation' 0.565252 -0.824918 -0 -0 0.824918 0.565252 -0 -0 -0 0 1 432.1254
+824 'point symmetry operation' 0.619694 -0.784844 -0 -0 0.784844 0.619694 -0 -0 -0 0 1 432.6511
+825 'point symmetry operation' 0.671304 -0.741182 -0 -0 0.741182 0.671304 -0 -0 -0 0 1 433.1768
+826 'point symmetry operation' 0.719846 -0.694134 -0 -0 0.694134 0.719846 -0 -0 -0 0 1 433.7025
+827 'point symmetry operation' 0.765098 -0.643913 -0 -0 0.643913 0.765098 -0 -0 -0 0 1 434.2282
+828 'point symmetry operation' 0.806854 -0.59075 -0 -0 0.59075 0.806854 -0 -0 -0 0 1 434.7539
+829 'point symmetry operation' 0.844923 -0.534887 -0 -0 0.534887 0.844923 -0 -0 -0 0 1 435.2796
+830 'point symmetry operation' 0.879131 -0.47658 -0 -0 0.47658 0.879131 -0 -0 -0 0 1 435.8053
+831 'point symmetry operation' 0.909321 -0.416095 -0 -0 0.416095 0.909321 -0 -0 -0 0 1 436.331
+832 'point symmetry operation' 0.935356 -0.353708 -0 -0 0.353708 0.935356 -0 -0 -0 0 1 436.8567
+833 'point symmetry operation' 0.957116 -0.289705 -0 -0 0.289705 0.957116 -0 -0 -0 0 1 437.3824
+834 'point symmetry operation' 0.974502 -0.224378 -0 -0 0.224378 0.974502 -0 -0 -0 0 1 437.9081
+835 'point symmetry operation' 0.987435 -0.158026 -0 -0 0.158026 0.987435 -0 -0 -0 0 1 438.4338
+836 'point symmetry operation' 0.995855 -0.090952 -0 -0 0.090952 0.995855 -0 -0 -0 -0 1 438.9595
+837 'point symmetry operation' 0.999725 -0.023461 -0 -0 0.023461 0.999725 -0 -0 -0 -0 1 439.4852
+838 'point symmetry operation' 0.999026 0.044136 -0 -0 -0.044136 0.999026 -0 -0 -0 -0 1 440.0109
+839 'point symmetry operation' 0.993761 0.111532 -0 -0 -0.111532 0.993761 -0 -0 -0 -0 1 440.5366
+840 'point symmetry operation' 0.983955 0.178418 -0 -0 -0.178418 0.983955 0 -0 -0 -0 1 441.0623
+841 'point symmetry operation' 0.969652 0.244488 -0 -0 -0.244488 0.969652 0 -0 -0 -0 1 441.588
+842 'point symmetry operation' 0.950918 0.309442 -0 -0 -0.309442 0.950918 0 -0 -0 -0 1 442.1137
+843 'point symmetry operation' 0.927839 0.372981 -0 -0 -0.372981 0.927839 0 -0 -0 -0 1 442.6394
+844 'point symmetry operation' 0.900519 0.434816 -0 -0 -0.434816 0.900519 0 -0 -0 -0 1 443.1651
+845 'point symmetry operation' 0.869085 0.494663 -0 -0 -0.494663 0.869085 0 -0 -0 -0 1 443.6908
+846 'point symmetry operation' 0.833678 0.552251 -0 -0 -0.552251 0.833678 0 -0 -0 -0 1 444.2165
+847 'point symmetry operation' 0.794462 0.607314 -0 -0 -0.607314 0.794462 0 -0 -0 -0 1 444.7422
+848 'point symmetry operation' 0.751615 0.659602 -0 -0 -0.659602 0.751615 0 0 -0 -0 1 445.2679
+849 'point symmetry operation' 0.705333 0.708876 -0 -0 -0.708876 0.705333 0 0 -0 -0 1 445.7936
+850 'point symmetry operation' 0.655828 0.75491 -0 -0 -0.75491 0.655828 0 0 -0 -0 1 446.3193
+851 'point symmetry operation' 0.603326 0.797494 -0 -0 -0.797494 0.603326 0 0 -0 -0 1 446.845
+852 'point symmetry operation' 0.548067 0.836434 -0 -0 -0.836434 0.548067 0 0 -0 -0 1 447.3707
+853 'point symmetry operation' 0.490303 0.871552 -0 -0 -0.871552 0.490303 0 0 -0 -0 1 447.8964
+854 'point symmetry operation' 0.430299 0.902686 -0 -0 -0.902686 0.430299 0 0 -0 -0 1 448.4221
+855 'point symmetry operation' 0.368328 0.929696 -0 -0 -0.929696 0.368328 0 0 -0 -0 1 448.9478
+856 'point symmetry operation' 0.304674 0.952457 -0 -0 -0.952457 0.304674 0 0 -0 -0 1 449.4735
+857 'point symmetry operation' 0.239628 0.970865 -0 -0 -0.970865 0.239628 0 0 -0 -0 1 449.9992
+858 'point symmetry operation' 0.173486 0.984836 -0 -0 -0.984836 0.173486 0 0 -0 -0 1 450.5249
+859 'point symmetry operation' 0.106552 0.994307 -0 -0 -0.994307 0.106552 0 0 -0 -0 1 451.0506
+860 'point symmetry operation' 0.039131 0.999234 -0 -0 -0.999234 0.039131 0 0 -0 -0 1 451.5763
+861 'point symmetry operation' -0.028469 0.999595 -0 -0 -0.999595 -0.028469 0 0 -0 -0 1 452.102
+862 'point symmetry operation' -0.095939 0.995387 -0 -0 -0.995387 -0.095939 0 0 -0 -0 1 452.6277
+863 'point symmetry operation' -0.162971 0.986631 -0 -0 -0.986631 -0.162971 0 0 -0 -0 1 453.1534
+864 'point symmetry operation' -0.229258 0.973366 -0 -0 -0.973366 -0.229258 0 0 -0 -0 1 453.6791
+865 'point symmetry operation' -0.294497 0.955652 -0 -0 -0.955652 -0.294497 0 0 -0 -0 1 454.2048
+866 'point symmetry operation' -0.35839 0.933572 -0 -0 -0.933572 -0.35839 0 0 -0 -0 1 454.7305
+867 'point symmetry operation' -0.420645 0.907225 -0 -0 -0.907225 -0.420645 0 0 -0 -0 1 455.2562
+868 'point symmetry operation' -0.480979 0.876732 -0 -0 -0.876732 -0.480979 0 0 -0 -0 1 455.7819
+869 'point symmetry operation' -0.539114 0.842233 -0 -0 -0.842233 -0.539114 0 0 -0 -0 1 456.3076
+870 'point symmetry operation' -0.594785 0.803885 -0 -0 -0.803885 -0.594785 0 0 -0 -0 1 456.8333
+871 'point symmetry operation' -0.647738 0.761863 -0 -0 -0.761863 -0.647738 0 0 -0 -0 1 457.359
+872 'point symmetry operation' -0.697732 0.716359 -0 -0 -0.716359 -0.697732 0 0 -0 -0 1 457.8847
+873 'point symmetry operation' -0.744536 0.667582 -0 -0 -0.667582 -0.744536 0 0 -0 -0 1 458.4104
+874 'point symmetry operation' -0.787938 0.615754 -0 -0 -0.615754 -0.787938 0 0 -0 -0 1 458.9361
+875 'point symmetry operation' -0.82774 0.561112 -0 -0 -0.561112 -0.82774 0 0 -0 -0 1 459.4618
+876 'point symmetry operation' -0.863759 0.503906 -0 -0 -0.503906 -0.863759 0 0 -0 -0 1 459.9875
+877 'point symmetry operation' -0.89583 0.444397 -0 -0 -0.444397 -0.89583 0 0 -0 -0 1 460.5132
+878 'point symmetry operation' -0.923808 0.382857 -0 -0 -0.382857 -0.923808 0 -0 -0 -0 1 461.0389
+879 'point symmetry operation' -0.947563 0.319568 -0 -0 -0.319568 -0.947563 0 -0 -0 -0 1 461.5646
+880 'point symmetry operation' -0.966989 0.254818 -0 -0 -0.254818 -0.966989 0 -0 -0 -0 1 462.0903
+881 'point symmetry operation' -0.981996 0.188903 -0 -0 -0.188903 -0.981996 0 -0 -0 -0 1 462.616
+882 'point symmetry operation' -0.992515 0.122126 -0 -0 -0.122126 -0.992515 0 -0 0 -0 1 463.1417
+883 'point symmetry operation' -0.998498 0.05479 -0 -0 -0.05479 -0.998498 0 -0 0 -0 1 463.6674
+884 'point symmetry operation' -0.999918 -0.012796 0 -0 0.012796 -0.999918 -0 -0 -0 0 1 464.1931
+885 'point symmetry operation' -0.996769 -0.080323 0 -0 0.080323 -0.996769 -0 -0 -0 0 1 464.7188
+886 'point symmetry operation' -0.989064 -0.147484 -0 -0 0.147484 -0.989064 -0 -0 -0 0 1 465.2445
+887 'point symmetry operation' -0.97684 -0.213971 -0 -0 0.213971 -0.97684 -0 -0 -0 0 1 465.7702
+888 'point symmetry operation' -0.960152 -0.279479 -0 -0 0.279479 -0.960152 -0 -0 -0 0 1 466.2959
+889 'point symmetry operation' -0.939076 -0.343711 -0 -0 0.343711 -0.939076 -0 -0 -0 0 1 466.8216
+890 'point symmetry operation' -0.913708 -0.406372 -0 -0 0.406372 -0.913708 -0 -0 -0 0 1 467.3473
+891 'point symmetry operation' -0.884165 -0.467175 -0 -0 0.467175 -0.884165 -0 -0 -0 0 1 467.873
+892 'point symmetry operation' -0.850581 -0.525844 -0 -0 0.525844 -0.850581 -0 -0 -0 0 1 468.3987
+893 'point symmetry operation' -0.81311 -0.58211 -0 -0 0.58211 -0.81311 -0 -0 -0 0 1 468.9244
+894 'point symmetry operation' -0.771923 -0.635715 -0 -0 0.635715 -0.771923 -0 -0 -0 0 1 469.4501
+895 'point symmetry operation' -0.727209 -0.686416 -0 -0 0.686416 -0.727209 -0 -0 -0 0 1 469.9758
+896 'point symmetry operation' -0.679172 -0.733979 -0 -0 0.733979 -0.679172 -0 -0 -0 0 1 470.5015
+897 'point symmetry operation' -0.62803 -0.778189 -0 -0 0.778189 -0.62803 -0 -0 -0 0 1 471.0272
+898 'point symmetry operation' -0.574019 -0.818842 -0 -0 0.818842 -0.574019 -0 -0 -0 0 1 471.5529
+899 'point symmetry operation' -0.517385 -0.855753 -0 -0 0.855753 -0.517385 -0 -0 -0 0 1 472.0786
+900 'point symmetry operation' -0.458386 -0.888753 -0 -0 0.888753 -0.458386 -0 -0 -0 0 1 472.6043
+901 'point symmetry operation' -0.397292 -0.917692 -0 -0 0.917692 -0.397292 -0 -0 -0 0 1 473.13
+902 'point symmetry operation' -0.334383 -0.942437 -0 -0 0.942437 -0.334383 -0 -0 -0 0 1 473.6557
+903 'point symmetry operation' -0.269945 -0.962876 -0 -0 0.962876 -0.269945 -0 -0 -0 0 1 474.1814
+904 'point symmetry operation' -0.204274 -0.978914 -0 -0 0.978914 -0.204274 -0 -0 -0 0 1 474.7071
+905 'point symmetry operation' -0.13767 -0.990478 -0 -0 0.990478 -0.13767 -0 -0 -0 0 1 475.2328
+906 'point symmetry operation' -0.070436 -0.997516 -0 -0 0.997516 -0.070436 -0 -0 -0 0 1 475.7585
+907 'point symmetry operation' -0.002881 -0.999996 -0 -0 0.999996 -0.002881 -0 -0 -0 0 1 476.2842
+908 'point symmetry operation' 0.064688 -0.997906 -0 -0 0.997906 0.064688 -0 -0 -0 0 1 476.8099
+909 'point symmetry operation' 0.131961 -0.991255 -0 -0 0.991255 0.131961 -0 -0 -0 0 1 477.3356
+910 'point symmetry operation' 0.198631 -0.980074 -0 -0 0.980074 0.198631 -0 -0 -0 0 1 477.8613
+911 'point symmetry operation' 0.264393 -0.964415 -0 -0 0.964415 0.264393 -0 -0 -0 0 1 478.387
+912 'point symmetry operation' 0.328947 -0.944348 -0 -0 0.944348 0.328947 -0 -0 -0 0 1 478.9127
+913 'point symmetry operation' 0.391998 -0.919966 -0 -0 0.919966 0.391998 -0 -0 -0 0 1 479.4384
+914 'point symmetry operation' 0.453257 -0.89138 -0 -0 0.89138 0.453257 -0 -0 -0 0 1 479.9641
+915 'point symmetry operation' 0.512445 -0.85872 -0 -0 0.85872 0.512445 -0 -0 -0 0 1 480.4898
+916 'point symmetry operation' 0.569292 -0.822136 -0 -0 0.822136 0.569292 -0 -0 -0 0 1 481.0155
+917 'point symmetry operation' 0.623536 -0.781794 -0 -0 0.781794 0.623536 -0 -0 -0 0 1 481.5412
+918 'point symmetry operation' 0.674931 -0.73788 -0 -0 0.73788 0.674931 -0 -0 -0 0 1 482.0669
+919 'point symmetry operation' 0.723242 -0.690594 -0 -0 0.690594 0.723242 -0 -0 -0 0 1 482.5926
+920 'point symmetry operation' 0.768248 -0.640152 -0 -0 0.640152 0.768248 -0 -0 -0 0 1 483.1183
+921 'point symmetry operation' 0.809743 -0.586785 -0 -0 0.586785 0.809743 -0 -0 -0 0 1 483.644
+922 'point symmetry operation' 0.847537 -0.530736 -0 -0 0.530736 0.847537 -0 -0 -0 0 1 484.1697
+923 'point symmetry operation' 0.881458 -0.472262 -0 -0 0.472262 0.881458 -0 -0 -0 0 1 484.6954
+924 'point symmetry operation' 0.911351 -0.411629 -0 -0 0.411629 0.911351 -0 -0 -0 0 1 485.2211
+925 'point symmetry operation' 0.93708 -0.349116 -0 -0 0.349116 0.93708 -0 -0 -0 0 1 485.7468
+926 'point symmetry operation' 0.958526 -0.285007 -0 -0 0.285007 0.958526 -0 -0 -0 0 1 486.2725
+927 'point symmetry operation' 0.975591 -0.219595 -0 -0 0.219595 0.975591 -0 -0 -0 0 1 486.7982
+928 'point symmetry operation' 0.988198 -0.15318 -0 -0 0.15318 0.988198 -0 -0 -0 0 1 487.3239
+929 'point symmetry operation' 0.99629 -0.086065 -0 -0 0.086065 0.99629 -0 -0 -0 -0 1 487.8496
+930 'point symmetry operation' 0.999828 -0.018557 -0 -0 0.018557 0.999828 -0 -0 -0 -0 1 488.3753
+
+
+
+loop_
+_atom_type.symbol
+C
+N
+O
+
+loop_
+_entity_poly_seq.entity_id
+_entity_poly_seq.num
+_entity_poly_seq.mon_id
+_entity_poly_seq.hetero
+1 1 MET n
+1 2 SER n
+1 3 ILE n
+1 4 GLN n
+1 5 LYS n
+1 6 SER n
+1 7 THR n
+1 8 ASN n
+1 9 SER n
+1 10 SER n
+1 11 SER n
+1 12 LEU n
+1 13 ALA n
+1 14 GLU n
+1 15 VAL n
+1 16 ILE n
+1 17 ASP n
+1 18 ARG n
+1 19 ILE n
+1 20 LEU n
+1 21 ASP n
+1 22 LYS n
+1 23 GLY n
+1 24 ILE n
+1 25 VAL n
+1 26 ILE n
+1 27 ASP n
+1 28 ALA n
+1 29 PHE n
+1 30 ALA n
+1 31 ARG n
+1 32 VAL n
+1 33 SER n
+1 34 VAL n
+1 35 VAL n
+1 36 GLY n
+1 37 ILE n
+1 38 GLU n
+1 39 ILE n
+1 40 LEU n
+1 41 THR n
+1 42 ILE n
+1 43 GLU n
+1 44 ALA n
+1 45 ARG n
+1 46 VAL n
+1 47 VAL n
+1 48 ILE n
+1 49 ALA n
+1 50 SER n
+1 51 VAL n
+1 52 ASP n
+1 53 THR n
+1 54 TRP n
+1 55 LEU n
+1 56 ARG n
+1 57 TYR n
+1 58 ALA n
+1 59 GLU n
+1 60 ALA n
+1 61 VAL n
+1 62 GLY n
+1 63 LEU n
+1 64 LEU n
+1 65 ARG n
+1 66 ASP n
+1 67 ASP n
+1 68 VAL n
+1 69 GLU n
+1 70 GLU n
+1 71 ASN n
+1 72 GLY n
+1 73 LEU n
+1 74 PRO n
+1 75 GLU n
+1 76 ARG n
+1 77 SER n
+1 78 ASN n
+1 79 SER n
+1 80 SER n
+1 81 GLU n
+1 82 GLY n
+1 83 GLN n
+1 84 PRO n
+1 85 ARG n
+1 86 PHE n
+1 87 SER n
+1 88 ILE n
+
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.pdbx_formal_charge
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+ATOM 1 N N . SER A 1 2 ? -6.63690769 15.6443077 -29.5414462 1 -0.8 ? 2 N 1
+ATOM 2 C CA . SER A 1 2 ? -5.51690769 14.9253077 -30.2014462 1 -0.8 ? 2 N 1
+ATOM 3 C C . SER A 1 2 ? -6.03990769 13.9793077 -31.2924462 1 -0.8 ? 2 N 1
+ATOM 4 O O . SER A 1 2 ? -7.23090769 13.9973077 -31.6004462 1 -0.8 ? 2 N 1
+ATOM 5 C CB . SER A 1 2 ? -4.64690769 14.2003077 -29.1644462 1 -0.8 ? 2 N 1
+ATOM 6 O OG . SER A 1 2 ? -3.43790769 13.7583077 -29.7534462 1 -0.8 ? 2 N 1
+ATOM 7 N N . ILE A 1 3 ? -5.17690769 13.1623077 -31.9064462 1 4.5 ? 3 N 1
+ATOM 8 C CA . ILE A 1 3 ? -5.50990769 12.2163077 -32.9884462 1 4.5 ? 3 N 1
+ATOM 9 C C . ILE A 1 3 ? -5.12790769 10.7833077 -32.6074462 1 4.5 ? 3 N 1
+ATOM 10 O O . ILE A 1 3 ? -4.18590769 10.5673077 -31.8464462 1 4.5 ? 3 N 1
+ATOM 11 C CB . ILE A 1 3 ? -4.89190769 12.6363077 -34.3374462 1 4.5 ? 3 N 1
+ATOM 12 C CG1 . ILE A 1 3 ? -3.37590769 12.3823077 -34.4194462 1 4.5 ? 3 N 1
+ATOM 13 C CG2 . ILE A 1 3 ? -5.24790769 14.0923077 -34.6554462 1 4.5 ? 3 N 1
+ATOM 14 C CD1 . ILE A 1 3 ? -2.78990769 12.6883077 -35.7964462 1 4.5 ? 3 N 1
+ATOM 15 N N . GLN A 1 4 ? -5.85690769 9.79630769 -33.1284462 1 -3.5 ? 4 N 1
+ATOM 16 C CA . GLN A 1 4 ? -5.59790769 8.38130769 -32.8514462 1 -3.5 ? 4 N 1
+ATOM 17 C C . GLN A 1 4 ? -4.36090769 7.86830769 -33.6014462 1 -3.5 ? 4 N 1
+ATOM 18 O O . GLN A 1 4 ? -4.03290769 8.34830769 -34.6834462 1 -3.5 ? 4 N 1
+ATOM 19 C CB . GLN A 1 4 ? -6.87590769 7.59030769 -33.1464462 1 -3.5 ? 4 N 1
+ATOM 20 C CG . GLN A 1 4 ? -6.76890769 6.11230769 -32.7404462 1 -3.5 ? 4 N 1
+ATOM 21 C CD . GLN A 1 4 ? -8.10090769 5.38630769 -32.5324462 1 -3.5 ? 4 N 1
+ATOM 22 O OE1 . GLN A 1 4 ? -8.12190769 4.22530769 -32.1464462 1 -3.5 ? 4 N 1
+ATOM 23 N NE2 . GLN A 1 4 ? -9.24390769 6.01030769 -32.7234462 1 -3.5 ? 4 N 1
+ATOM 24 N N . LYS A 1 5 ? -3.66590769 6.88430769 -33.0254462 1 -3.9 ? 5 N 1
+ATOM 25 C CA . LYS A 1 5 ? -2.38490769 6.33030769 -33.5064462 1 -3.9 ? 5 N 1
+ATOM 26 C C . LYS A 1 5 ? -2.42290769 4.80830769 -33.4734462 1 -3.9 ? 5 N 1
+ATOM 27 O O . LYS A 1 5 ? -3.27790769 4.22730769 -32.8094462 1 -3.9 ? 5 N 1
+ATOM 28 C CB . LYS A 1 5 ? -1.23590769 6.80830769 -32.6094462 1 -3.9 ? 5 N 1
+ATOM 29 C CG . LYS A 1 5 ? -0.995907692 8.31430769 -32.6684462 1 -3.9 ? 5 N 1
+ATOM 30 C CD . LYS A 1 5 ? -0.0109076923 8.70330769 -31.5584462 1 -3.9 ? 5 N 1
+ATOM 31 C CE . LYS A 1 5 ? 0.164092308 10.2173077 -31.4744462 1 -3.9 ? 5 N 1
+ATOM 32 N NZ . LYS A 1 5 ? 1.01109231 10.7273077 -32.5834462 1 -3.9 ? 5 N 1
+ATOM 33 N N . SER A 1 6 ? -1.47790769 4.14730769 -34.1394462 1 -0.8 ? 6 N 1
+ATOM 34 C CA . SER A 1 6 ? -1.41190769 2.68630769 -34.1284462 1 -0.8 ? 6 N 1
+ATOM 35 C C . SER A 1 6 ? -0.763907692 2.08530769 -32.8714462 1 -0.8 ? 6 N 1
+ATOM 36 O O . SER A 1 6 ? -0.744907692 0.867307692 -32.7404462 1 -0.8 ? 6 N 1
+ATOM 37 C CB . SER A 1 6 ? -0.732907692 2.19030769 -35.4004462 1 -0.8 ? 6 N 1
+ATOM 38 O OG . SER A 1 6 ? 0.643092308 2.43630769 -35.3604462 1 -0.8 ? 6 N 1
+ATOM 39 N N . THR A 1 7 ? -0.231907692 2.88030769 -31.9394462 1 -0.7 ? 7 N 1
+ATOM 40 C CA . THR A 1 7 ? 0.469092308 2.41630769 -30.7194462 1 -0.7 ? 7 N 1
+ATOM 41 C C . THR A 1 7 ? -0.155907692 2.95630769 -29.4234462 1 -0.7 ? 7 N 1
+ATOM 42 O O . THR A 1 7 ? -0.679907692 4.06830769 -29.3874462 1 -0.7 ? 7 N 1
+ATOM 43 C CB . THR A 1 7 ? 1.96709231 2.76430769 -30.7684462 1 -0.7 ? 7 N 1
+ATOM 44 O OG1 . THR A 1 7 ? 2.17109231 4.14130769 -30.9914462 1 -0.7 ? 7 N 1
+ATOM 45 C CG2 . THR A 1 7 ? 2.72609231 1.99130769 -31.8394462 1 -0.7 ? 7 N 1
+ATOM 46 N N . ASN A 1 8 ? -0.0919076923 2.17130769 -28.3404462 1 -3.5 ? 8 N 1
+ATOM 47 C CA . ASN A 1 8 ? -0.783907692 2.45730769 -27.0704462 1 -3.5 ? 8 N 1
+ATOM 48 C C . ASN A 1 8 ? 0.0770923077 3.19130769 -26.0204462 1 -3.5 ? 8 N 1
+ATOM 49 O O . ASN A 1 8 ? -0.454907692 3.64530769 -25.0084462 1 -3.5 ? 8 N 1
+ATOM 50 C CB . ASN A 1 8 ? -1.28190769 1.13230769 -26.4554462 1 -3.5 ? 8 N 1
+ATOM 51 C CG . ASN A 1 8 ? -2.19090769 0.281307692 -27.3244462 1 -3.5 ? 8 N 1
+ATOM 52 O OD1 . ASN A 1 8 ? -2.53190769 0.602307692 -28.4534462 1 -3.5 ? 8 N 1
+ATOM 53 N ND2 . ASN A 1 8 ? -2.61490769 -0.849692308 -26.8184462 1 -3.5 ? 8 N 1
+ATOM 54 N N . SER A 1 9 ? 1.40109231 3.25230769 -26.2014462 1 -0.8 ? 9 N 1
+ATOM 55 C CA . SER A 1 9 ? 2.36709231 3.64630769 -25.1624462 1 -0.8 ? 9 N 1
+ATOM 56 C C . SER A 1 9 ? 2.10709231 5.02430769 -24.5424462 1 -0.8 ? 9 N 1
+ATOM 57 O O . SER A 1 9 ? 1.73309231 5.94930769 -25.2584462 1 -0.8 ? 9 N 1
+ATOM 58 C CB . SER A 1 9 ? 3.77809231 3.61830769 -25.7464462 1 -0.8 ? 9 N 1
+ATOM 59 O OG . SER A 1 9 ? 3.86009231 4.45830769 -26.8844462 1 -0.8 ? 9 N 1
+ATOM 60 N N . SER A 1 10 ? 2.39009231 5.18130769 -23.2454462 1 -0.8 ? 10 N 1
+ATOM 61 C CA . SER A 1 10 ? 1.96109231 6.33130769 -22.4274462 1 -0.8 ? 10 N 1
+ATOM 62 C C . SER A 1 10 ? 3.10209231 6.95830769 -21.6064462 1 -0.8 ? 10 N 1
+ATOM 63 O O . SER A 1 10 ? 4.21309231 6.43230769 -21.5714462 1 -0.8 ? 10 N 1
+ATOM 64 C CB . SER A 1 10 ? 0.772092308 5.90630769 -21.5564462 1 -0.8 ? 10 N 1
+ATOM 65 O OG . SER A 1 10 ? 0.131092308 7.03230769 -20.9834462 1 -0.8 ? 10 N 1
+ATOM 66 N N . SER A 1 11 ? 2.87509231 8.13930769 -21.0304462 1 -0.8 ? 11 N 1
+ATOM 67 C CA . SER A 1 11 ? 3.89909231 9.00130769 -20.4254462 1 -0.8 ? 11 N 1
+ATOM 68 C C . SER A 1 11 ? 4.31109231 8.57830769 -19.0144462 1 -0.8 ? 11 N 1
+ATOM 69 O O . SER A 1 11 ? 3.54209231 7.97030769 -18.2724462 1 -0.8 ? 11 N 1
+ATOM 70 C CB . SER A 1 11 ? 3.39309231 10.4423077 -20.4134462 1 -0.8 ? 11 N 1
+ATOM 71 O OG . SER A 1 11 ? 2.21209231 10.5513077 -19.6444462 1 -0.8 ? 11 N 1
+ATOM 72 N N . LEU A 1 12 ? 5.52909231 8.93430769 -18.5954462 1 3.8 ? 12 N 1
+ATOM 73 C CA . LEU A 1 12 ? 6.05309231 8.53430769 -17.2864462 1 3.8 ? 12 N 1
+ATOM 74 C C . LEU A 1 12 ? 5.20809231 9.07630769 -16.1314462 1 3.8 ? 12 N 1
+ATOM 75 O O . LEU A 1 12 ? 4.86909231 8.33430769 -15.2184462 1 3.8 ? 12 N 1
+ATOM 76 C CB . LEU A 1 12 ? 7.51609231 8.97730769 -17.1824462 1 3.8 ? 12 N 1
+ATOM 77 C CG . LEU A 1 12 ? 8.16609231 8.73530769 -15.8124462 1 3.8 ? 12 N 1
+ATOM 78 C CD1 . LEU A 1 12 ? 8.18109231 7.25830769 -15.4304462 1 3.8 ? 12 N 1
+ATOM 79 C CD2 . LEU A 1 12 ? 9.60709231 9.22930769 -15.8574462 1 3.8 ? 12 N 1
+ATOM 80 N N . ALA A 1 13 ? 4.79709231 10.3383077 -16.1924462 1 1.8 ? 13 N 1
+ATOM 81 C CA . ALA A 1 13 ? 3.92209231 10.9203077 -15.1854462 1 1.8 ? 13 N 1
+ATOM 82 C C . ALA A 1 13 ? 2.57409231 10.1853077 -15.0594462 1 1.8 ? 13 N 1
+ATOM 83 O O . ALA A 1 13 ? 2.01009231 10.1363077 -13.9694462 1 1.8 ? 13 N 1
+ATOM 84 C CB . ALA A 1 13 ? 3.71309231 12.3893077 -15.5414462 1 1.8 ? 13 N 1
+ATOM 85 N N . GLU A 1 14 ? 2.06509231 9.56230769 -16.1244462 1 -3.5 ? 14 N 1
+ATOM 86 C CA . GLU A 1 14 ? 0.835092308 8.77130769 -16.0584462 1 -3.5 ? 14 N 1
+ATOM 87 C C . GLU A 1 14 ? 1.05309231 7.36330769 -15.4944462 1 -3.5 ? 14 N 1
+ATOM 88 O O . GLU A 1 14 ? 0.187092308 6.85130769 -14.7904462 1 -3.5 ? 14 N 1
+ATOM 89 C CB . GLU A 1 14 ? 0.195092308 8.70630769 -17.4474462 1 -3.5 ? 14 N 1
+ATOM 90 C CG . GLU A 1 14 ? -1.25090769 8.19630769 -17.4274462 1 -3.5 ? 14 N 1
+ATOM 91 C CD . GLU A 1 14 ? -2.22890769 9.11930769 -16.6784462 1 -3.5 ? 14 N 1
+ATOM 92 O OE1 . GLU A 1 14 ? -1.86490769 10.2593077 -16.3194462 1 -3.5 ? 14 N 1
+ATOM 93 O OE2 . GLU A 1 14 ? -3.39990769 8.71130769 -16.5004462 1 -3.5 ? 14 N 1
+ATOM 94 N N . VAL A 1 15 ? 2.21909231 6.74830769 -15.7104462 1 4.2 ? 15 N 1
+ATOM 95 C CA . VAL A 1 15 ? 2.59909231 5.52830769 -14.9804462 1 4.2 ? 15 N 1
+ATOM 96 C C . VAL A 1 15 ? 2.62809231 5.79530769 -13.4794462 1 4.2 ? 15 N 1
+ATOM 97 O O . VAL A 1 15 ? 2.00409231 5.06030769 -12.7224462 1 4.2 ? 15 N 1
+ATOM 98 C CB . VAL A 1 15 ? 3.95309231 4.97730769 -15.4504462 1 4.2 ? 15 N 1
+ATOM 99 C CG1 . VAL A 1 15 ? 4.47709231 3.85030769 -14.5584462 1 4.2 ? 15 N 1
+ATOM 100 C CG2 . VAL A 1 15 ? 3.82909231 4.42630769 -16.8714462 1 4.2 ? 15 N 1
+ATOM 101 N N . ILE A 1 16 ? 3.29809231 6.86530769 -13.0374462 1 4.5 ? 16 N 1
+ATOM 102 C CA . ILE A 1 16 ? 3.36109231 7.23530769 -11.6194462 1 4.5 ? 16 N 1
+ATOM 103 C C . ILE A 1 16 ? 1.96109231 7.43130769 -11.0484462 1 4.5 ? 16 N 1
+ATOM 104 O O . ILE A 1 16 ? 1.62609231 6.83030769 -10.0354462 1 4.5 ? 16 N 1
+ATOM 105 C CB . ILE A 1 16 ? 4.23009231 8.48830769 -11.4254462 1 4.5 ? 16 N 1
+ATOM 106 C CG1 . ILE A 1 16 ? 5.70009231 8.26430769 -11.8294462 1 4.5 ? 16 N 1
+ATOM 107 C CG2 . ILE A 1 16 ? 4.16009231 9.00230769 -9.98344615 1 4.5 ? 16 N 1
+ATOM 108 C CD1 . ILE A 1 16 ? 6.44609231 7.18030769 -11.0484462 1 4.5 ? 16 N 1
+ATOM 109 N N . ASP A 1 17 ? 1.10709231 8.20330769 -11.7094462 1 -3.5 ? 17 N 1
+ATOM 110 C CA . ASP A 1 17 ? -0.248907692 8.44430769 -11.2244462 1 -3.5 ? 17 N 1
+ATOM 111 C C . ASP A 1 17 ? -1.06990769 7.15230769 -11.0904462 1 -3.5 ? 17 N 1
+ATOM 112 O O . ASP A 1 17 ? -1.72990769 6.94030769 -10.0744462 1 -3.5 ? 17 N 1
+ATOM 113 C CB . ASP A 1 17 ? -0.933907692 9.42930769 -12.1754462 1 -3.5 ? 17 N 1
+ATOM 114 C CG . ASP A 1 17 ? -2.24090769 10.0053077 -11.6214462 1 -3.5 ? 17 N 1
+ATOM 115 O OD1 . ASP A 1 17 ? -2.39890769 10.1133077 -10.3884462 1 -3.5 ? 17 N 1
+ATOM 116 O OD2 . ASP A 1 17 ? -3.11590769 10.4113077 -12.4154462 1 -3.5 ? 17 N 1
+ATOM 117 N N . ARG A 1 18 ? -0.968907692 6.26630769 -12.0904462 1 -4.5 ? 18 N 1
+ATOM 118 C CA . ARG A 1 18 ? -1.67890769 4.96830769 -12.0944462 1 -4.5 ? 18 N 1
+ATOM 119 C C . ARG A 1 18 ? -1.18490769 3.98330769 -11.0164462 1 -4.5 ? 18 N 1
+ATOM 120 O O . ARG A 1 18 ? -1.95190769 3.15430769 -10.5314462 1 -4.5 ? 18 N 1
+ATOM 121 C CB . ARG A 1 18 ? -1.66490769 4.33330769 -13.4854462 1 -4.5 ? 18 N 1
+ATOM 122 C CG . ARG A 1 18 ? -3.01790769 4.43630769 -14.1744462 1 -4.5 ? 18 N 1
+ATOM 123 C CD . ARG A 1 18 ? -2.89990769 4.67530769 -15.6684462 1 -4.5 ? 18 N 1
+ATOM 124 N NE . ARG A 1 18 ? -4.13290769 5.23630769 -16.2144462 1 -4.5 ? 18 N 1
+ATOM 125 C CZ . ARG A 1 18 ? -4.25890769 5.70530769 -17.4514462 1 -4.5 ? 18 N 1
+ATOM 126 N NH1 . ARG A 1 18 ? -5.41990769 6.19830769 -17.8594462 1 -4.5 ? 18 N 1
+ATOM 127 N NH2 . ARG A 1 18 ? -3.22490769 5.68730769 -18.2794462 1 -4.5 ? 18 N 1
+ATOM 128 N N . ILE A 1 19 ? 0.0870923077 4.08430769 -10.6484462 1 4.5 ? 19 N 1
+ATOM 129 C CA . ILE A 1 19 ? 0.611092308 3.31530769 -9.51544615 1 4.5 ? 19 N 1
+ATOM 130 C C . ILE A 1 19 ? 0.0210923077 3.86330769 -8.21844615 1 4.5 ? 19 N 1
+ATOM 131 O O . ILE A 1 19 ? -0.567907692 3.11930769 -7.43844615 1 4.5 ? 19 N 1
+ATOM 132 C CB . ILE A 1 19 ? 2.15309231 3.32730769 -9.50944615 1 4.5 ? 19 N 1
+ATOM 133 C CG1 . ILE A 1 19 ? 2.67109231 2.41830769 -10.6384462 1 4.5 ? 19 N 1
+ATOM 134 C CG2 . ILE A 1 19 ? 2.71909231 2.86030769 -8.15944615 1 4.5 ? 19 N 1
+ATOM 135 C CD1 . ILE A 1 19 ? 4.17309231 2.54830769 -10.8974462 1 4.5 ? 19 N 1
+ATOM 136 N N . LEU A 1 20 ? 0.144092308 5.16630769 -7.97244615 1 3.8 ? 20 N 1
+ATOM 137 C CA . LEU A 1 20 ? -0.236907692 5.75230769 -6.69444615 1 3.8 ? 20 N 1
+ATOM 138 C C . LEU A 1 20 ? -1.73990769 5.69830769 -6.41044615 1 3.8 ? 20 N 1
+ATOM 139 O O . LEU A 1 20 ? -2.10090769 5.61930769 -5.24344615 1 3.8 ? 20 N 1
+ATOM 140 C CB . LEU A 1 20 ? 0.283092308 7.19130769 -6.60444615 1 3.8 ? 20 N 1
+ATOM 141 C CG . LEU A 1 20 ? 1.81309231 7.33130769 -6.58644615 1 3.8 ? 20 N 1
+ATOM 142 C CD1 . LEU A 1 20 ? 2.17309231 8.81130769 -6.51644615 1 3.8 ? 20 N 1
+ATOM 143 C CD2 . LEU A 1 20 ? 2.45609231 6.63830769 -5.39144615 1 3.8 ? 20 N 1
+ATOM 144 N N . ASP A 1 21 ? -2.62690769 5.69630769 -7.40244615 1 -3.5 ? 21 N 1
+ATOM 145 C CA . ASP A 1 21 ? -4.06590769 5.55930769 -7.13344615 1 -3.5 ? 21 N 1
+ATOM 146 C C . ASP A 1 21 ? -4.56590769 4.10530769 -7.02544615 1 -3.5 ? 21 N 1
+ATOM 147 O O . ASP A 1 21 ? -5.73690769 3.88530769 -6.71944615 1 -3.5 ? 21 N 1
+ATOM 148 C CB . ASP A 1 21 ? -4.90990769 6.43530769 -8.06644615 1 -3.5 ? 21 N 1
+ATOM 149 C CG . ASP A 1 21 ? -5.10690769 5.91530769 -9.49244615 1 -3.5 ? 21 N 1
+ATOM 150 O OD1 . ASP A 1 21 ? -4.56990769 4.84730769 -9.83944615 1 -3.5 ? 21 N 1
+ATOM 151 O OD2 . ASP A 1 21 ? -5.84990769 6.57330769 -10.2574462 1 -3.5 ? 21 N 1
+ATOM 152 N N . LYS A 1 22 ? -3.68590769 3.10930769 -7.19944615 1 -3.9 ? 22 N 1
+ATOM 153 C CA . LYS A 1 22 ? -3.88790769 1.72330769 -6.72844615 1 -3.9 ? 22 N 1
+ATOM 154 C C . LYS A 1 22 ? -3.24290769 1.48530769 -5.36544615 1 -3.9 ? 22 N 1
+ATOM 155 O O . LYS A 1 22 ? -3.80190769 0.789307692 -4.52344615 1 -3.9 ? 22 N 1
+ATOM 156 C CB . LYS A 1 22 ? -3.30190769 0.733307692 -7.74444615 1 -3.9 ? 22 N 1
+ATOM 157 C CG . LYS A 1 22 ? -4.05690769 0.670307692 -9.07644615 1 -3.9 ? 22 N 1
+ATOM 158 C CD . LYS A 1 22 ? -5.51390769 0.215307692 -8.91744615 1 -3.9 ? 22 N 1
+ATOM 159 C CE . LYS A 1 22 ? -6.15590769 -0.131692308 -10.2654462 1 -3.9 ? 22 N 1
+ATOM 160 N NZ . LYS A 1 22 ? -5.76890769 -1.48269231 -10.7514462 1 -3.9 ? 22 N 1
+ATOM 161 N N . GLY A 1 23 ? -2.08190769 2.08330769 -5.13544615 1 -0.4 ? 23 N 1
+ATOM 162 C CA . GLY A 1 23 ? -1.33590769 1.97730769 -3.89144615 1 -0.4 ? 23 N 1
+ATOM 163 C C . GLY A 1 23 ? -0.656907692 0.626307692 -3.70644615 1 -0.4 ? 23 N 1
+ATOM 164 O O . GLY A 1 23 ? -0.891907692 -0.313692308 -4.45644615 1 -0.4 ? 23 N 1
+ATOM 165 N N . ILE A 1 24 ? 0.207092308 0.535307692 -2.70244615 1 4.5 ? 24 N 1
+ATOM 166 C CA . ILE A 1 24 ? 1.01309231 -0.646692308 -2.38044615 1 4.5 ? 24 N 1
+ATOM 167 C C . ILE A 1 24 ? 0.925092308 -0.884692308 -0.878446154 1 4.5 ? 24 N 1
+ATOM 168 O O . ILE A 1 24 ? 1.11209231 0.0593076923 -0.119446154 1 4.5 ? 24 N 1
+ATOM 169 C CB . ILE A 1 24 ? 2.48409231 -0.421692308 -2.79444615 1 4.5 ? 24 N 1
+ATOM 170 C CG1 . ILE A 1 24 ? 2.65809231 -0.0736923077 -4.28844615 1 4.5 ? 24 N 1
+ATOM 171 C CG2 . ILE A 1 24 ? 3.33609231 -1.65269231 -2.45144615 1 4.5 ? 24 N 1
+ATOM 172 C CD1 . ILE A 1 24 ? 3.99909231 0.598307692 -4.59644615 1 4.5 ? 24 N 1
+ATOM 173 N N . VAL A 1 25 ? 0.697092308 -2.12069231 -0.435446154 1 4.2 ? 25 N 1
+ATOM 174 C CA . VAL A 1 25 ? 0.805092308 -2.53169231 0.973553846 1 4.2 ? 25 N 1
+ATOM 175 C C . VAL A 1 25 ? 1.79609231 -3.68169231 1.09355385 1 4.2 ? 25 N 1
+ATOM 176 O O . VAL A 1 25 ? 1.66609231 -4.68269231 0.400553846 1 4.2 ? 25 N 1
+ATOM 177 C CB . VAL A 1 25 ? -0.550907692 -2.92469231 1.58155385 1 4.2 ? 25 N 1
+ATOM 178 C CG1 . VAL A 1 25 ? -0.412907692 -3.22569231 3.07255385 1 4.2 ? 25 N 1
+ATOM 179 C CG2 . VAL A 1 25 ? -1.59190769 -1.81769231 1.43255385 1 4.2 ? 25 N 1
+ATOM 180 N N . ILE A 1 26 ? 2.78509231 -3.54969231 1.96655385 1 4.5 ? 26 N 1
+ATOM 181 C CA . ILE A 1 26 ? 3.77109231 -4.58669231 2.28155385 1 4.5 ? 26 N 1
+ATOM 182 C C . ILE A 1 26 ? 3.63509231 -4.90469231 3.76055385 1 4.5 ? 26 N 1
+ATOM 183 O O . ILE A 1 26 ? 3.73809231 -4.00869231 4.59155385 1 4.5 ? 26 N 1
+ATOM 184 C CB . ILE A 1 26 ? 5.18709231 -4.10269231 1.93255385 1 4.5 ? 26 N 1
+ATOM 185 C CG1 . ILE A 1 26 ? 5.34309231 -3.91369231 0.412553846 1 4.5 ? 26 N 1
+ATOM 186 C CG2 . ILE A 1 26 ? 6.25709231 -5.07269231 2.45255385 1 4.5 ? 26 N 1
+ATOM 187 C CD1 . ILE A 1 26 ? 6.52409231 -3.01169231 0.0455538462 1 4.5 ? 26 N 1
+ATOM 188 N N . ASP A 1 27 ? 3.37709231 -6.15469231 4.10655385 1 -3.5 ? 27 N 1
+ATOM 189 C CA . ASP A 1 27 ? 2.89209231 -6.53669231 5.43255385 1 -3.5 ? 27 N 1
+ATOM 190 C C . ASP A 1 27 ? 3.53609231 -7.85569231 5.87155385 1 -3.5 ? 27 N 1
+ATOM 191 O O . ASP A 1 27 ? 3.53509231 -8.81569231 5.10755385 1 -3.5 ? 27 N 1
+ATOM 192 C CB . ASP A 1 27 ? 1.36809231 -6.60169231 5.29155385 1 -3.5 ? 27 N 1
+ATOM 193 C CG . ASP A 1 27 ? 0.600092308 -7.13069231 6.49355385 1 -3.5 ? 27 N 1
+ATOM 194 O OD1 . ASP A 1 27 ? 1.21209231 -7.49169231 7.51555385 1 -3.5 ? 27 N 1
+ATOM 195 O OD2 . ASP A 1 27 ? -0.642907692 -7.17169231 6.40855385 1 -3.5 ? 27 N 1
+ATOM 196 N N . ALA A 1 28 ? 4.11809231 -7.92569231 7.06755385 1 1.8 ? 28 N 1
+ATOM 197 C CA . ALA A 1 28 ? 4.84509231 -9.10469231 7.51655385 1 1.8 ? 28 N 1
+ATOM 198 C C . ALA A 1 28 ? 4.88509231 -9.24469231 9.03855385 1 1.8 ? 28 N 1
+ATOM 199 O O . ALA A 1 28 ? 4.96509231 -8.24769231 9.75055385 1 1.8 ? 28 N 1
+ATOM 200 C CB . ALA A 1 28 ? 6.27009231 -9.01669231 6.96355385 1 1.8 ? 28 N 1
+ATOM 201 N N . PHE A 1 29 ? 4.94109231 -10.4766923 9.54355385 1 2.8 ? 29 N 1
+ATOM 202 C CA . PHE A 1 29 ? 5.25809231 -10.7616923 10.9445538 1 2.8 ? 29 N 1
+ATOM 203 C C . PHE A 1 29 ? 6.00209231 -12.0846923 11.1205538 1 2.8 ? 29 N 1
+ATOM 204 O O . PHE A 1 29 ? 5.91409231 -12.9726923 10.2785538 1 2.8 ? 29 N 1
+ATOM 205 C CB . PHE A 1 29 ? 4.00309231 -10.7056923 11.8245538 1 2.8 ? 29 N 1
+ATOM 206 C CG . PHE A 1 29 ? 3.00109231 -11.8246923 11.6615538 1 2.8 ? 29 N 1
+ATOM 207 C CD1 . PHE A 1 29 ? 3.23409231 -13.0776923 12.2495538 1 2.8 ? 29 N 1
+ATOM 208 C CD2 . PHE A 1 29 ? 1.79409231 -11.5926923 10.9855538 1 2.8 ? 29 N 1
+ATOM 209 C CE1 . PHE A 1 29 ? 2.28509231 -14.1046923 12.1265538 1 2.8 ? 29 N 1
+ATOM 210 C CE2 . PHE A 1 29 ? 0.835092308 -12.6126923 10.8805538 1 2.8 ? 29 N 1
+ATOM 211 C CZ . PHE A 1 29 ? 1.08409231 -13.8726923 11.4405538 1 2.8 ? 29 N 1
+ATOM 212 N N . ALA A 1 30 ? 6.71709231 -12.2286923 12.2315538 1 1.8 ? 30 N 1
+ATOM 213 C CA . ALA A 1 30 ? 7.40509231 -13.4496923 12.6235538 1 1.8 ? 30 N 1
+ATOM 214 C C . ALA A 1 30 ? 7.42009231 -13.5966923 14.1455538 1 1.8 ? 30 N 1
+ATOM 215 O O . ALA A 1 30 ? 7.55909231 -12.6006923 14.8555538 1 1.8 ? 30 N 1
+ATOM 216 C CB . ALA A 1 30 ? 8.82709231 -13.4136923 12.0605538 1 1.8 ? 30 N 1
+ATOM 217 N N . ARG A 1 31 ? 7.34709231 -14.8386923 14.6195538 1 -4.5 ? 31 N 1
+ATOM 218 C CA . ARG A 1 31 ? 7.37109231 -15.1386923 16.0485538 1 -4.5 ? 31 N 1
+ATOM 219 C C . ARG A 1 31 ? 8.28209231 -16.3326923 16.3595538 1 -4.5 ? 31 N 1
+ATOM 220 O O . ARG A 1 31 ? 8.26009231 -17.3426923 15.6565538 1 -4.5 ? 31 N 1
+ATOM 221 C CB . ARG A 1 31 ? 5.95609231 -15.4096923 16.5635538 1 -4.5 ? 31 N 1
+ATOM 222 C CG . ARG A 1 31 ? 5.87109231 -15.6156923 18.0665538 1 -4.5 ? 31 N 1
+ATOM 223 C CD . ARG A 1 31 ? 4.47909231 -15.3046923 18.5905538 1 -4.5 ? 31 N 1
+ATOM 224 N NE . ARG A 1 31 ? 3.50809231 -16.3246923 18.2025538 1 -4.5 ? 31 N 1
+ATOM 225 C CZ . ARG A 1 31 ? 2.29209231 -16.4346923 18.7265538 1 -4.5 ? 31 N 1
+ATOM 226 N NH1 . ARG A 1 31 ? 1.89209231 -15.5866923 19.6635538 1 -4.5 ? 31 N 1
+ATOM 227 N NH2 . ARG A 1 31 ? 1.47409231 -17.3946923 18.3135538 1 -4.5 ? 31 N 1
+ATOM 228 N N . VAL A 1 32 ? 9.08009231 -16.2026923 17.4165538 1 4.2 ? 32 N 1
+ATOM 229 C CA . VAL A 1 32 ? 10.0100923 -17.2556923 17.8505538 1 4.2 ? 32 N 1
+ATOM 230 C C . VAL A 1 32 ? 9.71709231 -17.5986923 19.3005538 1 4.2 ? 32 N 1
+ATOM 231 O O . VAL A 1 32 ? 9.80109231 -16.7316923 20.1665538 1 4.2 ? 32 N 1
+ATOM 232 C CB . VAL A 1 32 ? 11.4720923 -16.8096923 17.6825538 1 4.2 ? 32 N 1
+ATOM 233 C CG1 . VAL A 1 32 ? 12.4590923 -17.8616923 18.1935538 1 4.2 ? 32 N 1
+ATOM 234 C CG2 . VAL A 1 32 ? 11.7990923 -16.5176923 16.2175538 1 4.2 ? 32 N 1
+ATOM 235 N N . SER A 1 33 ? 9.39509231 -18.8536923 19.5795538 1 -0.8 ? 33 N 1
+ATOM 236 C CA . SER A 1 33 ? 8.94209231 -19.2936923 20.9015538 1 -0.8 ? 33 N 1
+ATOM 237 C C . SER A 1 33 ? 9.82609231 -20.4016923 21.4455538 1 -0.8 ? 33 N 1
+ATOM 238 O O . SER A 1 33 ? 10.2820923 -21.2526923 20.6905538 1 -0.8 ? 33 N 1
+ATOM 239 C CB . SER A 1 33 ? 7.48209231 -19.7426923 20.8585538 1 -0.8 ? 33 N 1
+ATOM 240 O OG . SER A 1 33 ? 6.68709231 -18.6876923 20.3495538 1 -0.8 ? 33 N 1
+ATOM 241 N N . VAL A 1 34 ? 10.0440923 -20.4216923 22.7575538 1 4.2 ? 34 N 1
+ATOM 242 C CA . VAL A 1 34 ? 10.8690923 -21.4146923 23.4545538 1 4.2 ? 34 N 1
+ATOM 243 C C . VAL A 1 34 ? 10.0930923 -21.9236923 24.6585538 1 4.2 ? 34 N 1
+ATOM 244 O O . VAL A 1 34 ? 9.47509231 -21.1356923 25.3605538 1 4.2 ? 34 N 1
+ATOM 245 C CB . VAL A 1 34 ? 12.2310923 -20.8136923 23.8315538 1 4.2 ? 34 N 1
+ATOM 246 C CG1 . VAL A 1 34 ? 13.0370923 -21.7096923 24.7705538 1 4.2 ? 34 N 1
+ATOM 247 C CG2 . VAL A 1 34 ? 13.0740923 -20.5906923 22.5755538 1 4.2 ? 34 N 1
+ATOM 248 N N . VAL A 1 35 ? 10.0540923 -23.2406923 24.8575538 1 4.2 ? 35 N 1
+ATOM 249 C CA . VAL A 1 35 ? 9.29209231 -23.9766923 25.8965538 1 4.2 ? 35 N 1
+ATOM 250 C C . VAL A 1 35 ? 7.79909231 -23.6266923 26.0405538 1 4.2 ? 35 N 1
+ATOM 251 O O . VAL A 1 35 ? 7.15609231 -24.0626923 26.9915538 1 4.2 ? 35 N 1
+ATOM 252 C CB . VAL A 1 35 ? 10.0260923 -24.0246923 27.2525538 1 4.2 ? 35 N 1
+ATOM 253 C CG1 . VAL A 1 35 ? 11.4200923 -24.6386923 27.1205538 1 4.2 ? 35 N 1
+ATOM 254 C CG2 . VAL A 1 35 ? 10.1490923 -22.6766923 27.9585538 1 4.2 ? 35 N 1
+ATOM 255 N N . GLY A 1 36 ? 7.21809231 -22.8926923 25.0905538 1 -0.4 ? 36 N 1
+ATOM 256 C CA . GLY A 1 36 ? 5.84209231 -22.3706923 25.1285538 1 -0.4 ? 36 N 1
+ATOM 257 C C . GLY A 1 36 ? 5.71009231 -20.8626923 25.4025538 1 -0.4 ? 36 N 1
+ATOM 258 O O . GLY A 1 36 ? 4.61009231 -20.3236923 25.3075538 1 -0.4 ? 36 N 1
+ATOM 259 N N . ILE A 1 37 ? 6.80809231 -20.1566923 25.6815538 1 4.5 ? 37 N 1
+ATOM 260 C CA . ILE A 1 37 ? 6.84309231 -18.7136923 25.9665538 1 4.5 ? 37 N 1
+ATOM 261 C C . ILE A 1 37 ? 7.26809231 -17.9726923 24.7005538 1 4.5 ? 37 N 1
+ATOM 262 O O . ILE A 1 37 ? 8.21609231 -18.3806923 24.0325538 1 4.5 ? 37 N 1
+ATOM 263 C CB . ILE A 1 37 ? 7.79309231 -18.4266923 27.1495538 1 4.5 ? 37 N 1
+ATOM 264 C CG1 . ILE A 1 37 ? 7.23509231 -19.0586923 28.4435538 1 4.5 ? 37 N 1
+ATOM 265 C CG2 . ILE A 1 37 ? 7.99209231 -16.9176923 27.3555538 1 4.5 ? 37 N 1
+ATOM 266 C CD1 . ILE A 1 37 ? 8.25809231 -19.1526923 29.5785538 1 4.5 ? 37 N 1
+ATOM 267 N N . GLU A 1 38 ? 6.57409231 -16.9026923 24.3195538 1 -3.5 ? 38 N 1
+ATOM 268 C CA . GLU A 1 38 ? 6.81709231 -16.1916923 23.0525538 1 -3.5 ? 38 N 1
+ATOM 269 C C . GLU A 1 38 ? 8.00209231 -15.2216923 23.1155538 1 -3.5 ? 38 N 1
+ATOM 270 O O . GLU A 1 38 ? 7.84009231 -14.0106923 23.0295538 1 -3.5 ? 38 N 1
+ATOM 271 C CB . GLU A 1 38 ? 5.51809231 -15.5716923 22.5155538 1 -3.5 ? 38 N 1
+ATOM 272 C CG . GLU A 1 38 ? 4.77909231 -14.5746923 23.4225538 1 -3.5 ? 38 N 1
+ATOM 273 C CD . GLU A 1 38 ? 3.34509231 -14.2876923 22.9315538 1 -3.5 ? 38 N 1
+ATOM 274 O OE1 . GLU A 1 38 ? 3.07609231 -14.3946923 21.7125538 1 -3.5 ? 38 N 1
+ATOM 275 O OE2 . GLU A 1 38 ? 2.49009231 -13.9106923 23.7615538 1 -3.5 ? 38 N 1
+ATOM 276 N N . ILE A 1 39 ? 9.21209231 -15.7456923 23.3055538 1 4.5 ? 39 N 1
+ATOM 277 C CA . ILE A 1 39 ? 10.3910923 -14.9596923 23.6845538 1 4.5 ? 39 N 1
+ATOM 278 C C . ILE A 1 39 ? 10.7990923 -13.8346923 22.7215538 1 4.5 ? 39 N 1
+ATOM 279 O O . ILE A 1 39 ? 11.3940923 -12.8746923 23.1945538 1 4.5 ? 39 N 1
+ATOM 280 C CB . ILE A 1 39 ? 11.5970923 -15.8556923 24.0155538 1 4.5 ? 39 N 1
+ATOM 281 C CG1 . ILE A 1 39 ? 12.1800923 -16.5906923 22.7985538 1 4.5 ? 39 N 1
+ATOM 282 C CG2 . ILE A 1 39 ? 11.2640923 -16.8326923 25.1525538 1 4.5 ? 39 N 1
+ATOM 283 C CD1 . ILE A 1 39 ? 13.6170923 -17.0646923 23.0435538 1 4.5 ? 39 N 1
+ATOM 284 N N . LEU A 1 40 ? 10.4660923 -13.8766923 21.4295538 1 3.8 ? 40 N 1
+ATOM 285 C CA . LEU A 1 40 ? 10.7230923 -12.7796923 20.4795538 1 3.8 ? 40 N 1
+ATOM 286 C C . LEU A 1 40 ? 9.59709231 -12.6606923 19.4545538 1 3.8 ? 40 N 1
+ATOM 287 O O . LEU A 1 40 ? 8.99409231 -13.6556923 19.0665538 1 3.8 ? 40 N 1
+ATOM 288 C CB . LEU A 1 40 ? 12.0920923 -13.0006923 19.8135538 1 3.8 ? 40 N 1
+ATOM 289 C CG . LEU A 1 40 ? 12.4530923 -12.0266923 18.6805538 1 3.8 ? 40 N 1
+ATOM 290 C CD1 . LEU A 1 40 ? 12.6120923 -10.5936923 19.1765538 1 3.8 ? 40 N 1
+ATOM 291 C CD2 . LEU A 1 40 ? 13.7760923 -12.4396923 18.0535538 1 3.8 ? 40 N 1
+ATOM 292 N N . THR A 1 41 ? 9.28109231 -11.4576923 18.9925538 1 -0.7 ? 41 N 1
+ATOM 293 C CA . THR A 1 41 ? 8.25509231 -11.2136923 17.9675538 1 -0.7 ? 41 N 1
+ATOM 294 C C . THR A 1 41 ? 8.55409231 -9.94169231 17.1855538 1 -0.7 ? 41 N 1
+ATOM 295 O O . THR A 1 41 ? 9.04309231 -8.97969231 17.7675538 1 -0.7 ? 41 N 1
+ATOM 296 C CB . THR A 1 41 ? 6.88509231 -11.1016923 18.6395538 1 -0.7 ? 41 N 1
+ATOM 297 O OG1 . THR A 1 41 ? 6.53209231 -12.3296923 19.2225538 1 -0.7 ? 41 N 1
+ATOM 298 C CG2 . THR A 1 41 ? 5.74109231 -10.7316923 17.7035538 1 -0.7 ? 41 N 1
+ATOM 299 N N . ILE A 1 42 ? 8.21809231 -9.90269231 15.8965538 1 4.5 ? 42 N 1
+ATOM 300 C CA . ILE A 1 42 ? 8.33909231 -8.72169231 15.0355538 1 4.5 ? 42 N 1
+ATOM 301 C C . ILE A 1 42 ? 7.07609231 -8.57769231 14.1925538 1 4.5 ? 42 N 1
+ATOM 302 O O . ILE A 1 42 ? 6.56809231 -9.56369231 13.6735538 1 4.5 ? 42 N 1
+ATOM 303 C CB . ILE A 1 42 ? 9.60509231 -8.80069231 14.1585538 1 4.5 ? 42 N 1
+ATOM 304 C CG1 . ILE A 1 42 ? 10.8620923 -8.89269231 15.0505538 1 4.5 ? 42 N 1
+ATOM 305 C CG2 . ILE A 1 42 ? 9.67809231 -7.59269231 13.2115538 1 4.5 ? 42 N 1
+ATOM 306 C CD1 . ILE A 1 42 ? 12.2010923 -8.91569231 14.3085538 1 4.5 ? 42 N 1
+ATOM 307 N N . GLU A 1 43 ? 6.58409231 -7.35969231 14.0155538 1 -3.5 ? 43 N 1
+ATOM 308 C CA . GLU A 1 43 ? 5.51009231 -7.01369231 13.0855538 1 -3.5 ? 43 N 1
+ATOM 309 C C . GLU A 1 43 ? 5.86409231 -5.71469231 12.3625538 1 -3.5 ? 43 N 1
+ATOM 310 O O . GLU A 1 43 ? 6.39209231 -4.80569231 12.9945538 1 -3.5 ? 43 N 1
+ATOM 311 C CB . GLU A 1 43 ? 4.18509231 -6.90369231 13.8535538 1 -3.5 ? 43 N 1
+ATOM 312 C CG . GLU A 1 43 ? 3.03009231 -6.36569231 12.9975538 1 -3.5 ? 43 N 1
+ATOM 313 C CD . GLU A 1 43 ? 1.66009231 -6.47369231 13.6865538 1 -3.5 ? 43 N 1
+ATOM 314 O OE1 . GLU A 1 43 ? 1.58809231 -6.53269231 14.9345538 1 -3.5 ? 43 N 1
+ATOM 315 O OE2 . GLU A 1 43 ? 0.631092308 -6.54069231 12.9725538 1 -3.5 ? 43 N 1
+ATOM 316 N N . ALA A 1 44 ? 5.56509231 -5.59269231 11.0685538 1 1.8 ? 44 N 1
+ATOM 317 C CA . ALA A 1 44 ? 5.80209231 -4.37869231 10.2915538 1 1.8 ? 44 N 1
+ATOM 318 C C . ALA A 1 44 ? 4.74709231 -4.17469231 9.20555385 1 1.8 ? 44 N 1
+ATOM 319 O O . ALA A 1 44 ? 4.19209231 -5.13969231 8.69155385 1 1.8 ? 44 N 1
+ATOM 320 C CB . ALA A 1 44 ? 7.20109231 -4.44869231 9.68055385 1 1.8 ? 44 N 1
+ATOM 321 N N . ARG A 1 45 ? 4.49109231 -2.92769231 8.81355385 1 -4.5 ? 45 N 1
+ATOM 322 C CA . ARG A 1 45 ? 3.60709231 -2.58069231 7.69455385 1 -4.5 ? 45 N 1
+ATOM 323 C C . ARG A 1 45 ? 4.09809231 -1.30769231 7.01355385 1 -4.5 ? 45 N 1
+ATOM 324 O O . ARG A 1 45 ? 4.57509231 -0.401692308 7.68755385 1 -4.5 ? 45 N 1
+ATOM 325 C CB . ARG A 1 45 ? 2.17009231 -2.43369231 8.21855385 1 -4.5 ? 45 N 1
+ATOM 326 C CG . ARG A 1 45 ? 1.13309231 -2.29969231 7.09755385 1 -4.5 ? 45 N 1
+ATOM 327 C CD . ARG A 1 45 ? -0.261907692 -1.94269231 7.61255385 1 -4.5 ? 45 N 1
+ATOM 328 N NE . ARG A 1 45 ? -0.838907692 -2.99769231 8.45555385 1 -4.5 ? 45 N 1
+ATOM 329 C CZ . ARG A 1 45 ? -1.97190769 -2.92769231 9.12055385 1 -4.5 ? 45 N 1
+ATOM 330 N NH1 . ARG A 1 45 ? -2.74890769 -1.89069231 9.06755385 1 -4.5 ? 45 N 1
+ATOM 331 N NH2 . ARG A 1 45 ? -2.34890769 -3.89869231 9.88755385 1 -4.5 ? 45 N 1
+ATOM 332 N N . VAL A 1 46 ? 3.94309231 -1.20869231 5.69755385 1 4.2 ? 46 N 1
+ATOM 333 C CA . VAL A 1 46 ? 4.22509231 -0.00769230769 4.89755385 1 4.2 ? 46 N 1
+ATOM 334 C C . VAL A 1 46 ? 3.07409231 0.225307692 3.93755385 1 4.2 ? 46 N 1
+ATOM 335 O O . VAL A 1 46 ? 2.58609231 -0.731692308 3.35055385 1 4.2 ? 46 N 1
+ATOM 336 C CB . VAL A 1 46 ? 5.54609231 -0.136692308 4.12255385 1 4.2 ? 46 N 1
+ATOM 337 C CG1 . VAL A 1 46 ? 5.83809231 1.10130769 3.27455385 1 4.2 ? 46 N 1
+ATOM 338 C CG2 . VAL A 1 46 ? 6.74109231 -0.347692308 5.05155385 1 4.2 ? 46 N 1
+ATOM 339 N N . VAL A 1 47 ? 2.65709231 1.47030769 3.74255385 1 4.2 ? 47 N 1
+ATOM 340 C CA . VAL A 1 47 ? 1.60909231 1.87430769 2.79655385 1 4.2 ? 47 N 1
+ATOM 341 C C . VAL A 1 47 ? 2.10809231 3.04430769 1.95955385 1 4.2 ? 47 N 1
+ATOM 342 O O . VAL A 1 47 ? 2.71109231 3.96630769 2.49855385 1 4.2 ? 47 N 1
+ATOM 343 C CB . VAL A 1 47 ? 0.314092308 2.25930769 3.52855385 1 4.2 ? 47 N 1
+ATOM 344 C CG1 . VAL A 1 47 ? -0.822907692 2.60230769 2.56455385 1 4.2 ? 47 N 1
+ATOM 345 C CG2 . VAL A 1 47 ? -0.179907692 1.13730769 4.43355385 1 4.2 ? 47 N 1
+ATOM 346 N N . ILE A 1 48 ? 1.85609231 3.04730769 0.651553846 1 4.5 ? 48 N 1
+ATOM 347 C CA . ILE A 1 48 ? 2.15909231 4.17630769 -0.244446154 1 4.5 ? 48 N 1
+ATOM 348 C C . ILE A 1 48 ? 0.962092308 4.42830769 -1.15344615 1 4.5 ? 48 N 1
+ATOM 349 O O . ILE A 1 48 ? 0.443092308 3.48130769 -1.73544615 1 4.5 ? 48 N 1
+ATOM 350 C CB . ILE A 1 48 ? 3.44809231 3.90630769 -1.04644615 1 4.5 ? 48 N 1
+ATOM 351 C CG1 . ILE A 1 48 ? 4.65109231 3.80230769 -0.0924461538 1 4.5 ? 48 N 1
+ATOM 352 C CG2 . ILE A 1 48 ? 3.67209231 4.99630769 -2.10244615 1 4.5 ? 48 N 1
+ATOM 353 C CD1 . ILE A 1 48 ? 5.99709231 3.56930769 -0.771446154 1 4.5 ? 48 N 1
+ATOM 354 N N . ALA A 1 49 ? 0.520092308 5.67230769 -1.30744615 1 1.8 ? 49 N 1
+ATOM 355 C CA . ALA A 1 49 ? -0.630907692 6.02130769 -2.14044615 1 1.8 ? 49 N 1
+ATOM 356 C C . ALA A 1 49 ? -0.715907692 7.53130769 -2.42944615 1 1.8 ? 49 N 1
+ATOM 357 O O . ALA A 1 49 ? 0.0260923077 8.32730769 -1.85844615 1 1.8 ? 49 N 1
+ATOM 358 C CB . ALA A 1 49 ? -1.90190769 5.55430769 -1.42944615 1 1.8 ? 49 N 1
+ATOM 359 N N . SER A 1 50 ? -1.63790769 7.94730769 -3.29444615 1 -0.8 ? 50 N 1
+ATOM 360 C CA . SER A 1 50 ? -2.13390769 9.32730769 -3.33244615 1 -0.8 ? 50 N 1
+ATOM 361 C C . SER A 1 50 ? -3.08690769 9.60630769 -2.16444615 1 -0.8 ? 50 N 1
+ATOM 362 O O . SER A 1 50 ? -3.59190769 8.67530769 -1.54044615 1 -0.8 ? 50 N 1
+ATOM 363 C CB . SER A 1 50 ? -2.83990769 9.57530769 -4.65944615 1 -0.8 ? 50 N 1
+ATOM 364 O OG . SER A 1 50 ? -4.00190769 8.77530769 -4.76544615 1 -0.8 ? 50 N 1
+ATOM 365 N N . VAL A 1 51 ? -3.37890769 10.8733077 -1.85644615 1 4.2 ? 51 N 1
+ATOM 366 C CA . VAL A 1 51 ? -4.20990769 11.2283077 -0.689446154 1 4.2 ? 51 N 1
+ATOM 367 C C . VAL A 1 51 ? -5.58590769 10.5803077 -0.762446154 1 4.2 ? 51 N 1
+ATOM 368 O O . VAL A 1 51 ? -6.03490769 9.97530769 0.205553846 1 4.2 ? 51 N 1
+ATOM 369 C CB . VAL A 1 51 ? -4.34090769 12.7553077 -0.524446154 1 4.2 ? 51 N 1
+ATOM 370 C CG1 . VAL A 1 51 ? -5.38790769 13.1813077 0.508553846 1 4.2 ? 51 N 1
+ATOM 371 C CG2 . VAL A 1 51 ? -3.00890769 13.3543077 -0.0704461538 1 4.2 ? 51 N 1
+ATOM 372 N N . ASP A 1 52 ? -6.24990769 10.6293077 -1.91044615 1 -3.5 ? 52 N 1
+ATOM 373 C CA . ASP A 1 52 ? -7.62490769 10.1363077 -2.03444615 1 -3.5 ? 52 N 1
+ATOM 374 C C . ASP A 1 52 ? -7.75990769 8.62730769 -1.80244615 1 -3.5 ? 52 N 1
+ATOM 375 O O . ASP A 1 52 ? -8.81790769 8.17030769 -1.38744615 1 -3.5 ? 52 N 1
+ATOM 376 C CB . ASP A 1 52 ? -8.17090769 10.4883077 -3.41744615 1 -3.5 ? 52 N 1
+ATOM 377 C CG . ASP A 1 52 ? -8.00890769 11.9693077 -3.75344615 1 -3.5 ? 52 N 1
+ATOM 378 O OD1 . ASP A 1 52 ? -8.56790769 12.8213077 -3.02344615 1 -3.5 ? 52 N 1
+ATOM 379 O OD2 . ASP A 1 52 ? -7.31890769 12.2723077 -4.74944615 1 -3.5 ? 52 N 1
+ATOM 380 N N . THR A 1 53 ? -6.69790769 7.85230769 -2.05144615 1 -0.7 ? 53 N 1
+ATOM 381 C CA . THR A 1 53 ? -6.65690769 6.40530769 -1.79244615 1 -0.7 ? 53 N 1
+ATOM 382 C C . THR A 1 53 ? -6.08890769 6.06230769 -0.425446154 1 -0.7 ? 53 N 1
+ATOM 383 O O . THR A 1 53 ? -6.59190769 5.13430769 0.200553846 1 -0.7 ? 53 N 1
+ATOM 384 C CB . THR A 1 53 ? -5.91190769 5.66930769 -2.90144615 1 -0.7 ? 53 N 1
+ATOM 385 O OG1 . THR A 1 53 ? -6.73590769 5.72830769 -4.03744615 1 -0.7 ? 53 N 1
+ATOM 386 C CG2 . THR A 1 53 ? -5.66690769 4.19130769 -2.62544615 1 -0.7 ? 53 N 1
+ATOM 387 N N . TRP A 1 54 ? -5.13290769 6.82030769 0.114553846 1 -0.9 ? 54 N 1
+ATOM 388 C CA . TRP A 1 54 ? -4.75390769 6.63430769 1.51155385 1 -0.9 ? 54 N 1
+ATOM 389 C C . TRP A 1 54 ? -5.93390769 6.88630769 2.44855385 1 -0.9 ? 54 N 1
+ATOM 390 O O . TRP A 1 54 ? -6.12490769 6.14330769 3.40255385 1 -0.9 ? 54 N 1
+ATOM 391 C CB . TRP A 1 54 ? -3.57090769 7.51030769 1.88455385 1 -0.9 ? 54 N 1
+ATOM 392 C CG . TRP A 1 54 ? -3.12490769 7.31030769 3.29555385 1 -0.9 ? 54 N 1
+ATOM 393 C CD1 . TRP A 1 54 ? -2.16690769 6.44730769 3.69955385 1 -0.9 ? 54 N 1
+ATOM 394 C CD2 . TRP A 1 54 ? -3.64590769 7.92730769 4.51555385 1 -0.9 ? 54 N 1
+ATOM 395 N NE1 . TRP A 1 54 ? -2.05990769 6.48930769 5.07655385 1 -0.9 ? 54 N 1
+ATOM 396 C CE2 . TRP A 1 54 ? -2.94990769 7.38030769 5.62955385 1 -0.9 ? 54 N 1
+ATOM 397 C CE3 . TRP A 1 54 ? -4.61690769 8.91030769 4.79455385 1 -0.9 ? 54 N 1
+ATOM 398 C CZ2 . TRP A 1 54 ? -3.20690769 7.77030769 6.94555385 1 -0.9 ? 54 N 1
+ATOM 399 C CZ3 . TRP A 1 54 ? -4.87590769 9.32130769 6.11455385 1 -0.9 ? 54 N 1
+ATOM 400 C CH2 . TRP A 1 54 ? -4.17990769 8.74630769 7.18755385 1 -0.9 ? 54 N 1
+ATOM 401 N N . LEU A 1 55 ? -6.82190769 7.83130769 2.14155385 1 3.8 ? 55 N 1
+ATOM 402 C CA . LEU A 1 55 ? -8.06290769 7.97330769 2.89655385 1 3.8 ? 55 N 1
+ATOM 403 C C . LEU A 1 55 ? -8.96890769 6.72730769 2.83155385 1 3.8 ? 55 N 1
+ATOM 404 O O . LEU A 1 55 ? -9.56890769 6.39730769 3.84555385 1 3.8 ? 55 N 1
+ATOM 405 C CB . LEU A 1 55 ? -8.79990769 9.25030769 2.46855385 1 3.8 ? 55 N 1
+ATOM 406 C CG . LEU A 1 55 ? -8.09090769 10.5423077 2.90855385 1 3.8 ? 55 N 1
+ATOM 407 C CD1 . LEU A 1 55 ? -8.73590769 11.7413077 2.22755385 1 3.8 ? 55 N 1
+ATOM 408 C CD2 . LEU A 1 55 ? -8.18490769 10.7703077 4.41355385 1 3.8 ? 55 N 1
+ATOM 409 N N . ARG A 1 56 ? -8.95190769 5.98830769 1.72855385 1 -4.5 ? 56 N 1
+ATOM 410 C CA . ARG A 1 56 ? -9.72790769 4.75430769 1.65555385 1 -4.5 ? 56 N 1
+ATOM 411 C C . ARG A 1 56 ? -9.20090769 3.79530769 2.73255385 1 -4.5 ? 56 N 1
+ATOM 412 O O . ARG A 1 56 ? -9.96890769 3.24830769 3.52355385 1 -4.5 ? 56 N 1
+ATOM 413 C CB . ARG A 1 56 ? -9.61090769 4.11930769 0.269553846 1 -4.5 ? 56 N 1
+ATOM 414 C CG . ARG A 1 56 ? -10.9029077 3.50430769 -0.242446154 1 -4.5 ? 56 N 1
+ATOM 415 C CD . ARG A 1 56 ? -11.0039077 3.60930769 -1.75544615 1 -4.5 ? 56 N 1
+ATOM 416 N NE . ARG A 1 56 ? -10.0019077 2.78830769 -2.42944615 1 -4.5 ? 56 N 1
+ATOM 417 C CZ . ARG A 1 56 ? -9.13090769 3.25130769 -3.31944615 1 -4.5 ? 56 N 1
+ATOM 418 N NH1 . ARG A 1 56 ? -8.25490769 2.43130769 -3.88244615 1 -4.5 ? 56 N 1
+ATOM 419 N NH2 . ARG A 1 56 ? -9.13590769 4.53630769 -3.64744615 1 -4.5 ? 56 N 1
+ATOM 420 N N . TYR A 1 57 ? -7.88190769 3.60430769 2.75055385 1 -1.3 ? 57 N 1
+ATOM 421 C CA . TYR A 1 57 ? -7.19890769 2.75230769 3.72755385 1 -1.3 ? 57 N 1
+ATOM 422 C C . TYR A 1 57 ? -7.52990769 3.21230769 5.14355385 1 -1.3 ? 57 N 1
+ATOM 423 O O . TYR A 1 57 ? -8.03390769 2.44130769 5.95455385 1 -1.3 ? 57 N 1
+ATOM 424 C CB . TYR A 1 57 ? -5.68890769 2.75530769 3.45555385 1 -1.3 ? 57 N 1
+ATOM 425 C CG . TYR A 1 57 ? -4.83490769 2.23730769 4.58755385 1 -1.3 ? 57 N 1
+ATOM 426 C CD1 . TYR A 1 57 ? -4.66690769 0.854307692 4.76855385 1 -1.3 ? 57 N 1
+ATOM 427 C CD2 . TYR A 1 57 ? -4.21390769 3.13830769 5.46755385 1 -1.3 ? 57 N 1
+ATOM 428 C CE1 . TYR A 1 57 ? -3.89290769 0.372307692 5.83955385 1 -1.3 ? 57 N 1
+ATOM 429 C CE2 . TYR A 1 57 ? -3.44790769 2.66030769 6.54455385 1 -1.3 ? 57 N 1
+ATOM 430 C CZ . TYR A 1 57 ? -3.29290769 1.27330769 6.73955385 1 -1.3 ? 57 N 1
+ATOM 431 O OH . TYR A 1 57 ? -2.55990769 0.806307692 7.78355385 1 -1.3 ? 57 N 1
+ATOM 432 N N . ALA A 1 58 ? -7.32290769 4.49130769 5.43055385 1 1.8 ? 58 N 1
+ATOM 433 C CA . ALA A 1 58 ? -7.47790769 5.04530769 6.75955385 1 1.8 ? 58 N 1
+ATOM 434 C C . ALA A 1 58 ? -8.91490769 4.99230769 7.27055385 1 1.8 ? 58 N 1
+ATOM 435 O O . ALA A 1 58 ? -9.13390769 4.75730769 8.45255385 1 1.8 ? 58 N 1
+ATOM 436 C CB . ALA A 1 58 ? -6.95890769 6.47330769 6.69655385 1 1.8 ? 58 N 1
+ATOM 437 N N . GLU A 1 59 ? -9.91390769 5.16730769 6.41955385 1 -3.5 ? 59 N 1
+ATOM 438 C CA . GLU A 1 59 ? -11.3219077 5.09730769 6.80555385 1 -3.5 ? 59 N 1
+ATOM 439 C C . GLU A 1 59 ? -11.8049077 3.66730769 7.09655385 1 -3.5 ? 59 N 1
+ATOM 440 O O . GLU A 1 59 ? -12.6809077 3.47130769 7.93255385 1 -3.5 ? 59 N 1
+ATOM 441 C CB . GLU A 1 59 ? -12.1459077 5.73930769 5.68655385 1 -3.5 ? 59 N 1
+ATOM 442 C CG . GLU A 1 59 ? -13.6079077 5.96730769 6.07555385 1 -3.5 ? 59 N 1
+ATOM 443 C CD . GLU A 1 59 ? -14.3259077 6.89630769 5.08155385 1 -3.5 ? 59 N 1
+ATOM 444 O OE1 . GLU A 1 59 ? -14.1809077 6.71230769 3.84855385 1 -3.5 ? 59 N 1
+ATOM 445 O OE2 . GLU A 1 59 ? -15.0719077 7.79830769 5.52855385 1 -3.5 ? 59 N 1
+ATOM 446 N N . ALA A 1 60 ? -11.2349077 2.65530769 6.44255385 1 1.8 ? 60 N 1
+ATOM 447 C CA . ALA A 1 60 ? -11.5629077 1.24730769 6.67655385 1 1.8 ? 60 N 1
+ATOM 448 C C . ALA A 1 60 ? -10.8589077 0.690307692 7.92155385 1 1.8 ? 60 N 1
+ATOM 449 O O . ALA A 1 60 ? -11.4569077 -0.0406923077 8.71055385 1 1.8 ? 60 N 1
+ATOM 450 C CB . ALA A 1 60 ? -11.1759077 0.448307692 5.42955385 1 1.8 ? 60 N 1
+ATOM 451 N N . VAL A 1 61 ? -9.58790769 1.04330769 8.11755385 1 4.2 ? 61 N 1
+ATOM 452 C CA . VAL A 1 61 ? -8.79190769 0.638307692 9.28355385 1 4.2 ? 61 N 1
+ATOM 453 C C . VAL A 1 61 ? -9.18490769 1.42530769 10.5365538 1 4.2 ? 61 N 1
+ATOM 454 O O . VAL A 1 61 ? -9.16690769 0.874307692 11.6305538 1 4.2 ? 61 N 1
+ATOM 455 C CB . VAL A 1 61 ? -7.30190769 0.768307692 8.93755385 1 4.2 ? 61 N 1
+ATOM 456 C CG1 . VAL A 1 61 ? -6.37590769 0.512307692 10.1175538 1 4.2 ? 61 N 1
+ATOM 457 C CG2 . VAL A 1 61 ? -6.93590769 -0.261692308 7.87155385 1 4.2 ? 61 N 1
+ATOM 458 N N . GLY A 1 62 ? -9.60590769 2.68230769 10.3895538 1 -0.4 ? 62 N 1
+ATOM 459 C CA . GLY A 1 62 ? -10.0809077 3.53830769 11.4765538 1 -0.4 ? 62 N 1
+ATOM 460 C C . GLY A 1 62 ? -9.01490769 4.48030769 12.0375538 1 -0.4 ? 62 N 1
+ATOM 461 O O . GLY A 1 62 ? -8.68790769 4.39330769 13.2155538 1 -0.4 ? 62 N 1
+ATOM 462 N N . LEU A 1 63 ? -8.48090769 5.38530769 11.2095538 1 3.8 ? 63 N 1
+ATOM 463 C CA . LEU A 1 63 ? -7.59690769 6.49930769 11.6105538 1 3.8 ? 63 N 1
+ATOM 464 C C . LEU A 1 63 ? -8.23590769 7.89730769 11.4745538 1 3.8 ? 63 N 1
+ATOM 465 O O . LEU A 1 63 ? -7.69090769 8.87130769 11.9805538 1 3.8 ? 63 N 1
+ATOM 466 C CB . LEU A 1 63 ? -6.28590769 6.43530769 10.8115538 1 3.8 ? 63 N 1
+ATOM 467 C CG . LEU A 1 63 ? -5.37790769 5.25230769 11.1625538 1 3.8 ? 63 N 1
+ATOM 468 C CD1 . LEU A 1 63 ? -4.25190769 5.14730769 10.1435538 1 3.8 ? 63 N 1
+ATOM 469 C CD2 . LEU A 1 63 ? -4.74090769 5.41830769 12.5375538 1 3.8 ? 63 N 1
+ATOM 470 N N . LEU A 1 64 ? -9.42890769 7.98430769 10.8995538 1 3.8 ? 64 N 1
+ATOM 471 C CA . LEU A 1 64 ? -10.1119077 9.27530769 10.8025538 1 3.8 ? 64 N 1
+ATOM 472 C C . LEU A 1 64 ? -11.0449077 9.45130769 12.0095538 1 3.8 ? 64 N 1
+ATOM 473 O O . LEU A 1 64 ? -11.3799077 8.47130769 12.6755538 1 3.8 ? 64 N 1
+ATOM 474 C CB . LEU A 1 64 ? -10.9039077 9.37130769 9.49855385 1 3.8 ? 64 N 1
+ATOM 475 C CG . LEU A 1 64 ? -10.1329077 9.86730769 8.27355385 1 3.8 ? 64 N 1
+ATOM 476 C CD1 . LEU A 1 64 ? -9.16490769 8.80330769 7.78155385 1 3.8 ? 64 N 1
+ATOM 477 C CD2 . LEU A 1 64 ? -11.0889077 10.2813077 7.16655385 1 3.8 ? 64 N 1
+ATOM 478 N N . ARG A 1 65 ? -11.4679077 10.6853077 12.2965538 1 -4.5 ? 65 N 1
+ATOM 479 C CA . ARG A 1 65 ? -12.3669077 10.9303077 13.4095538 1 -4.5 ? 65 N 1
+ATOM 480 C C . ARG A 1 65 ? -13.7399077 10.2533077 13.0525538 1 -4.5 ? 65 N 1
+ATOM 481 O O . ARG A 1 65 ? -14.1509077 10.2693077 11.8915538 1 -4.5 ? 65 N 1
+ATOM 482 C CB . ARG A 1 65 ? -12.5609077 12.4283077 13.6315538 1 -4.5 ? 65 N 1
+ATOM 483 C CG . ARG A 1 65 ? -13.0689077 13.1763077 12.4095538 1 -4.5 ? 65 N 1
+ATOM 484 C CD . ARG A 1 65 ? -13.5829077 14.5583077 12.7785538 1 -4.5 ? 65 N 1
+ATOM 485 N NE . ARG A 1 65 ? -12.5579077 15.3743077 13.4245538 1 -4.5 ? 65 N 1
+ATOM 486 C CZ . ARG A 1 65 ? -12.7799077 16.5773077 13.9445538 1 -4.5 ? 65 N 1
+ATOM 487 N NH1 . ARG A 1 65 ? -11.7879077 17.2493077 14.5135538 1 -4.5 ? 65 N 1
+ATOM 488 N NH2 . ARG A 1 65 ? -13.9939077 17.1083077 13.8985538 1 -4.5 ? 65 N 1
+ATOM 489 N N . ASP A 1 66 ? -14.4219077 9.67030769 14.0435538 1 -3.5 ? 66 N 1
+ATOM 490 C CA . ASP A 1 66 ? -15.7039077 8.95230769 13.8875538 1 -3.5 ? 66 N 1
+ATOM 491 C C . ASP A 1 66 ? -16.8579077 9.84430769 13.4085538 1 -3.5 ? 66 N 1
+ATOM 492 O O . ASP A 1 66 ? -17.4599077 9.51630769 12.3655538 1 -3.5 ? 66 N 1
+ATOM 493 C CB . ASP A 1 66 ? -16.0839077 8.21930769 15.1945538 1 -3.5 ? 66 N 1
+ATOM 494 C CG . ASP A 1 66 ? -15.0939077 7.12930769 15.6535538 1 -3.5 ? 66 N 1
+ATOM 495 O OD1 . ASP A 1 66 ? -14.1349077 7.44930769 16.3935538 1 -3.5 ? 66 N 1
+ATOM 496 O OD2 . ASP A 1 66 ? -15.2989077 5.94030769 15.3065538 1 -3.5 ? 66 N 1

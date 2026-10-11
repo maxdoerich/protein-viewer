@@ -1,0 +1,38 @@
+/* Minimal design tokens for the protein viewers.
+   Extracted from the iGEM Heidelberg 2026 wiki (static/tokens.css): only what the viewer CSS reads,
+   values unchanged. Re-skin the viewers by editing these; the --gv-* / --lv-* palette lives in
+   static/gv-viewer/gv-viewer.css and static/latch-viewer/latch-viewer.css. */
+
+@font-face { font-family: 'Nunito Sans'; font-weight: 200 1000;
+  src: url('https://static.igem.wiki/teams/6249/wiki/fonts/nunito-sans-variable.ttf') format('truetype'); }
+
+:root {
+  --clr-body: #FFFFFF; /* the mockups sit on plain white */
+  --clr-frosted-blue: #8AD4DC; /* "Frosted Blue" */
+  --clr-ink: #202020; /* near-black — column headings, nav links */
+  --clr-light-cyan: #D3FCFF; /* "Light Cyan" */
+  --clr-muted: #555555; /* secondary prose — captions, the collaborations blurb. Lighter than --clr-text on purpose */
+  --clr-on-dark: #FFFFFF; /* text and icons ON a dark fill (the footer, a filled bar). NOT --clr-body, which is the page's own white background */
+  --clr-pine-blue: #3B7C7A; /* "Pine Blue" */
+  --clr-ring-core: #E55B00; /* the toggle's filled centre */
+  --clr-text: #202020; /* body copy */
+  --clr-title: #F37D46; /* the big page title face */
+  --clr-title-shadow: #FFBC8E; /* its offset shadow — lighter peach, not darker */
+  --font-family-primary: "Nunito Sans", sans-serif; /* the only face on the site: body, headings and chrome all use it, and the weights below are what separate them */
+  --fs-body: calc(0.96875rem + clamp(0rem, 0.69767vw - 0.17006rem, 0.2625rem) + clamp(0rem, 0.52885vw - 0.32788rem, 0.06875rem) + clamp(0rem, 0.525vw - 0.39375rem, 0.2625rem));
+  --fs-eyebrow: calc(0.7rem + clamp(0rem, 0.5814vw - 0.14172rem, 0.21875rem) + clamp(0rem, 0.625vw - 0.3875rem, 0.08125rem) + clamp(0rem, 0.4vw - 0.3rem, 0.2rem)); /* the small label ABOVE a heading (the "eyebrow") — the smallest step in the scale */
+  --fs-h5: calc(0.925rem + clamp(0rem, 0.19934vw - 0.04859rem, 0.075rem) + clamp(0rem, 0.4vw - 0.3rem, 0.2rem)); /* <h5>, and the small print in the frame — the one step BELOW body at the ceiling */
+  --fw-bold: 700; /* in-sentence emphasis and the nav links */
+  --fw-heading: 800;
+  --fw-regular: 400; /* body copy, and anything that should NOT shout */
+  --lh-snug: 1.35; /* UI text and captions — tighter than prose, looser than a heading */
+  --lh-tight: 1.15; /* headings: a heading of two lines wants them close */
+  --radius: calc(0.125rem + clamp(0rem, 0.13289vw - 0.03239rem, 0.05rem) + clamp(0rem, 0.28846vw - 0.17885rem, 0.0375rem) + clamp(0rem, 0.0875vw - 0.06562rem, 0.04375rem));
+  --radius-box: calc(0.375rem + clamp(0rem, 0.1495vw - 0.03644rem, 0.05625rem) + clamp(0rem, 0.72115vw - 0.44712rem, 0.09375rem) + clamp(0rem, 0.2125vw - 0.15937rem, 0.10625rem));
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, .10); /* a card sitting on the page */
+  --space-1: 0.25rem; /* 4px — hairline gaps inside a control */
+  --space-2: 0.5rem; /* 8px — padding inside a small thing: a chip, a label, a table cell */
+  --space-3: 1rem; /* 16px — the default. Gap between paragraphs, padding of an ordinary box. The one to reach for first */
+  --space-4: calc(1.25rem + clamp(0rem, 0.49834vw - 0.12147rem, 0.1875rem) + clamp(0rem, 0.48077vw - 0.29808rem, 0.0625rem) + clamp(0rem, 0.6vw - 0.45rem, 0.3rem)); /* 20 / 23 / 24 / 29px — between blocks within a section: figure to caption to next paragraph */
+  --space-5: calc(1.5rem + clamp(0rem, 1.97674vw - 0.48183rem, 0.74375rem) + clamp(0rem, 1.97115vw - 1.22212rem, 0.25625rem) + clamp(0rem, 1vw - 0.75rem, 0.5rem)); /* 24 / 36 / 40 / 48px — between whole sections */
+}

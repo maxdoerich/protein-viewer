@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protein viewer</title>
+<link rel="stylesheet" href="static/tokens.css">
+<style>
+  body { margin: 0; background: var(--clr-body); color: var(--clr-text); font-family: var(--font-family-primary); font-size: var(--fs-body); }
+  main { max-width: 60rem; margin: 0 auto; padding: var(--space-4) var(--space-3); }
+  nav ul { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-4); padding: 0; list-style: none; }
+  nav a { display: block; padding: var(--space-1) var(--space-3); border: 1px solid var(--clr-pine-blue); border-radius: var(--radius-box);
+          color: var(--clr-pine-blue); text-decoration: none; font-weight: var(--fw-bold); }
+  nav a[aria-current] { background: var(--clr-pine-blue); color: var(--clr-on-dark); }
+  nav button { padding: var(--space-1) var(--space-3); border: 1px solid var(--clr-ring-core); border-radius: var(--radius-box); background: none;
+               color: var(--clr-ring-core); font: inherit; font-weight: var(--fw-bold); cursor: pointer; }
+  nav button[aria-pressed="true"] { background: var(--clr-ring-core); color: var(--clr-on-dark); }
+  p.note { color: var(--clr-muted); }
+</style>
+</head>
+<body>
+<main>
+  <nav><ul id="nav"></ul></nav>
+  <div id="mount"></div>
+  <p class="note" id="note"></p>
+</main>
+<script>
+/* One page, one viewer per ?v=… . Each viewer script mounts itself onto its [data-…] element, loads Mol* from
+   static/molstar/ and its data from its own folder (or data-base). To embed a viewer in your own page, copy this
+   wiring: tokens.css, then the CSS files listed here, then the script, with the mount element in the body. */
+var V = {
+  gv:       { name: 'Gas vesicle assembly', attr: 'data-gv-viewer', css: ['gv-viewer/gv-viewer.css'],
+              js: 'gv-viewer/gv-viewer.js', readme: 'proteins/gv_animation/README.md' },
+  hydro4:   { name: 'GvpA hydropathy', attr: 'data-gv-viewer data-preview="hydro4"', css: ['gv-viewer/gv-viewer.css'],
+              js: 'gv-viewer/gv-viewer.js', readme: 'proteins/gv_animation/README.md' },
+  latch:    { name: 'Latch construct', attr: 'data-latch-viewer', css: ['gv-viewer/gv-viewer.css', 'latch-viewer/latch-viewer.css'],
+              js: 'latch-viewer/latch-viewer.js', readme: 'proteins/latch_animation/README.md' },
+  anim5:    { name: 'Five latch designs', attr: 'data-latch-anim', css: ['gv-viewer/gv-viewer.css', 'latch-viewer/latch-viewer.css', 'latch-anim5/latch-anim.css'],
+              js: 'latch-anim5/latch-anim.js', readme: 'proteins/latch_anim5/README.md' },
+  top10:    { name: 'Latch top 10', attr: 'data-latch-top10', css: ['gv-viewer/gv-viewer.css', 'latch-viewer/latch-viewer.css', 'latch-top10/latch-top10.css'],
+              js: 'latch-top10/latch-top10.js', readme: 'proteins/latch_top10/README.md' },
+  top10bp:  { name: 'Latch top 10, blocking peptide', attr: 'data-latch-top10 data-base="static/latch-top10-bp/" data-binder="GvpC binder"',
+              css: ['gv-viewer/gv-viewer.css', 'latch-viewer/latch-viewer.css', 'latch-top10/latch-top10.css'],
+              js: 'latch-top10/latch-top10.js', readme: 'proteins/latch_top10/README.md' }
+};
+var key = new URLSearchParams(location.search).get('v');
+if (!V[key]) key = 'gv';
+var cur = V[key];
+document.getElementById('nav').innerHTML = Object.keys(V).map(function (k) {
+  return '<li><a href="?v=' + k + '"' + (k === key ? ' aria-current="page"' : '') + '>' + V[k].name + '</a></li>';
+}).join('') + '<li><button type="button" data-pv-dev aria-pressed="false">Developer mode</button></li>';
+document.title = cur.name + ' · Protein viewer';
+document.getElementById('mount').innerHTML = '<div ' + cur.attr + ' data-pv-key="' + key + '" role="group" aria-label="Interactive 3D model: ' + cur.name + '">' +
+  '<p>An interactive 3D model appears here. It needs JavaScript and WebGL.</p></div>';
+document.getElementById('note').innerHTML = 'Background, data sources and honest limits: <code>' + cur.readme + '</code>';
+cur.css.concat('dev/dev-mode.css').forEach(function (f) {
+  var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'static/' + f; document.head.appendChild(l);
+});
+/* the viewer, then the developer mode (static/dev/dev-mode.js): it applies the edits made with it and, behind the
+   button above, offers the tools to make them. async = false keeps the two in this order. */
+[cur.js, 'dev/dev-mode.js'].forEach(function (f) {
+  var s = document.createElement('script'); s.src = 'static/' + f; s.async = false; document.head.appendChild(s);
+});
+</script>
+</body>
+</html>

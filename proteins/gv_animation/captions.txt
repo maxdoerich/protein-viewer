@@ -1,0 +1,39 @@
+GAS VESICLE ANIMATION: CAPTIONS / NARRATION (60 s, 30 fps)
+Times are mm:ss (frame numbers in brackets). Add the captions on your slide or in a video editor.
+
+00:00-00:07  [1-210]
+  Gas vesicles are hollow, gas-filled protein shells that let bacteria and archaea float.
+
+00:07-00:13  [210-390]
+  The wall is only one protein layer thick. It is built from thousands of copies of one small protein, GvpA, arranged in ribs.
+
+00:14-00:20  [425-600]
+  GvpA folds into an alpha-beta-beta-alpha motif: two helices (red) and a beta-hairpin (yellow).
+
+00:20-00:25  [595-760]
+  The side facing the gas is strongly hydrophobic (gold) and the outer surface is hydrophilic (blue). Gas passes through small pores, but water is kept out.
+
+00:26-00:31  [790-935]
+  GvpA copies pack side by side into ribs, which gives the wall its corrugated shape.
+
+00:32-00:36  [955-1075]
+  Cryo-EM density of the wall (EMD-14238) with the fitted atomic model (PDB 7R1C).
+
+00:37-00:42  [1100-1270]
+  Repeating this arrangement builds the whole shell: a cylinder closed by two conical tips.
+
+00:42-00:46  [1270-1370]
+  Each half of the shell is one continuous, low-pitch helix of GvpA. The two halves have opposite polarity and meet at a central seam.
+
+00:47-00:54  [1420-1630]
+  GvpC binds to the outside along the ribs and forms a helical cage that reinforces the shell.
+
+00:54-01:00  [1630-1800]
+  (hold on the finished vesicle)
+
+CREDITS (end slide or small print)
+  Structures: PDB 7R1C, EMD-14238, full-vesicle model (Zenodo 10.5281/zenodo.6458345):
+    Huber et al., Cell (2023).
+  PDB 8GBS (GvpA/GvpC, Anabaena flos-aquae): Dutka et al., Structure (2023).
+  Rendered with Blender and Molecular Nodes.
+  Note: GvpC is from Anabaena flos-aquae, placed onto the B. megaterium shell by structural alignment of GvpA.

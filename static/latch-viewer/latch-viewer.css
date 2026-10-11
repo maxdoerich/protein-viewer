@@ -1,0 +1,22 @@
+/* Latch (biosensor) viewer: see latch-viewer.js.
+   Layout, step buttons, card, legend and tools are the gas-vesicle viewer's (gv-viewer.css, loaded first);
+   this file says what the parts of the construct are painted in, and widens the step rail to five. latch-viewer.js
+   reads the colours back at start-up and hands them to Mol*. Retune a colour here, never in the script.
+   Same rules as gv-viewer.css: the six palette colours by name, tokens only. */
+.lv {
+  --lv-binder: var(--gv-pine);        /* the GvpA binder */
+  --lv-site:   var(--gv-frost);       /* ... its GvpA-binding site: the same colour as the GvpA it docks onto */
+  --lv-latch:  var(--gv-cayenne);     /* the latch that blocks the site */
+  --lv-tbd:    var(--gv-peach);       /* the target-binding domain at the latch's free end */
+  --lv-target: var(--clr-muted);      /* the target protein: a neutral grey, it is not part of the construct */
+  --lv-gvpa:   var(--gv-frost);       /* the GvpA pentamer the binder docks onto */
+  --lv-wall:   var(--gv-cyan);        /* the rest of the vesicle wall */
+  --lv-clash:  var(--gv-tangerine);   /* residues of binder and PD-L1 that overlap with the latch shut (the latch is dimmed then) */
+}
+
+/* five steps, not the viewer's four: the rail runs between the centres of five columns
+   (here for latch-viewer.js and latch-anim.js alike; the top 10 has no steps) */
+.lv .gvv-steps { grid-template-columns: repeat(5, 1fr); }
+.lv .gvv-steps::before { left: 10%; right: 10%; }
+.lv .gvv-steps::after { left: 10%; width: calc(80% * var(--gvv-progress)); }
+.lv .gvv-step-label { text-align: center; }

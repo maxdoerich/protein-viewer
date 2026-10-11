@@ -1,0 +1,88 @@
+{
+ "hinge_center": [
+  21.54,
+  1.697,
+  -10.198
+ ],
+ "hinge_axis": [
+  0.0775,
+  -0.9224,
+  0.3783
+ ],
+ "hinge_deg": 65,
+ "fly_arm": [
+  -0.2016,
+  0.7584,
+  -0.6199
+ ],
+ "fly_pdl1": [
+  0.9388,
+  -0.3064,
+  0.1575
+ ],
+ "fly_gvpa": [
+  -0.8339,
+  -0.0515,
+  -0.5496
+ ],
+ "n_traj_frames": 50,
+ "n_morph_frames": 90,
+ "n_binder": 112,
+ "latch_len": 120,
+ "interface_res": [
+  1,
+  4,
+  5,
+  8,
+  9,
+  12,
+  14,
+  15,
+  18,
+  19,
+  22,
+  25,
+  91,
+  92,
+  93,
+  94,
+  96,
+  97,
+  101
+ ],
+ "closed": {
+  "n_block_ca": 11,
+  "arm_clear": 3.41,
+  "pdl1_clear": 2.02,
+  "pdl1_latch_overlap": 223
+ },
+ "open": {
+  "n_block_ca": 0,
+  "arm_clear": 11.85,
+  "pdl1_clear": 25.99,
+  "pdl1_latch_overlap": 0
+ },
+ "latch_iface_closed": 2.2,
+ "latch_iface_open": 13.02,
+ "block_hinge": {
+  "axis": [
+   -0.5986,
+   -0.6177,
+   0.51
+  ],
+  "deg": 120,
+  "center": [
+   21.54,
+   1.697,
+   -10.198
+  ],
+  "iface_covered_closed": 12,
+  "iface_covered_open": 0,
+  "n_iface": 19,
+  "clearance_to_binder": 9.66,
+  "clearance_to_gvpa": 17.69,
+  "path_clearance": 4.75,
+  "latch_iface_open": 15.47,
+  "note": "Latch+Arm+PD-L1 drehen als ein Koerper; ersetzt hinge_axis/hinge_deg"
+ }
+}

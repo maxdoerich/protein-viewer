@@ -1,0 +1,366 @@
+/* Gas-vesicle assembly viewer (Model page): see gv-viewer.js.
+   Every selector is under .gvv, so this file cannot restyle the rest of the site,
+   and it follows the house rules (.claude/kb/css-design-system.md): tokens only,
+   space on the --space-N ladder, layout at the declared breakpoints only. */
+
+/* ------------------------------------------------ what the 3D scene is painted in --
+   gv-viewer.js reads these back at start-up and hands them to Mol*. Retune a colour
+   here (or in tokens.css), never in the script. */
+.gvv {
+  /* The six palette colours, by name. Nothing in this file may colour anything with a
+     token outside this set, except the neutrals: text, ink, white, grey. */
+  --gv-cayenne:   var(--clr-ring-core);     /* E55B00 */
+  --gv-tangerine: var(--clr-title);         /* F37D46 */
+  --gv-peach:     var(--clr-title-shadow);  /* FFBC8E */
+  --gv-frost:     var(--clr-frosted-blue);  /* 8AD4DC */
+  --gv-pine:      var(--clr-pine-blue);     /* 3B7C7A */
+  --gv-cyan:      var(--clr-light-cyan);    /* D3FCFF */
+
+  --gv-helix:     var(--gv-tangerine);      /* GvpA cartoon: the two helices */
+  --gv-strand:    var(--gv-pine);           /* ... the beta-hairpin */
+  --gv-loop:      var(--gv-frost);          /* ... the loops between them */
+  --gv-hero:      var(--gv-tangerine);      /* "the GvpA from step 1" once it has neighbours */
+  --gv-rib-a:     var(--gv-pine);           /* ribs alternate between two teals */
+  --gv-rib-b:     var(--gv-frost);
+  --gv-density:   var(--gv-cyan);           /* the EMD-14238 density: a pale glassy skin */
+  --gv-half-a:    var(--gv-pine);           /* the two helical halves of the vesicle */
+  --gv-half-b:    var(--gv-frost);
+  --gv-gvpc:      var(--gv-cayenne);        /* GvpC */
+  --gv-philic:    var(--gv-pine);           /* hydropathy scale: hydrophilic ... */
+  --gv-neutral:   var(--gv-cyan);
+  --gv-phobic:    var(--gv-cayenne);        /* ... hydrophobic */
+  --gv-outline:   var(--gv-pine);           /* outlines + ambient occlusion: the illustration's ink */
+  --gv-highlight: var(--gv-peach);          /* hover */
+  --gv-bg:        var(--clr-body);          /* the page's own white: not in the palette */
+
+  --gvv-ring: calc(var(--fs-body) * 3.1);   /* a step button: the site's three-circle ring */
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-family: var(--font-family-primary);
+  color: var(--clr-text);
+  text-align: left;
+}
+
+/* ---------------------------------------------------------------------- stage -- */
+.gvv-stage {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-box);
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, var(--clr-body) 0 40%, transparent 100%),
+    linear-gradient(180deg, var(--gv-cyan), var(--gv-cyan) 55%, var(--clr-body));
+}
+/* the scene is drawn on a transparent canvas ABOVE the text boxes (card, legend, notes: z-index 0), so a box
+   never covers the protein; buttons stay on top of it */
+.gvv-canvas { position: absolute; inset: 0; z-index: 1; touch-action: none; }
+.gvv:not(.is-ready) .gvv-canvas { opacity: 0; }   /* until Mol* is set up its canvas is opaque: keep the text readable under it */
+
+/* Mol*'s own chrome: off, or restyled into the site's */
+.gvv .msp-plugin,
+.gvv .msp-plugin .msp-viewport,
+.gvv .msp-plugin .msp-layout-standard { background: transparent; border: 0; }
+.gvv .msp-plugin .msp-viewport-controls,
+.gvv .msp-plugin .msp-viewport-top-left-controls,
+.gvv .msp-plugin .msp-selection-viewport-controls,
+.gvv .msp-plugin .msp-animation-viewport-controls,
+.gvv .msp-plugin .msp-state-snapshot-viewport-controls,
+.gvv .msp-plugin .msp-toast-container,
+.gvv .msp-plugin .msp-background-tasks,
+.gvv .msp-plugin .msp-overlay-tasks,
+.gvv .msp-plugin .msp-logo { display: none; }
+.gvv .msp-plugin .msp-highlight-toast-wrapper {
+  top: var(--space-3); bottom: auto; right: auto; left: 50%;
+  transform: translateX(-50%);
+}
+.gvv .msp-plugin .msp-highlight-info {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-box);
+  background: var(--clr-body);
+  box-shadow: var(--shadow-sm);
+  color: var(--gv-pine);
+  font-family: var(--font-family-primary);
+  font-size: calc(var(--fs-body) * .75);
+  opacity: 1;
+}
+
+/* -------------------------------------------- the step's text: over the scene from
+   768 up, under it on a phone (where it would cover the model) */
+.gvv-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-box);
+  background: var(--gv-cyan);
+}
+.gvv-eyebrow {
+  align-self: flex-start;
+  padding-inline: var(--space-1);
+  background: linear-gradient(transparent 55%, var(--gv-cyan) 55%);   /* the headings' highlighter bar */
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gv-pine);
+}
+.gvv-title {
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-tight);
+  color: var(--gv-tangerine);
+}
+.gvv-text {
+  font-size: calc(var(--fs-body) * .8);
+  line-height: var(--lh-snug);
+  color: var(--clr-muted);
+}
+@media (min-width: 768px) {
+  .gvv-card {
+    position: absolute; z-index: 0;
+    top: var(--space-3); left: var(--space-3);
+    max-width: 40%;
+    background: color-mix(in srgb, var(--clr-body) 90%, transparent);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* --------------------------------------------------------- round tool buttons -- */
+.gvv-tools {
+  position: absolute; z-index: 2;
+  top: var(--space-3); right: var(--space-3);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.gvv-tool {
+  display: grid; place-items: center;
+  width: calc(var(--fs-body) * 2.1); height: calc(var(--fs-body) * 2.1);
+  padding: 0;
+  border: 0; border-radius: 50%;
+  background: var(--clr-body);
+  color: var(--gv-pine);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+.gvv-tool .gvv-icon { width: 55%; height: 55%; }
+.gvv-tool:hover { background: var(--gv-cyan); transform: scale(1.06); }
+.gvv-tool[aria-pressed="true"] { background: var(--gv-pine); color: var(--clr-on-dark); }
+
+/* ------------------------------------------------- the step's on/off chip(s) -- */
+.gvv-chips {
+  position: absolute; z-index: 2;
+  left: var(--space-3); bottom: var(--space-3);
+  display: flex; gap: var(--space-2);
+}
+.gvv-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
+  border: 0; border-radius: calc(var(--fs-body) * 2);
+  background: var(--clr-body);
+  box-shadow: var(--shadow-sm);
+  font-size: calc(var(--fs-body) * .8);
+  font-weight: var(--fw-bold);
+  color: var(--gv-pine);
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.gvv-chip .gvv-icon { width: calc(var(--fs-body) * 1.2); height: calc(var(--fs-body) * 1.2); }
+.gvv-chip::after {                                   /* a small switch: off = pale, on = orange */
+  content: ""; width: calc(var(--fs-body) * .55); height: calc(var(--fs-body) * .55);
+  border-radius: 50%; background: var(--gv-frost);
+  transition: background-color .2s ease;
+}
+.gvv-chip[aria-pressed="true"] { background: var(--gv-cyan); color: var(--clr-ink); }
+.gvv-chip[aria-pressed="true"]::after { background: var(--gv-cayenne); }
+.gvv-chip:hover { background: var(--gv-cyan); }
+
+/* -------------------------------------------------------------------- legend -- */
+.gvv-legend {
+  position: absolute; z-index: 0;
+  right: var(--space-3); bottom: var(--space-3);
+  display: flex; flex-direction: column; gap: var(--space-1);
+  margin: 0; padding: var(--space-2) var(--space-3);
+  list-style: none;
+  border-radius: var(--radius-box);
+  background: color-mix(in srgb, var(--clr-body) 88%, transparent);
+  font-size: calc(var(--fs-body) * .72);
+  line-height: var(--lh-snug);
+  color: var(--clr-text);
+}
+.gvv-legend:empty { display: none; }
+.gvv-key { display: flex; align-items: center; gap: var(--space-2); }
+.gvv-swatch {
+  --gvv-swatch: transparent;                        /* gv-viewer.js sets the real colour inline, per key */
+  flex: none;
+  width: calc(var(--fs-body) * .8); height: calc(var(--fs-body) * .8);
+  border-radius: 50%;
+  background: var(--gvv-swatch);
+}
+.gvv-swatch--skin {                                   /* translucent density: a rim, faint inside */
+  background: radial-gradient(circle closest-side, transparent 0 55%, var(--gvv-swatch) 55% 100%);
+  box-shadow: inset 0 0 0 .1rem var(--gv-pine);
+}
+.gvv-swatch--scale {
+  width: calc(var(--fs-body) * 4);
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--gv-philic), var(--gv-neutral), var(--gv-phobic));
+}
+
+/* ------------------------------------------- "Ctrl + scroll to zoom" + loading -- */
+.gvv-hint {
+  position: absolute; z-index: 3; left: 50%; top: 50%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-box);
+  background: color-mix(in srgb, var(--clr-ink) 78%, transparent);
+  color: var(--clr-on-dark);
+  font-size: calc(var(--fs-body) * .85);
+  font-weight: var(--fw-bold);
+  transform: translate(-50%, -50%);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease;
+}
+.gvv-hint.is-on { opacity: 1; }
+.gvv-hint kbd {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius);
+  background: var(--clr-body); color: var(--clr-ink);
+  font-family: inherit; font-size: inherit;
+}
+
+.gvv-veil {
+  position: absolute; z-index: 4; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-3);
+  background: color-mix(in srgb, var(--clr-body) 55%, transparent);
+  font-size: calc(var(--fs-body) * .85);
+  font-weight: var(--fw-bold);
+  color: var(--gv-pine);
+}
+.gvv-veil[hidden] { display: none; }
+.gvv-veil.is-soft { background: transparent; pointer-events: none; }
+.gvv-veil.is-error .gvv-pulse { display: none; }
+.gvv-veil.is-error { padding: var(--space-5); text-align: center; color: var(--clr-muted); }
+.gvv-pulse {                                          /* the figure ring, breathing */
+  width: var(--gvv-ring); height: var(--gvv-ring);
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+      var(--gv-pine) 0 45.45%,
+      var(--gv-frost) 45.45% 72.73%,
+      var(--gv-cyan) 72.73% 100%);
+  animation: gvv-breathe 1.4s ease-in-out infinite alternate;
+}
+@keyframes gvv-breathe { from { transform: scale(.8); } to { transform: scale(1.1); } }
+
+/* ---------------------------------------------- the four steps, on a rail -- */
+.gvv-steps {
+  --gvv-progress: 0;
+  position: relative;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  margin: 0; padding: 0;
+  list-style: none;
+}
+.gvv-steps[hidden] { display: none; }                 /* a one-step viewer has no rail: display: grid would undo [hidden] */
+.gvv-steps::before,
+.gvv-steps::after {                                   /* the rail between ring centres, and how far along it we are */
+  content: "";
+  position: absolute; left: 12.5%;
+  top: calc(var(--gvv-ring) / 2 - var(--space-1) / 2);
+  height: var(--space-1);
+  border-radius: var(--radius);
+}
+.gvv-steps::before { right: 12.5%; background: var(--gv-frost); }
+.gvv-steps::after {
+  width: calc(75% * var(--gvv-progress));
+  background: var(--gv-cayenne);
+  transition: width .6s ease;
+}
+.gvv-step { position: relative; z-index: 1; display: flex; justify-content: center; }
+.gvv-step-btn {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
+  padding: 0; border: 0; background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+.gvv-ring {
+  display: grid; place-items: center;
+  width: var(--gvv-ring); height: var(--gvv-ring);
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,     /* the sidenav's top dot */
+      var(--gv-pine) 0 45.45%,
+      var(--gv-frost) 45.45% 72.73%,
+      var(--gv-cyan) 72.73% 100%);
+  color: var(--clr-on-dark);
+  transition: transform .3s ease;
+}
+.gvv-ring .gvv-icon { width: 34%; height: 34%; }
+.gvv-step-label {
+  display: flex; align-items: baseline; gap: var(--space-1);
+  font-size: calc(var(--fs-body) * .8);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  color: var(--gv-pine);
+}
+.gvv-step-n { font-size: var(--fs-eyebrow); color: var(--clr-muted); font-weight: var(--fw-regular); }
+.gvv-step-btn:hover .gvv-ring { transform: scale(1.08); }
+.gvv-step-btn:focus-visible { outline: 2px solid var(--gv-tangerine); outline-offset: var(--space-1); border-radius: var(--radius-box); }
+.gvv-step.is-done .gvv-ring {
+  background: radial-gradient(circle closest-side,
+      var(--gv-pine) 0 45.45%,
+      var(--gv-frost) 45.45% 72.73%,
+      var(--gv-cyan) 72.73% 100%);
+}
+.gvv-step-btn[aria-current="step"] .gvv-ring {         /* the dropdown's orange ring, grown */
+  background: radial-gradient(circle closest-side,
+      var(--gv-cayenne) 0 45.45%,
+      var(--gv-tangerine) 45.45% 72.73%,
+      var(--gv-peach) 72.73% 100%);
+  transform: scale(1.15);
+}
+.gvv-step-btn[aria-current="step"] .gvv-step-label { color: var(--gv-cayenne); }
+.gvv-step-btn[aria-current="step"] .gvv-step-n { color: var(--gv-cayenne); }
+.gvv.is-busy .gvv-step-btn[aria-current="step"] .gvv-ring { animation: gvv-breathe .7s ease-in-out infinite alternate; }
+
+/* ------------------------------------------------------------------ phones -- */
+@media (max-width: 767.98px) {
+  .gvv .msp-plugin .msp-highlight-toast-wrapper { display: none; }   /* no hover on touch */
+  .gvv-legend { left: var(--space-2); right: auto; bottom: var(--space-2); flex-direction: row; flex-wrap: wrap; }
+  .gvv-chips { top: var(--space-2); left: var(--space-2); bottom: auto; }
+  .gvv-tools { top: var(--space-2); right: var(--space-2); }
+}
+@media (min-width: 768px) {
+  .gvv-stage { aspect-ratio: 16 / 10; }
+}
+
+/* -------------------------------------------------------------- full screen -- */
+.gvv:fullscreen {
+  padding: var(--space-4);
+  background: var(--clr-body);
+}
+.gvv:fullscreen .gvv-stage { flex: 1; aspect-ratio: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .gvv * { transition: none; animation: none; }
+}
+:root[data-motion="reduced"] .gvv * { transition: none; animation: none; }
+
+/* ---- the 4-GvpA preview: which side of the wall is out and which in (gv-viewer.js places them) ---- */
+.gvv-side {
+  position: absolute; z-index: 0; left: 0; top: 0;
+  display: flex; flex-direction: column; align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-box);
+  background: color-mix(in srgb, var(--clr-body) 82%, transparent);
+  color: var(--clr-ink);
+  font-size: calc(var(--fs-body) * .85);
+  line-height: var(--lh-tight);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.gvv-side span { font-size: calc(var(--fs-body) * .75); }
+.gvv-side--out strong { color: var(--gv-philic); }
+.gvv-side--in strong { color: var(--gv-phobic); }
+.gvv--preview .gvv-legend { left: var(--space-3); right: auto; }

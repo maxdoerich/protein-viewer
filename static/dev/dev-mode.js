@@ -1,0 +1,717 @@
+/* Developer mode: edit a viewer in place.
+ *
+ * Works on the one [data-pv-key] viewer of index.html, whichever script mounted it: the four viewers share their markup
+ * (gv-viewer.css) and each hands over its Mol* plugin as host.__pv once it is ready. Everything edited is one JSON
+ * object in localStorage ("pv-config:<key>"), applied on every load: with developer mode off the page shows the
+ * edited viewer and nothing else. The [data-pv-dev] button switches the editing tools on:
+ *   - text box and legend: move (drag the tab), resize (drag the corner), edit the text of the current step;
+ *   - notes: boxes tied to a residue, placed in 3D, with a line to it;
+ *   - which of the viewer's buttons are shown;
+ *   - colour and display mode of the selection (click residues in 3D, or drag over the sequence view);
+ *   - the sequence view, where the proteins are named.
+ * Text is written in a small markup, see render(): "# " label, "## " title, "[pine] " legend key, **bold**, *italic*.
+ */
+(function start() {
+  'use strict';
+
+  // the viewer script mounts first (index.html loads it before this one), at DOMContentLoaded at the latest
+  if (document.readyState === 'loading') return document.addEventListener('DOMContentLoaded', start);
+  var host = document.querySelector('[data-pv-key]');
+  if (!host) return;
+  var stage = host.querySelector('.gvv-stage');
+  var STORE = 'pv-config:' + host.getAttribute('data-pv-key');
+  var cfg = { box: {}, text: {}, hide: [], paint: [], mode: {}, notes: [], names: {}, seq: false };
+  try { Object.assign(cfg, JSON.parse(localStorage.getItem(STORE) || '{}')); } catch (e) { console.warn('[dev-mode]', e); }
+  function save() { localStorage.setItem(STORE, JSON.stringify(cfg)); }
+
+  var dev = false, plugin = null, pv, S, V3;
+
+  /* every colour the site has (tokens.css), under the palette's names: nothing else can be picked */
+  var PALETTE = { cayenne: '--clr-ring-core', tangerine: '--clr-title', peach: '--clr-title-shadow', frost: '--clr-frosted-blue',
+                  pine: '--clr-pine-blue', cyan: '--clr-light-cyan', grey: '--clr-muted', ink: '--clr-ink', white: '--clr-body' };
+  var MODES = {                                         // the representations the viewers already draw with
+    cartoon: ['Cartoon', { sizeFactor: 0.3 }],
+    'gaussian-surface': ['Surface', { quality: 'custom', resolution: 1.6, radiusOffset: 0.8, smoothness: 1.6 }],
+    'molecular-surface': ['Molecular surface', { probeRadius: 1.4 }],
+    spacefill: ['Spheres', { sizeFactor: 1 }]
+  };
+  var LOOK = { celShaded: true, material: { metalness: 0, roughness: 1, bumpiness: 0 } };   // as in the viewers
+
+  var shades = {};
+  /** a custom property as 0xRRGGBB. ponytail: the tokens are all #RRGGBB; resolve through a canvas, as the viewers do, if one ever is not */
+  function hex(prop) {
+    if (shades[prop] == null) shades[prop] = parseInt(getComputedStyle(host).getPropertyValue(prop).trim().slice(1), 16);
+    return shades[prop];
+  }
+  function css(c) { return '#' + ('00000' + c.toString(16)).slice(-6); }
+  function mix(a, b, k) {
+    var ch = function (s) { return Math.round((a >> s & 255) + ((b >> s & 255) - (a >> s & 255)) * k) << s; };
+    return ch(16) | ch(8) | ch(0);
+  }
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function hash(s) {
+    for (var h = 5381, i = 0; i < s.length; i++) h = (h * 33 ^ s.charCodeAt(i)) >>> 0;
+    return h.toString(36);
+  }
+
+  /* ---------------------------------------------------------------- markup -- */
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+  function inline(s) {
+    return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+  function key(colour, kind, label) {
+    return '<span class="gvv-swatch' + (kind ? ' gvv-swatch--' + kind : '') + '"' +
+      (colour ? ' style="--gvv-swatch: var(' + (PALETTE[colour] || '--' + colour) + ')"' : '') + '></span>' +
+      '<span class="gvv-key-label">' + inline(label) + '</span>';
+  }
+  /** one line, one element:  # label (blue bar) · ## title (orange) · [colour] legend key · [scale] left | right · text */
+  function render(text, tag) {
+    return text.split('\n').map(function (line) {
+      var m, cls = 'gvv-text', body;
+      if (!line.trim()) return '';
+      if ((m = /^\[scale\]\s*(.*?)\s*\|\s*(.*)$/.exec(line))) {
+        cls = 'gvv-key gvv-key--scale';
+        body = '<span class="gvv-key-label">' + inline(m[1]) + '</span>' + key('', 'scale', m[2]);
+      } else if ((m = /^\[([\w-]+)(?::(\w+))?\]\s*(.*)$/.exec(line))) { cls = 'gvv-key'; body = key(m[1], m[2], m[3]); }
+      else if ((m = /^##\s*(.*)$/.exec(line))) { cls = 'gvv-title'; body = inline(m[1]); }
+      else if ((m = /^#\s*(.*)$/.exec(line))) { cls = 'gvv-eyebrow'; body = inline(m[1]); }
+      else body = inline(line);
+      return '<' + tag + ' class="' + cls + '">' + body + '</' + tag + '>';
+    }).join('');
+  }
+  /** what a viewer painted, as markup: the text an edit starts from */
+  function toMarkup(box) {
+    return Array.prototype.map.call(box.children, function (c) {
+      var t = c.textContent.trim(), has = function (n) { return c.classList.contains(n); };
+      if (has('gvv-eyebrow')) return '# ' + t;
+      if (has('gvv-title')) return '## ' + t;
+      if (has('gvv-key--scale')) return '[scale] ' + c.firstChild.textContent + ' | ' + c.lastChild.textContent;
+      if (has('gvv-key')) {
+        var sw = c.querySelector('.gvv-swatch');
+        var v = /var\(--([\w-]+)\)/.exec(sw.getAttribute('style') || ''), kind = /gvv-swatch--(\w+)/.exec(sw.className);
+        return '[' + (v ? v[1] : 'pine') + (kind ? ':' + kind[1] : '') + '] ' + t;
+      }
+      return t;
+    }).join('\n');
+  }
+
+  /* ----------------------------------------------- the text box and the legend --
+     A viewer repaints them on every step. What it painted is the box's `orig`, and its hash the key the edited
+     text of that step is stored under, so no viewer has to say which step it is on. */
+  var items = [], boxes = {}, picked = null;
+
+  function place(box) {
+    var g = cfg.box[box.id];
+    box.el.classList.toggle('pv-placed', !!g);
+    ['x', 'y', 'w', 'h'].forEach(function (k) {
+      if (g && g[k] != null) box.el.style.setProperty('--pv-' + k, g[k] + '%'); else box.el.style.removeProperty('--pv-' + k);
+    });
+  }
+  function geometry(e) {                                  // where a box sits in its offset parent, px
+    var p = e.offsetParent, r = e.getBoundingClientRect(), q = p.getBoundingClientRect();
+    return { x: r.left - q.left - p.clientLeft, y: r.top - q.top - p.clientTop, w: r.width, h: r.height };
+  }
+  function setBox(box, x, y, w, h) {                      // stored in % of the parent, so it follows the figure's size
+    var p = box.el.offsetParent, pc = function (v, of) { return Math.round(v / of * 1000) / 10; };
+    cfg.box[box.id] = { x: pc(x, p.clientWidth), y: pc(y, p.clientHeight), w: pc(w, p.clientWidth),
+                        h: h == null ? null : pc(h, p.clientHeight) };
+    place(box);
+  }
+
+  function track(id, label, e) {
+    if (!e || !e.isConnected) return;
+    var box = boxes[id] = { id: id, label: label, el: e };
+    var mo = new MutationObserver(function () { box.orig = null; box.draw(); if (picked === box) pick(box); placeNotes(); });
+    box.draw = function () {
+      if (box.orig == null) { box.orig = e.innerHTML; box.key = hash(box.orig); box.def = toMarkup(e); }
+      var t = cfg.text[box.key];
+      e.innerHTML = t == null ? box.orig : render(t, e.tagName === 'UL' ? 'li' : 'span');
+      mo.takeRecords();                                   // our own change is not a repaint
+    };
+    box.text = function () { var t = cfg.text[box.key]; return t == null ? box.def : t; };
+    box.setText = function (t) {
+      if (t === box.def) delete cfg.text[box.key]; else cfg.text[box.key] = t;
+      box.draw();
+    };
+    box.grab = function () { return Object.assign(geometry(e), { tall: (cfg.box[id] || {}).h != null }); };
+    box.move = function (s, dx, dy) { setBox(box, s.x + dx, s.y + dy, s.w, s.tall ? s.h : null); };
+    box.size = function (s, dx, dy) { setBox(box, s.x, s.y, Math.max(60, s.w + dx), Math.max(24, s.h + dy)); };
+    mo.observe(e, { childList: true, subtree: true, characterData: true });
+    box.draw();
+    place(box);
+    items.push(box);
+  }
+  track('card', 'Text box', host.querySelector('.gvv-card'));
+  track('legend', 'Legend', host.querySelector('.gvv-legend'));
+  function stepKey() { return boxes.card ? boxes.card.key : null; }
+
+  /* ------------------------------------------------------------ the buttons -- */
+  function applyHide() {
+    Array.prototype.forEach.call(host.querySelectorAll('.gvv-tool, .gvv-chips'), function (b) {
+      b.hidden = cfg.hide.indexOf(b.getAttribute('data-tool') || 'chips') >= 0;
+    });
+  }
+  applyHide();
+
+  /* ------------------------------------------------- frames (developer mode) --
+     The boxes lie behind the scene, where no pointer reaches them: each gets a frame above it, with a tab to
+     drag and pick it by and a corner to resize it. */
+  var frames = el('div', 'pv-frames');
+  host.appendChild(frames);
+
+  function drag(e, start, fn) {
+    var t = e.currentTarget, x = e.clientX, y = e.clientY;
+    e.preventDefault();
+    t.setPointerCapture(e.pointerId);
+    t.onpointermove = function (m) { fn(start, m.clientX - x, m.clientY - y); };
+    t.onpointerup = function () { t.onpointermove = t.onpointerup = null; save(); };
+  }
+  function frameOf(it) {
+    if (it.frame) return it.frame;
+    var f = it.frame = el('div', 'pv-frame', '<button type="button" class="pv-grip"></button><span class="pv-corner"></span>');
+    f.firstChild.textContent = it.label;
+    f.firstChild.title = 'Drag to move, click to edit the text';
+    f.firstChild.addEventListener('pointerdown', function (e) { pick(it); drag(e, it.grab(), it.move); });
+    f.lastChild.addEventListener('pointerdown', function (e) { pick(it); drag(e, it.grab(), it.size); });
+    frames.appendChild(f);
+    return f;
+  }
+  var looping = false;
+  function syncFrames() {
+    looping = dev;
+    if (!dev) return;
+    var hr = host.getBoundingClientRect();
+    items.forEach(function (it) {
+      var f = frameOf(it), r = it.el.getBoundingClientRect();
+      var pos = 'left:' + (r.left - hr.left) + 'px;top:' + (r.top - hr.top) + 'px;width:' + r.width + 'px;height:' + r.height + 'px';
+      f.hidden = !it.el.offsetParent;
+      if (f.style.cssText !== pos) f.style.cssText = pos;
+      f.classList.toggle('is-picked', it === picked);
+    });
+    requestAnimationFrame(syncFrames);
+  }
+
+  /* ------------------------------------------------------------------ panel -- */
+  var panel = el('aside', 'pv-panel',
+    '<h2>Developer mode</h2>' +
+    '<section><h3>Text</h3>' +
+      '<p class="pv-help">Drag a box by its tab, resize it at its corner. Click the tab to edit its text for this step.</p>' +
+      '<label class="pv-label" for="pv-text">Editing: <strong data-el="which">nothing picked</strong></label>' +
+      '<textarea id="pv-text" data-el="text" rows="8" spellcheck="false" disabled></textarea>' +
+      '<p class="pv-help"><code># line</code> label with the blue bar · <code>## line</code> orange title · ' +
+        '<code>**bold**</code> · <code>*italic*</code> · <code>[pine] label</code> legend key, with ' +
+        Object.keys(PALETTE).join(', ') + '</p>' +
+      '<label class="pv-check" data-el="scope" hidden><input type="checkbox" data-el="every"> Show on every step</label>' +
+      '<div class="pv-row"><button type="button" data-act="resetBox">Reset this box</button>' +
+        '<button type="button" data-act="dropNote" data-el="drop" hidden>Delete note</button></div>' +
+    '</section>' +
+    '<section><h3>Buttons</h3><div data-el="buttons"></div></section>' +
+    '<section><h3>Selection</h3>' +
+      '<p class="pv-help" data-el="sel">The 3D model is not loaded yet.</p>' +
+      '<div class="pv-row">' + Object.keys(PALETTE).map(function (n) {
+        return '<button type="button" class="pv-swatch" data-act="colour" data-v="' + n + '" title="' + n + '" aria-label="' + n +
+               '" style="background: var(' + PALETTE[n] + ')"></button>';
+      }).join('') + '</div>' +
+      '<div class="pv-row"><button type="button" data-act="scheme" data-v="ss">Secondary structure</button>' +
+        '<button type="button" data-act="scheme" data-v="plddt" title="Reads the B-factor column as pLDDT">pLDDT</button>' +
+        '<button type="button" data-act="scheme" data-v="hydro">Hydropathy</button>' +
+        '<button type="button" data-act="uncolour">Original colours</button></div>' +
+      '<div class="pv-row">' + Object.keys(MODES).map(function (m) {
+        return '<button type="button" data-act="mode" data-v="' + m + '">' + MODES[m][0] + '</button>';
+      }).join('') + '<button type="button" data-act="mode" data-v="">Original display</button></div>' +
+      '<div class="pv-row"><button type="button" data-act="note">Add note to selection</button>' +
+        '<button type="button" data-act="unselect">Clear selection</button></div>' +
+    '</section>' +
+    '<section><h3>Sequence</h3><div class="pv-row"><button type="button" data-act="seq" aria-pressed="false">Sequence view</button></div></section>' +
+    '<section><h3>Edits of this viewer</h3><div class="pv-row"><button type="button" data-act="export">Export</button>' +
+      '<button type="button" data-act="import">Import</button><button type="button" data-act="wipe">Reset all</button></div></section>');
+  document.body.appendChild(panel);
+  function $(name) { return panel.querySelector('[data-el="' + name + '"]'); }
+
+  Array.prototype.forEach.call(host.querySelectorAll('.gvv-tool, .gvv-chips'), function (b) {
+    var name = b.getAttribute('data-tool') || 'chips';
+    var l = el('label', 'pv-check', '<input type="checkbox"> ');
+    l.append(name === 'chips' ? 'Option chips (bottom left)' : b.getAttribute('aria-label'));
+    l.firstChild.checked = cfg.hide.indexOf(name) < 0;
+    l.firstChild.addEventListener('change', function () {
+      cfg.hide = cfg.hide.filter(function (n) { return n !== name; }).concat(this.checked ? [] : [name]);
+      applyHide(); save();
+    });
+    $('buttons').appendChild(l);
+  });
+
+  function pick(it) {
+    picked = it;
+    $('which').textContent = it ? it.label : 'nothing picked';
+    $('text').disabled = !it;
+    $('text').value = it ? it.text() : '';
+    $('scope').hidden = $('drop').hidden = !(it && it.note);
+    if (it && it.note) $('every').checked = it.note.step == null;
+  }
+  $('text').addEventListener('input', function () { if (picked) { picked.setText(this.value); placeNotes(); save(); } });
+  $('every').addEventListener('change', function () { picked.note.step = this.checked ? null : stepKey(); placeNotes(); save(); });
+
+  var ACT = {
+    resetBox: function () {
+      if (!picked) return;
+      if (picked.note) { delete picked.note.w; delete picked.note.h; picked.note.off = null; placeNotes(); }
+      else { delete cfg.box[picked.id]; delete cfg.text[picked.key]; picked.draw(); place(picked); pick(picked); }
+    },
+    dropNote: function () {
+      cfg.notes.splice(cfg.notes.indexOf(picked.note), 1);
+      items.splice(items.indexOf(picked), 1);
+      picked.el.remove(); if (picked.frame) picked.frame.remove();
+      pick(null); placeNotes();
+    },
+    colour: function (v) { paint({ color: hex(PALETTE[v]) }); },
+    scheme: function (v) { paint({ scheme: v }); },
+    uncolour: function () { paint({ clear: true }); },
+    mode: function (v) { setMode(v); },
+    note: function () { addNote(); },
+    unselect: function () { if (plugin) plugin.managers.structure.selection.clear(); },
+    seq: function () { cfg.seq = !cfg.seq; drawSeq(); },
+    export: function () {
+      var a = el('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(cfg, null, 1)], { type: 'application/json' }));
+      a.download = STORE.replace(':', '-') + '.json';
+      a.click();
+    },
+    import: function () {
+      var f = el('input');
+      f.type = 'file'; f.accept = 'application/json';
+      f.onchange = function () {
+        f.files[0].text().then(function (t) { JSON.parse(t); localStorage.setItem(STORE, t); location.reload(); })
+          .catch(function (e) { alert('Not a config file: ' + e.message); });
+      };
+      f.click();
+    },
+    wipe: function () {
+      if (!confirm('Throw away every edit of this viewer?')) return;
+      save = function () {};                              // nothing may write the edits back before the page is gone
+      localStorage.removeItem(STORE);
+      location.reload();
+    }
+  };
+  panel.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]');
+    if (!b) return;
+    ACT[b.getAttribute('data-act')](b.getAttribute('data-v'));
+    save();
+  });
+
+  /* ------------------------------------------------------------ the 3D part -- */
+  /* what the viewer has built: [{ name, ref, cell, sref, skey, structure, on }] */
+  var idx = null, skeys = {};
+  /** a name for a structure that survives a reload: its assembly id, or the file it was read from */
+  function structKey(c) {
+    var ref = c.transform.ref, cells = plugin.state.data.cells, p = c.transform.params;
+    if (skeys[ref]) return skeys[ref];
+    if (p && p.type && p.type.params && p.type.params.id) return (skeys[ref] = p.type.params.id);
+    for (; c; c = c.transform.parent === c.transform.ref ? null : cells.get(c.transform.parent)) {
+      var u = c.transform.params && c.transform.params.url;
+      if (u) return (skeys[ref] = String(u.url || u).replace(/^.*\//, ''));
+    }
+    return '';
+  }
+  function index() {
+    if (idx) return idx;
+    var cells = plugin.state.data.cells;
+    idx = [];
+    Object.keys(pv.built).forEach(function (name) {       // latch-top10 nests one level: built[tag] = { closed, open, ghost }
+      var v = pv.built[name], refs = typeof v === 'string' ? [[name, v]] : Object.keys(v).map(function (k) { return [name + '_' + k, v[k]]; });
+      refs.forEach(function (nr) {
+        var c = cells.get(nr[1]), sc = c && cells.get(c.transform.parent);
+        if (!c || !c.obj || !sc || !sc.obj || !sc.obj.data.units) return;       // gone, or not a structure (the density)
+        idx.push({ name: nr[0], ref: nr[1], cell: c, sref: sc.transform.ref, skey: structKey(sc), structure: sc.obj.data,
+                   on: !c.state.isHidden });
+      });
+    });
+    return idx;
+  }
+  function shown() { return index().filter(function (r) { return r.on; }); }
+
+  /* residues of a unit, in order: copies of a chain share one table */
+  var ONE = { ALA: 'A', ARG: 'R', ASN: 'N', ASP: 'D', CYS: 'C', GLN: 'Q', GLU: 'E', GLY: 'G', HIS: 'H', ILE: 'I', LEU: 'L',
+              LYS: 'K', MET: 'M', PHE: 'F', PRO: 'P', SER: 'S', THR: 'T', TRP: 'W', TYR: 'Y', VAL: 'V' };
+  var tables = new WeakMap();
+  function table(u) {
+    var t = tables.get(u.elements);
+    if (t) return t;
+    var atoms = u.model.atomicHierarchy.atoms, els = u.elements, last = -1;
+    t = { seq: '', start: [], res: [], comp: [], ord: new Map() };   // start: first atom (index in the unit) of each residue
+    for (var i = 0; i < els.length; i++) {
+      var r = u.residueIndex[els[i]];
+      if (r === last) continue;
+      last = r;
+      t.ord.set(r, t.res.length);
+      t.start.push(i); t.res.push(r); t.comp.push(atoms.label_comp_id.value(els[i]));
+      t.seq += ONE[t.comp[t.comp.length - 1]] || 'X';
+    }
+    t.start.push(els.length);
+    tables.set(els, t);
+    return t;
+  }
+
+  /* ---- colours: a list of paint jobs, each a target and a colour, a scheme, or "clear" ----
+     target { seq, from, to }: those residues of every copy of that protein (from the sequence view)
+     target { at: [{ s, u, r }] }: residues r of unit u of structure s (picked in 3D)
+     Each representation gets the result as one Mol* overpaint node, rebuilt from the whole list. */
+  var KD = { ALA: 1.8, ARG: -4.5, ASN: -3.5, ASP: -3.5, CYS: 2.5, GLN: -3.5, GLU: -3.5, GLY: -0.4, HIS: -3.2, ILE: 4.5, LEU: 3.8,
+             LYS: -3.9, MET: 1.9, PHE: 2.8, PRO: -1.6, SER: -0.8, THR: -0.7, TRP: -0.9, TYR: -1.3, VAL: 4.2 };
+  var ssProp;
+  var SCHEME = {
+    ss: function (r, u, t, i) {
+      var all = ssProp && ssProp.get(r.structure).value, e = all && all.get(u.invariantId);
+      var f = e ? e.type[e.getIndex(t.res[i])] : 0;         // SecondaryStructureType flags: 2 helix, 4 strand
+      return hex(f & 2 ? '--gv-helix' : f & 4 ? '--gv-strand' : '--gv-loop');
+    },
+    hydro: function (r, u, t, i) {                        // Kyte–Doolittle on the viewers' own scale
+      var k = ((KD[t.comp[i]] || 0) + 4.5) / 9;
+      return k < .5 ? mix(hex('--gv-philic'), hex('--gv-neutral'), k * 2) : mix(hex('--gv-neutral'), hex('--gv-phobic'), k * 2 - 1);
+    },
+    plddt: function (r, u, t, i) {                        // the B-factor column, in AlphaFold's four bands
+      var b = u.model.atomicConformation.B_iso_or_equiv.value(u.elements[t.start[i]]);
+      return hex(PALETTE[b > 90 ? 'pine' : b > 70 ? 'frost' : b > 50 ? 'peach' : 'cayenne']);
+    }
+  };
+  async function needSS(structure) {
+    if (!cfg.paint.some(function (o) { return o.scheme === 'ss'; })) return;
+    ssProp = ssProp || plugin.customStructureProperties.get('molstar_computed_secondary_structure');
+    if (!ssProp.get(structure).value) {
+      await ssProp.attach({ runtime: { shouldUpdate: false, isSynchronous: true, update: function () {} },
+                            assetManager: plugin.managers.asset }, structure);
+    }
+  }
+
+  var version = 0, single = null, atMaps = new WeakMap();
+  function atMap(op) {                                    // 's|u' -> residues, for a job picked in 3D
+    var m = atMaps.get(op);
+    if (!m) { atMaps.set(op, m = new Map()); op.at.forEach(function (a) { m.set(a.s + '|' + a.u, a.r); }); }
+    return m;
+  }
+  /** the colour of each residue of a unit after every job (null: as the viewer drew it); memo: per table, for a structure */
+  function resolve(r, u, memo) {
+    var t = table(u), id = r.skey + '|' + u.id;
+    if (!single) { single = new Set(); cfg.paint.forEach(function (o) { if (o.at) atMap(o).forEach(function (v, k) { single.add(k); }); }); }
+    var shared = !single.has(id);
+    if (shared && memo.has(t)) return memo.get(t);
+    var out = [];
+    for (var i = 0; i < t.res.length; i++) out.push(null);
+    cfg.paint.forEach(function (o) {
+      var set = function (i) { if (i < out.length) out[i] = o.clear ? null : o.scheme ? SCHEME[o.scheme](r, u, t, i) : o.color; };
+      if (o.at) (atMap(o).get(id) || []).forEach(set);
+      else if (o.seq === t.seq) for (var i = o.from; i <= o.to; i++) set(i);
+    });
+    if (shared) memo.set(t, out);
+    return out;
+  }
+  function atomsOf(t, from, to) {                         // unit indices of residues from..to: a sorted Int32Array is a Mol* OrderedSet
+    var a = new Int32Array(t.start[to + 1] - t.start[from]);
+    for (var i = 0; i < a.length; i++) a[i] = t.start[from] + i;
+    return a;
+  }
+
+  var nodes = {}, painted = {};
+  async function applyPaint(r) {
+    if (painted[r.ref] === version) return;
+    painted[r.ref] = version;
+    if (!cfg.paint.length && !nodes[r.ref]) return;
+    await needSS(r.structure);
+    var memo = new Map(), groups = new Map(), by = new Map(), L = S.StructureElement.Loci, layers = [];
+    r.structure.units.forEach(function (u) {
+      if (u.kind !== 0) return;
+      var t = table(u), cols = resolve(r, u, memo), g = groups.get(cols);
+      if (!g) {                                           // colour -> atoms, once per colouring
+        var lists = new Map();
+        cols.forEach(function (c, i) {
+          if (c == null) return;
+          var l = lists.get(c) || lists.set(c, []).get(c);
+          for (var k = t.start[i]; k < t.start[i + 1]; k++) l.push(k);
+        });
+        groups.set(cols, g = new Map());
+        lists.forEach(function (l, c) { g.set(c, Int32Array.from(l)); });
+      }
+      g.forEach(function (ix, c) { (by.get(c) || by.set(c, []).get(c)).push({ unit: u, indices: ix }); });
+    });
+    by.forEach(function (els, c) {
+      layers.push({ bundle: S.StructureElement.Bundle.fromLoci(L(r.structure, els)), color: c, clear: false });
+    });
+    var b = plugin.build();
+    if (nodes[r.ref]) b.to(nodes[r.ref]).update({ layers: layers });
+    else nodes[r.ref] = b.to(r.ref).apply(pv.lib.plugin.StateTransforms.Representation.OverpaintStructureRepresentation3DFromBundle,
+                                          { layers: layers }, { tags: 'pv-paint' }).ref;
+    await b.commit();
+  }
+
+  /* ---- display mode: per component, by the name its viewer built it under ---- */
+  var was = {}, now = {};
+  async function applyMode(r) {
+    var want = cfg.mode[r.name] || null;
+    if ((now[r.ref] || null) === want) return;
+    var old = r.cell.transform.params.type;
+    if (!was[r.ref]) was[r.ref] = old;
+    var type = want
+      ? { name: want, params: Object.assign({}, plugin.representation.structure.registry.get(want).defaultValues, LOOK, MODES[want][1]) }
+      : was[r.ref];
+    now[r.ref] = want;
+    var at = r.cell.obj.data.repr.state.transform.slice();   // where its viewer has put it: a new type starts at the origin again
+    await plugin.build().to(r.ref).update(function (p) {
+      p.type = { name: type.name, params: Object.assign({}, type.params, { alpha: old.params.alpha }) };   // a fade keeps running
+      return p;
+    }).commit();
+    var repr = r.cell.obj.data.repr;
+    repr.setState({ transform: at });
+    plugin.canvas3d.update(repr);
+  }
+  function setMode(type) {
+    if (!plugin) return;
+    var hit = sel.n ? sel.at.map(function (a) { return a.s; }) : null;
+    shown().forEach(function (r) {
+      if (hit && hit.indexOf(r.skey) < 0) return;
+      if (type) cfg.mode[r.name] = type; else delete cfg.mode[r.name];
+    });
+    sync();
+  }
+
+  var queue = Promise.resolve(), timer;
+  function touch() { idx = null; clearTimeout(timer); timer = setTimeout(sync, 120); }
+  function sync() {
+    queue = queue.then(async function () {
+      idx = null;
+      for (var reps = index(), i = 0; i < reps.length; i++) { await applyMode(reps[i]); await applyPaint(reps[i]); }
+      drawSeq(); placeNotes();
+    }).catch(function (e) { console.error('[dev-mode]', e); });
+  }
+
+  /* ---- selection: Mol*'s own. Clicks in 3D (selection mode) and drags over the sequence both end up in it ---- */
+  var sel = { n: 0, at: [], bySeq: {} };
+  var seqSel = null;                                      // [{ seq, from, to }] while the selection came from the sequence view only
+  var selfSel = false, selTimer;
+  function readSelection() {
+    var L = S.StructureElement.Loci, cells = plugin.state.data.cells;
+    sel = { n: 0, at: [], bySeq: {} };
+    plugin.managers.structure.selection.entries.forEach(function (e, ref) {
+      var c = cells.get(ref), per = new Map();
+      if (!c || L.isEmpty(e.selection)) return;
+      L.forEachLocation(e.selection, function (loc) {
+        if (loc.unit.kind !== 0) return;
+        var set = per.get(loc.unit) || per.set(loc.unit, new Set()).get(loc.unit);
+        set.add(table(loc.unit).ord.get(loc.unit.residueIndex[loc.element]));
+      });
+      per.forEach(function (set, u) {
+        var seq = table(u).seq, all = sel.bySeq[seq] || (sel.bySeq[seq] = new Set());
+        set.forEach(function (i) { all.add(i); });
+        sel.n += set.size;
+        sel.at.push({ s: structKey(c), u: u.id, r: Array.from(set) });
+      });
+    });
+    $('sel').textContent = (sel.n ? sel.n + ' residue' + (sel.n > 1 ? 's' : '') + ' selected.' : 'Nothing selected: colours and display apply to everything shown.') +
+      ' Click residues in the viewer (Shift for a range) or drag over the sequence.';
+    markSeq();
+  }
+  function selectSeq(seq, from, to, add) {
+    var m = plugin.managers.structure.selection, done = {}, x = { seq: seq, from: from, to: to };
+    seqSel = !add ? [x] : seqSel ? seqSel.concat([x]) : sel.n ? null : [x];
+    selfSel = true;
+    if (!add) m.clear();
+    shown().forEach(function (r) {
+      if (done[r.sref]) return;
+      done[r.sref] = true;
+      var memo = new Map(), els = [];
+      r.structure.units.forEach(function (u) {
+        var t = u.kind === 0 && table(u);
+        if (!t || t.seq !== seq) return;
+        els.push({ unit: u, indices: memo.get(t) || memo.set(t, atomsOf(t, from, to)).get(t) });
+      });
+      if (els.length) m.fromLoci('add', S.StructureElement.Loci(r.structure, els));
+    });
+    selfSel = false;
+  }
+  function paint(what) {
+    if (!plugin) return;
+    var targets = seqSel || (sel.n ? [{ at: sel.at }] : rows().map(function (w) { return { seq: w.seq, from: 0, to: w.seq.length - 1 }; }));
+    targets.forEach(function (t) {                        // a job that is painted over completely is dropped
+      if (t.seq != null) cfg.paint = cfg.paint.filter(function (o) { return !(o.seq === t.seq && o.from >= t.from && o.to <= t.to); });
+      cfg.paint.push(Object.assign({}, what, t));
+    });
+    if (cfg.paint.every(function (o) { return o.clear; })) cfg.paint = [];
+    version++; single = null;
+    sync();
+  }
+
+  /* ---- sequence view: one row per protein (= distinct sequence) on screen ---- */
+  var seqEl = el('div', 'pv-seq'), seqRows = [], seqSig = '';
+  seqEl.hidden = true;
+  host.after(seqEl);
+  function rows() {
+    var seen = {}, out = [];
+    shown().forEach(function (r) {
+      var done = new Set();
+      r.structure.units.forEach(function (u) {
+        if (u.kind !== 0 || done.has(u.elements)) return;
+        done.add(u.elements);
+        var t = table(u), w = seen[t.seq];
+        if (!w) out.push(w = seen[t.seq] = { seq: t.seq, chains: [], rep: r, unit: u });
+        var ch = u.model.atomicHierarchy.chains.label_asym_id.value(u.chainIndex[u.elements[0]]);
+        if (w.chains.indexOf(ch) < 0) w.chains.push(ch);
+      });
+    });
+    return out;
+  }
+  function drawSeq() {
+    panel.querySelector('[data-act="seq"]').setAttribute('aria-pressed', cfg.seq ? 'true' : 'false');
+    seqEl.hidden = !(dev && cfg.seq && plugin);
+    if (seqEl.hidden) return;
+    var rs = rows(), sig = version + '|' + rs.map(function (w) { return w.seq + w.chains; }).join('|');
+    if (sig !== seqSig) {
+      seqSig = sig; seqRows = rs;
+      seqEl.innerHTML = rs.length ? '' : '<p class="pv-help">No protein on screen.</p>';
+      rs.forEach(function (w, n) {
+        var cols = resolve(w.rep, w.unit, new Map()), res = w.unit.model.atomicHierarchy.residues, t = table(w.unit);
+        var row = el('div', 'pv-seq-row',
+          '<input class="pv-seq-name" aria-label="Protein name"><span class="pv-help">' + w.seq.length + ' residues · chain ' +
+          esc(w.chains.join(', ')) + '</span><div class="pv-seq-res" data-row="' + n + '">' + w.seq.split('').map(function (ch, i) {
+            var c = cols[i], dark = c != null && (c >> 16 & 255) * .3 + (c >> 8 & 255) * .59 + (c & 255) * .11 < 140;
+            return '<span data-i="' + i + '"' + ((i + 1) % 10 ? '' : ' data-n="' + (i + 1) + '"') +
+              ' title="' + t.comp[i] + ' ' + res.auth_seq_id.value(t.res[i]) + '"' +
+              (c == null ? '' : ' style="background:' + css(c) + (dark ? ';color:var(--clr-on-dark)' : '') + '"') + '>' + ch + '</span>';
+          }).join('') + '</div>');
+        row.firstChild.value = cfg.names[w.seq] || 'Chain ' + w.chains.join(', ');
+        row.firstChild.addEventListener('input', function () { cfg.names[w.seq] = this.value; save(); });
+        seqEl.appendChild(row);
+      });
+    }
+    markSeq();
+  }
+  function markSeq() {
+    Array.prototype.forEach.call(seqEl.querySelectorAll('.pv-seq-res'), function (row) {
+      var set = sel.bySeq[seqRows[row.getAttribute('data-row')].seq];
+      Array.prototype.forEach.call(row.children, function (c, i) {
+        c.classList.remove('is-pre');
+        c.classList.toggle('is-sel', !!set && set.has(i));
+      });
+    });
+  }
+  seqEl.addEventListener('pointerdown', function (e) {    // drag over residues: a range; Shift adds it to the selection
+    var s = e.target.closest('[data-i]');
+    if (!s) return;
+    e.preventDefault();
+    var row = s.parentNode, a = +s.getAttribute('data-i'), b = a;
+    function preview() {
+      Array.prototype.forEach.call(row.children, function (c, i) { c.classList.toggle('is-pre', i >= Math.min(a, b) && i <= Math.max(a, b)); });
+    }
+    function over(ev) {
+      var o = ev.target.closest('[data-i]');
+      if (o && o.parentNode === row) { b = +o.getAttribute('data-i'); preview(); }
+    }
+    function up(ev) {
+      row.removeEventListener('pointerover', over);
+      window.removeEventListener('pointerup', up);
+      selectSeq(seqRows[row.getAttribute('data-row')].seq, Math.min(a, b), Math.max(a, b), ev.shiftKey);
+    }
+    row.addEventListener('pointerover', over);
+    window.addEventListener('pointerup', up);
+    preview();
+  });
+
+  /* ---- notes: a box at a 3D point (its residue + an offset), behind the scene like every box; the line to its
+     residue is drawn above the scene, or it would end at the protein's outline ----
+     { id, s, u, a: atom, off: [x, y, z] Å, text, step: the step it belongs to (null: every step), w, h px } */
+  var noteLayer = el('div', 'pv-notes'), leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  leaders.setAttribute('class', 'pv-leaders');
+  if (stage) { stage.prepend(noteLayer); stage.appendChild(leaders); }
+
+  function noteItem(n) {
+    var e = el('div', 'pv-note'), it = { id: n.id, label: 'Note', el: e, note: n };
+    it.text = function () { return n.text; };
+    it.setText = function (t) { n.text = t; e.innerHTML = render(t, 'span'); };
+    it.grab = function () { return { x: it.x, y: it.y, w: e.offsetWidth, h: e.offsetHeight }; };
+    it.move = function (s, dx, dy) { n.off = Array.from(V3.sub(V3(), unproject(s.x + dx, s.y + dy, it.z), it.at)); placeNotes(); };
+    it.size = function (s, dx, dy) { n.w = Math.max(60, s.w + dx); n.h = Math.max(24, s.h + dy); placeNotes(); };
+    it.setText(n.text);
+    e.hidden = true;
+    noteLayer.appendChild(e);
+    items.push(it);
+    return it;
+  }
+  cfg.notes.forEach(noteItem);
+
+  function unproject(x, y, z) {
+    return V3.transformMat4(V3(), V3.create(x / stage.clientWidth * 2 - 1, 1 - y / stage.clientHeight * 2, z),
+                            plugin.canvas3d.camera.inverseProjectionView);
+  }
+  function anchor(n) {                                    // where its residue is drawn right now, or null if it is not
+    var r = shown().filter(function (x) { return x.skey === n.s; })[0], u = r && r.structure.unitMap.get(n.u);
+    if (!u) return null;
+    var v = u.conformation.position(n.a, V3());
+    return V3.transformMat4(v, v, r.cell.obj.data.repr.state.transform);   // the viewers move parts by this matrix
+  }
+  function placeNotes() {
+    if (!plugin) return;
+    var w = stage.clientWidth, h = stage.clientHeight, pvm = plugin.canvas3d.camera.projectionView, lines = '';
+    var px = function (v) { var q = V3.transformMat4(V3(), v, pvm); return [(q[0] * .5 + .5) * w, (1 - (q[1] * .5 + .5)) * h, q[2]]; };
+    items.forEach(function (it) {
+      var n = it.note, e = it.el;
+      if (!n) return;
+      var at = (n.step == null || n.step === stepKey()) ? anchor(n) : null, a = at && px(at);
+      e.hidden = !a || Math.abs(a[2]) > 1;
+      if (e.hidden) return;
+      if (!n.off) n.off = Array.from(V3.sub(V3(), unproject(a[0] + 60, a[1] - 90, a[2]), at));    // a new note: up and to the right
+      var p = px(V3.add(V3(), at, n.off));
+      it.at = at; it.x = p[0]; it.y = p[1]; it.z = p[2];     // where it is drawn, for a drag to start from
+      e.style.cssText = 'left:' + p[0] + 'px;top:' + p[1] + 'px' + (n.w ? ';width:' + n.w + 'px;max-width:none' : '') + (n.h ? ';height:' + n.h + 'px' : '');
+      var x = Math.min(Math.max(a[0], p[0]), p[0] + e.offsetWidth), y = Math.min(Math.max(a[1], p[1]), p[1] + e.offsetHeight);
+      lines += '<line x1="' + x + '" y1="' + y + '" x2="' + a[0] + '" y2="' + a[1] + '"/><circle cx="' + a[0] + '" cy="' + a[1] + '" r="3"/>';
+    });
+    if (leaders.innerHTML !== lines) leaders.innerHTML = lines;
+  }
+  function addNote() {
+    var a = sel.at[0], r = a && shown().filter(function (x) { return x.skey === a.s; })[0];
+    if (!r) return alert('Select a residue first: click it in the viewer.');
+    var u = r.structure.unitMap.get(a.u), t = table(u), i = a.r[0], h = u.model.atomicHierarchy, atom = u.elements[t.start[i]];
+    for (var k = t.start[i]; k < t.start[i + 1]; k++) if (h.atoms.label_atom_id.value(u.elements[k]) === 'CA') atom = u.elements[k];
+    var n = { id: Date.now().toString(36), s: a.s, u: a.u, a: atom, off: null, step: stepKey(),
+              text: '## ' + t.comp[i] + ' ' + h.residues.auth_seq_id.value(t.res[i]) + '\nWhat this residue does.' };
+    cfg.notes.push(n);
+    pick(noteItem(n));
+    placeNotes();
+    $('text').focus();
+  }
+
+  /* ------------------------------------------------------------- on and off -- */
+  var toggle = document.querySelector('[data-pv-dev]');
+  function setDev(on) {
+    dev = on;
+    localStorage.setItem('pv-dev', on ? '1' : '');
+    document.body.classList.toggle('pv-dev', on);
+    if (toggle) toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (plugin) {
+      plugin.selectionMode = on;
+      if (on) readSelection(); else plugin.managers.structure.selection.clear();
+      drawSeq();
+    }
+    if (on && !looping) syncFrames();
+  }
+  if (toggle) toggle.addEventListener('click', function () { setDev(!dev); });
+
+  function ready() {
+    pv = host.__pv; plugin = pv.plugin; S = pv.lib.structure; V3 = pv.lib.math.LinearAlgebra.Vec3;
+    var ev = plugin.state.data.events;
+    ev.cell.stateUpdated.subscribe(touch);               // a part was shown or hidden
+    ev.object.created.subscribe(touch);                  // ... or built
+    plugin.managers.structure.selection.events.changed.subscribe(function () {
+      if (!selfSel) seqSel = null;
+      clearTimeout(selTimer); selTimer = setTimeout(readSelection, 30);
+    });
+    plugin.canvas3d.didDraw.subscribe(placeNotes);
+    setDev(dev);
+    sync();
+  }
+  setDev(localStorage.getItem('pv-dev') === '1');
+  if (host.__pv) ready(); else host.addEventListener('pv:ready', ready);
+})();
