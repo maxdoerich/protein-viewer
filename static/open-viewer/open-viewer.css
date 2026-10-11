@@ -1,0 +1,11 @@
+/* Open-a-structure viewer: see open-viewer.js. Loads after gv-viewer.css, which styles the stage, text box, legend and
+   buttons; this file is only the bar above them (outside .gvv, so it uses the site tokens). Tokens only. */
+.ov-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);
+          font-family: var(--font-family-primary); }
+.ov-id { padding: var(--space-1) var(--space-2); border: 1px solid var(--clr-pine-blue); border-radius: var(--radius-box);
+         font: inherit; text-transform: uppercase; }
+.ov-btn { padding: var(--space-1) var(--space-3); border: 1px solid var(--clr-pine-blue); border-radius: var(--radius-box); background: none;
+          color: var(--clr-pine-blue); font: inherit; font-weight: var(--fw-bold); cursor: pointer; }
+.ov-btn--go { background: var(--clr-pine-blue); color: var(--clr-on-dark); }
+.ov-msg { color: var(--clr-muted); font-size: calc(var(--fs-body) * .8); }
+.ov-msg.is-error { color: var(--clr-ring-core); }

@@ -19,6 +19,7 @@ wiki so they can be developed on their own. Nothing here depends on the wiki's g
 | `anim5` | `static/latch-anim5/` | the same five steps for five latch designs, picked by buttons |
 | `top10` | `static/latch-top10/` | ten latch designs, each closed / open / both |
 | `top10bp` | same script, data from `static/latch-top10-bp/` | the ten blocking-peptide designs |
+| `open` | `static/open-viewer/` | any structure: fetch a PDB ID (PDBe) or upload a `.pdb` / `.cif` / `.mmcif` / `.bcif` file; drawn as a cartoon in the family's colours, with the same text box, legend, buttons and developer mode |
 
 ## Layout
 
@@ -34,6 +35,7 @@ static/             what a browser loads; every viewer finds Mol* at ../molstar/
   latch-anim5/      latch-anim.js/.css    + latch-assembly.cif, latch-anim.json    (generated)
   latch-top10/      latch-top10.js/.css   + dNN_closed/open.pdb, designs.json      (generated)
   latch-top10-bp/   data only, shown by latch-top10.js
+  open-viewer/      open-viewer.js/.css  (fetch by PDB ID / upload a file; no data of its own; the bar above it is its only CSS)
   dev/              dev-mode.js/.css: the developer mode of index.html (below)
 proteins/           how the data is made (one README per folder, with the honest limits of each figure)
   gv_animation/     prep_data.py (raw PDB/EMDB/Zenodo → data/), prep_viewer.py (→ static/gv-viewer/),
@@ -73,6 +75,14 @@ B-factors are pLDDT.
 A viewer takes part by setting `host.__pv = { plugin, lib, built }` and firing `pv:ready` (see the end of each
 `boot()`); `index.html` loads `dev/dev-mode.css` and `dev/dev-mode.js` after it and marks the mount with `data-pv-key`.
 
+## Open a structure
+
+`?v=open`: type a PDB ID and **Fetch**, or **Upload file**. The structure replaces the one shown, and is drawn like the
+others: polymer only (protein and nucleic acid; water and ligands are left out), cartoon, secondary-structure colours,
+the same text box / legend / buttons, all editable in developer mode. Edits are kept in `pv-config:open`: the text of
+a box belongs to the structure it was written for, a colour to the sequence it was applied to, a display mode to
+every structure. The last PDB ID is remembered and fetched again on the next visit; an uploaded file is not.
+
 ## Put a viewer on another page
 
 Same wiring as `index.html`: `tokens.css`, the CSS files, the script, and a mount element in the body:
@@ -84,7 +94,7 @@ Same wiring as `index.html`: `tokens.css`, the CSS files, the script, and a moun
 <script src="static/gv-viewer/gv-viewer.js"></script>
 ```
 
-Mount attributes: `data-latch-viewer`, `data-latch-anim`, `data-latch-top10`; `data-base="…/"` loads the data from
+Mount attributes: `data-latch-viewer`, `data-latch-anim`, `data-latch-top10`, `data-open-viewer`; `data-base="…/"` loads the data from
 another folder (a CDN), `data-binder="…"` renames the binder in the top-10 legend. Mol* is only fetched when the figure
 nears the viewport.
 

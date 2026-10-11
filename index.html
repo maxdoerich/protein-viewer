@@ -41,7 +41,9 @@ var V = {
               js: 'latch-top10/latch-top10.js', readme: 'proteins/latch_top10/README.md' },
   top10bp:  { name: 'Latch top 10, blocking peptide', attr: 'data-latch-top10 data-base="static/latch-top10-bp/" data-binder="GvpC binder"',
               css: ['gv-viewer/gv-viewer.css', 'latch-viewer/latch-viewer.css', 'latch-top10/latch-top10.css'],
-              js: 'latch-top10/latch-top10.js', readme: 'proteins/latch_top10/README.md' }
+              js: 'latch-top10/latch-top10.js', readme: 'proteins/latch_top10/README.md' },
+  open:     { name: 'Open a structure', attr: 'data-open-viewer', css: ['gv-viewer/gv-viewer.css', 'open-viewer/open-viewer.css'],
+              js: 'open-viewer/open-viewer.js', readme: 'README.md' }
 };
 var key = new URLSearchParams(location.search).get('v');
 if (!V[key]) key = 'gv';
