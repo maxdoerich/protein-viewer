@@ -317,7 +317,11 @@
       host.dispatchEvent(new CustomEvent('pv:ready'));
 
       if (preview) {         // each label rides a 3D point just outside / inside the wall, so it follows every turn
-        var cam = plugin.canvas3d.camera, h4 = manifest.hydro4, Vec3 = lib.math.LinearAlgebra.Vec3, pt = Vec3();
+        var cam = plugin.canvas3d.camera, h4 = manifest.hydro4, Vec3 = lib.math.LinearAlgebra.Vec3, pt = Vec3(), q = Vec3();
+        var inFront = function (x, y, z) {     // nothing drawn at that pixel, or what is drawn there lies behind z
+          var hit = plugin.canvas3d.identify([x, y]);
+          return !hit || !hit.position || z <= Vec3.transformMat4(q, hit.position, cam.projectionView)[2];
+        };
         var place = function () {
           var w = stage.clientWidth, h = stage.clientHeight;       // CSS pixels: cam.viewport is in device pixels
           sides.forEach(function (e, i) {
@@ -327,6 +331,7 @@
             var x = (pt[0] * .5 + .5) * w, y = (1 - (pt[1] * .5 + .5)) * h, m = 24;
             e.style.left = Math.min(Math.max(x, m), w - m) + 'px';
             e.style.top = Math.min(Math.max(y, m), h - m) + 'px';
+            e.classList.toggle('is-front', inFront(x, y, pt[2]));    // else the canvas, drawn above it, hides it
           });
         };
         plugin.canvas3d.didDraw.subscribe(place);    // after every draw, when projectionView is current

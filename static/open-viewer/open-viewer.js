@@ -5,7 +5,8 @@
  * Mounted onto every [data-open-viewer] element. Mol* 5.13 is vendored in ../molstar/. Only the polymer is drawn
  * (protein and nucleic acid as cartoon); water and ligands are left out. The last PDB ID fetched is remembered and
  * fetched again on the next visit, so the developer mode's edits (text, notes, colours) have their structure back;
- * an uploaded file is not kept.
+ * an uploaded file is not kept. For a scene file (developer mode's Export / Import) the structure travels with it: the
+ * PDB ID, or the uploaded file's own content, never a path. See host.__pvScene at the end of mount().
  */
 (function () {
   'use strict';
@@ -67,6 +68,11 @@
     l.rel = 'stylesheet'; l.href = href; l.setAttribute('data-molstar', '');
     document.head.appendChild(l);
   }
+  function b64(u8) {                                         // chunked: one apply() over a whole file overflows the stack
+    for (var s = '', i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+    return btoa(s);
+  }
+  function unb64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
   function webglOk() {
     try {
       var c = document.createElement('canvas');
@@ -160,6 +166,7 @@
 
     /* ---- Mol*, set up as the other viewers do ---- */
     var viewer, plugin, lib, COLORS, built = {}, focus = null;
+    var current = null;                                       // what is shown, as a scene file keeps it: { pdb } | { file, text | base64 }
 
     var booted, inView = true;
     /** Mol* is fetched (5 MB) on first need, as in the other viewers: when the figure nears the viewport */
@@ -269,9 +276,10 @@
         color: 'secondary-structure', colorParams: { saturation: 0, lightness: 0, colors: { name: 'custom', params: ss } } };
     }
 
-    /** `source` gives { data, format } once Mol* is up: a download cell, or the file's own bytes */
-    async function show(what, source) {
-      if (show.busy) return;
+    /** `source` gives { data, format } once Mol* is up: a download cell, or the file's own bytes; `desc` is `current`
+        if it works. Resolves to whether it did (a failure is shown on the page, not thrown). */
+    async function show(what, source, desc) {
+      if (show.busy) return false;
       show.busy = true;
       say('Loading ' + what + '…');
       veil.querySelector('.gvv-veil-text').textContent = 'Loading ' + what + '…';
@@ -281,6 +289,7 @@
       try {
         await boot();
         await plugin.clear();
+        current = null;
         Object.keys(built).forEach(function (k) { delete built[k]; });
         focus = null;
         var s = await source();
@@ -297,10 +306,13 @@
         paint(what, m.entryId || m.label || what,
           struct.data.polymerResidueCount + ' residues, ' + struct.data.elementCount + ' atoms. Drag to turn it.', LEGEND);
         say(what);
+        current = desc;
+        return true;
       } catch (e) {
         console.error('[open-viewer]', e);
         say('Could not load ' + what + '. Check the ID, or that the file is a PDB / mmCIF file.', true);
         paintEmpty();
+        return false;
       } finally {
         show.busy = false;
         veil.hidden = true; veil.classList.remove('is-soft');
@@ -310,24 +322,53 @@
 
     function fetchId(id) {
       id = id.toLowerCase();
-      show('PDB ' + id.toUpperCase(), async function () {
+      return show('PDB ' + id.toUpperCase(), async function () {
         var data = await plugin.builders.data.download(
           { url: 'https://www.ebi.ac.uk/pdbe/entry-files/download/' + id + '.bcif', isBinary: true, label: id.toUpperCase() },
           { state: { isGhost: true } });
         try { localStorage.setItem(LAST, id); } catch (e) { /* private window: no memory, no harm */ }
         return { data: data, format: 'mmcif' };
-      });
+      }, { pdb: id.toUpperCase() });
     }
-    function openFile(f) {
-      var ext = f.name.split('.').pop().toLowerCase();
-      show(f.name, async function () {
+    /** a file's name and content: text, or bytes for .bcif. The content is kept (in `current`) for a scene file */
+    function openData(name, data) {
+      var ext = name.split('.').pop().toLowerCase(), bin = typeof data !== 'string';
+      return show(name, async function () {
         if (!FORMAT[ext]) throw new Error('unsupported extension .' + ext);
-        var bin = ext === 'bcif';
-        var data = await plugin.builders.data.rawData(
-          { data: bin ? new Uint8Array(await f.arrayBuffer()) : await f.text(), label: f.name }, { state: { isGhost: true } });
-        return { data: data, format: FORMAT[ext] };
-      });
+        return { data: await plugin.builders.data.rawData({ data: data, label: name }, { state: { isGhost: true } }),
+                 format: FORMAT[ext] };
+      }, bin ? { file: name, base64: b64(data) } : { file: name, text: data });
     }
+    async function openFile(f) {
+      openData(f.name, /\.bcif$/i.test(f.name) ? new Uint8Array(await f.arrayBuffer()) : await f.text());
+    }
+
+    /* ---- scene file (developer mode: Export / Import): the structure and the camera; the edits are dev-mode's ---- */
+    var plain = function (k, v) { return ArrayBuffer.isView(v) ? Array.from(v) : v; };
+    host.__pvScene = {
+      get: function () {
+        var cam = plugin && focus && plugin.canvas3d.camera.getSnapshot();
+        return { structure: current || undefined, camera: cam ? JSON.parse(JSON.stringify(cam, plain)) : undefined };
+      },
+      set: async function (s) {
+        var d = s.structure;
+        if (d) {
+          var ok;
+          if (d.pdb) {
+            if (!PDB_ID.test(d.pdb)) throw new Error('"' + d.pdb + '" is not a PDB ID');
+            idInput.value = String(d.pdb).toUpperCase();
+            ok = await fetchId(d.pdb);
+          } else if (d.file && (d.text != null || d.base64)) {
+            ok = await openData(String(d.file).replace(/^.*[\\/]/, ''), d.base64 ? unb64(d.base64) : String(d.text));
+          } else throw new Error('the scene has a structure this viewer cannot read');
+          if (!ok) throw new Error('the structure of this scene could not be loaded');
+        }
+        if (s.camera && plugin && focus) {
+          plugin.canvas3d.camera.setState(s.camera, 0);
+          plugin.canvas3d.requestDraw();
+        }
+      }
+    };
 
     bar.addEventListener('submit', function (e) {
       e.preventDefault();

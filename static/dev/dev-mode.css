@@ -3,7 +3,7 @@
    while <body> has .pv-dev. Same rules as gv-viewer.css: tokens only, space on the --space-N ladder. */
 
 /* ------------------------------------------------------------ the edited viewer -- */
-.gvv-tool[hidden], .gvv-chips[hidden], .pv-note[hidden] { display: none; }
+.gvv-tool[hidden], .gvv-chips[hidden], .pv-note[hidden], .gvv .gvv-card[hidden], .gvv .gvv-legend[hidden] { display: none; }
 
 /* a moved or resized box: dev-mode.js sets --pv-x/y/w/h in % of the box's offset parent.
    Not on a phone, where the text box sits under the scene (gv-viewer.css). */
@@ -16,8 +16,10 @@
   }
 }
 
-/* notes: under the canvas like every box; the lines to their residues above it */
-.pv-notes { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+/* notes: under the canvas like every box, unless they are in front of the protein (.is-front); the lines to their
+   residues above it. .pv-notes makes no stacking context of its own, so a note can rise above the canvas. */
+.pv-notes { position: absolute; inset: 0; pointer-events: none; }
+.pv-note.is-front { z-index: 2; }
 .pv-note {
   position: absolute;
   display: flex; flex-direction: column; gap: var(--space-1);

@@ -7,9 +7,12 @@ Usage:
                                             in ../../gv_animation/data/; out_dir defaults to
                                             static/latch-viewer/ in the wiki repository
 Writes:
-  latch-assembly.cif  every part of the construct once (binder, latch, target-binding domain, target, GvpA
+  latch-assembly.cif  every part of the construct (binder, latch, linker + target-binding domain, target, GvpA
                       pentamer) plus one GvpA monomer with an mmCIF assembly operator per copy in the wall.
-                      Each part is its own assembly, so latch-viewer.js can move and fade it on its own.
+                      Each part is its own assembly, so latch-viewer.js can move and fade it on its own. The
+                      polypeptide also comes as unbroken chains (binder + latch, binder + latch + linker +
+                      domain, and latch + linker + domain from the hinge), so that it can be drawn as ONE cartoon
+                      wherever its parts sit together; the B-factor column says which part a residue belongs to.
   latch-viewer.json   hinge, fly-in vector, dock offset and camera frames.
 Requires: numpy, gemmi
 
@@ -37,7 +40,9 @@ AWAY = 65.0            # A the whole construct stands off the wall until the las
 GAP = 25.0             # A of room around the model for each camera frame
 TRIM = 26              # PD-L1 binder residues 1-26 are left out: an N-terminal helix that runs 30 A away from the latch,
                        # so the folded domain would hang far from it. A drawn linker takes their place (see `linker`).
-LINKER_STEP = 3.8      # A, CA-CA
+LINKER_LENGTHS = (9, 10, 11)  # residues tried for the linker loop (its ends are 25 A apart: fewer would have to run stretched)
+LINKER_CLEAR = 3.5     # A it keeps from every atom it can meet (binder through the whole swing, pentamer, target, its own ends)
+LINKER_TRIES = 30      # random starts per length (~2.5 s each); seeded, so a rebuild gives the same loop
 
 
 # ------------------------------------------------------------------ trim: inputs -> ../data/
@@ -135,46 +140,191 @@ mono = gemmi.read_structure(os.path.join(GV, "gvpa_monomer.cif"))
 mono.rename_chain(mono[0][0].name, "G")
 st[0].add_chain(mono[0]["G"])
 
-# Bridge and linker. Binder, latch and domain are chains of their own (so each can move and fade alone), and a cartoon stops at the
-# end of its chain: the 3.8 A CA-CA joins would show as gaps. Each bridge is a two-residue chain, the last residue before
-# the join and the first after it, drawn with the part that arrives later (J with the latch, K with the domain).
-def bridge(name, before, after):
-    ch = gemmi.Chain(name)
-    for res in (before[len(before) - 1], after[0]):
-        ch.add_residue(res)
-    for i, r in enumerate(ch, 1):
-        r.seqid = gemmi.SeqId(i, " ")
-    st[0].add_chain(ch)
+# ---- the linker loop: a real peptide backbone, closed onto the domain ---------------------------------------------
+# ideal backbone geometry (Engh & Huber)
+B_NCA, B_CAC, B_CN, B_CO = 1.458, 1.525, 1.329, 1.231
+A_NCAC, A_CACN, A_CNCA = 111.2, 116.2, 121.7
+# where loop glycines sit in the Ramachandran plot (phi, psi, weight): polyproline II, beta, right- and left-handed
+# helix, and the extended left-handed region only glycine reaches
+GLY_BASINS = [(-75, 145, .30), (-120, 130, .20), (-65, -40, .20), (80, 10, .15), (90, -170, .10), (-90, 0, .05)]
+
+
+def nerf(a, b, c, bond, angle, torsion):
+    """the atom after a-b-c at `bond` from c, angle b-c-d = `angle`, dihedral a-b-c-d = `torsion` (degrees)"""
+    bc = (c - b) / np.linalg.norm(c - b)
+    n = np.cross(b - a, bc); n /= np.linalg.norm(n)
+    m = np.cross(n, bc)
+    th, ph = np.radians(angle), np.radians(torsion)
+    d2 = np.array([-bond * np.cos(th), bond * np.sin(th) * np.cos(ph), bond * np.sin(th) * np.sin(ph)])
+    return c + d2[0] * bc + d2[1] * m + d2[2] * n
+
+
+def dihedral(a, b, c, d):
+    b0, b1, b2 = a - b, c - b, d - c
+    b1 /= np.linalg.norm(b1)
+    v, w = b0 - (b0 @ b1) * b1, b2 - (b2 @ b1) * b1
+    return np.degrees(np.arctan2(np.cross(b1, v) @ w, v @ w))
+
+
+def gly_allowed(phi, psi):
+    """coarse glycine Ramachandran: everything except the squeezed bands round phi = 0"""
+    return abs(phi) > 45 and not (abs(phi) < 70 and abs(psi) < 35)
 
 
 def linker(name, before, after):
-    """latch C terminus -> first residue of the domain: a straight, schematic Gly linker (CA every 3.8 A), drawn as a chain of
-    its own that starts and ends on the two residues it joins. Straight because nothing is known about its fold: the real
-    construct has a flexible linker here (the AlphaFold pilot used GGSGGS), which this stands for."""
+    """latch C terminus -> first residue of the domain: a Gly loop built as a peptide, the way loop-modelling tools do.
+    Residues are added to the latch's last residue with ideal bond lengths, angles and planar peptide bonds, their phi/psi
+    drawn from where loop glycines sit (GLY_BASINS); a least-squares fit over all phi/psi at once then closes the chain onto the
+    domain's first residue (N, CA, C within 0.15 A), each residue held softly in its basin. Of LINKER_TRIES starts per length, the builder keeps
+    loops that closed with every residue still in an allowed region of the plot, that do not touch themselves, and that
+    keep LINKER_CLEAR from everything they move past (the binder at every angle of the block's swing, the pentamer once
+    docked, the target on its domain, latch and domain); of those, the one with the most room and the most typical angles.
+    It moves with the block, so it is checked in the block's frame. Nothing is known about how the real linker folds (the
+    real construct has a flexible one; the AlphaFold pilot used GGSGGS): this is one plausible conformation, drawn."""
+    from scipy.spatial import cKDTree
+    rng = np.random.default_rng(7)
+    at_ = lambda r, n: np.array(r[n][0].pos.tolist())
     a, b = before[len(before) - 1], after[0]
-    p0, p1 = np.array(a["CA"][0].pos.tolist()), np.array(b["CA"][0].pos.tolist())
-    n = max(1, int(round(np.linalg.norm(p1 - p0) / LINKER_STEP)) - 1)       # residues in between
-    u = (p1 - p0) / np.linalg.norm(p1 - p0)
-    w = np.cross(u, [0, 0, 1.0]); w /= np.linalg.norm(w)
+    Na, CAa, Ca = at_(a, "N"), at_(a, "CA"), at_(a, "C")
+    psi_a = dihedral(Na, CAa, Ca, at_(a, "O")) - 180.0           # the latch's own last psi: its O sits anti to the next N
+    target = np.array([at_(b, "N"), at_(b, "CA"), at_(b, "C")])
+
+    ends = lambda chain, h, t: np.array([q.pos.tolist() for r in list(chain)[h:len(chain) - t] for q in r])
+    own = cKDTree(np.vstack([ends(before, 0, 2), ends(after, 2, 0), xyz(st[0]["T"])]))
+    binder = cKDTree(xyz(st[0]["F"]))
+    penta = cKDTree(np.vstack([xyz(st[0][c]) for c in "ABCDE"]))
+    swings = [rot(hinge_ax, hinge_deg * f) for f in np.linspace(0, 1, 13)]
+
+    def build(phis, psis, phi_b):
+        """backbone N, CA, C of n new residues and of the virtual residue that should coincide with the domain's first"""
+        X = [Na, CAa, Ca]
+        prev_psi = psi_a
+        for ph, ps in list(zip(phis, psis)) + [(phi_b, None)]:
+            N = nerf(X[-3], X[-2], X[-1], B_CN, A_CACN, prev_psi)
+            CA = nerf(X[-2], X[-1], N, B_NCA, A_CNCA, 180.0)
+            C = nerf(X[-1], N, CA, B_CAC, A_NCAC, ph)
+            X += [N, CA, C]
+            prev_psi = ps
+        return np.array(X[3:])                                    # 3 (n + 1) atoms: N, CA, C per residue
+
+    CLOSE = 0.15         # A rmsd of the last N, CA, C onto the domain's first residue
+    from scipy.optimize import least_squares
+    wrap = lambda d: (d + 180.0) % 360.0 - 180.0
+
+    def ccd(X, rounds):
+        """cyclic coordinate descent: turn phi (N-CA) and psi (CA-C) bonds one at a time towards the target"""
+        X = X.copy()
+        k = len(X) // 3 - 1                                       # new residues
+        for _ in range(rounds):
+            for j in range(k + 1):
+                for (p_, q) in ((3 * j, 3 * j + 1), (3 * j + 1, 3 * j + 2)):
+                    if j == k and q != 3 * j + 1:                 # the domain's own psi is not ours to turn
+                        continue
+                    o, u = X[p_], X[q] - X[p_]
+                    u /= np.linalg.norm(u)
+                    mv = X[-3:] - o; tg = target - o
+                    mv_p = mv - np.outer(mv @ u, u); tg_p = tg - np.outer(tg @ u, u)
+                    th = np.arctan2((np.cross(mv_p, tg_p) @ u).sum(), (mv_p * tg_p).sum())
+                    X[q + 1:] = (X[q + 1:] - o) @ rot(u, np.degrees(th)).T + o
+        return X
+
+    def close(start):
+        """CCD from the drawn angles gets the chain's end to the domain (fast, ends ~1 A off); a short least-squares
+        polish over all phi/psi then closes it, each angle allowed to move only a little from where CCD left it"""
+        n = (len(start) - 1) // 2
+        X = ccd(build(start[:n], start[n:2 * n], start[2 * n]), 40)
+        if np.sqrt(((X[-3:] - target) ** 2).sum(1).mean()) > 2.5:
+            return X, False
+        tor = torsions(X)                                                   # (phi, psi) of the n new residues
+        v0 = np.r_[[t[0] for t in tor], [t[1] for t in tor], dihedral(X[-4], X[-3], X[-2], X[-1])]   # + the closing phi
+        def resid(v):
+            Y = build(v[:n], v[n:2 * n], v[2 * n])
+            return np.r_[(Y[-3:] - target).ravel() * 10.0, wrap(v - v0) / 90.0]
+        v = least_squares(resid, v0, max_nfev=40 * len(v0)).x
+        X = build(v[:n], v[n:2 * n], v[2 * n])
+        return X, np.sqrt(((X[-3:] - target) ** 2).sum(1).mean()) < CLOSE
+
+    def torsions(X):
+        full = np.vstack([[Na, CAa, Ca], X])
+        out = []
+        for j in range(1, len(full) // 3 - 1):
+            N, CA, C = full[3 * j], full[3 * j + 1], full[3 * j + 2]
+            out.append((dihedral(full[3 * j - 1], N, CA, C), dihedral(N, CA, C, full[3 * j + 3])))
+        return out
+
+    def oxygens(X):
+        """O of every new residue: in the peptide plane, opposite the bisector of C-CA and C-N(next)"""
+        full = np.vstack([X, target[:1]])
+        O = []
+        for j in range(len(X) // 3 - 1):
+            CA, C, Nn = full[3 * j + 1], full[3 * j + 2], full[3 * j + 3]
+            v = (C - CA) / np.linalg.norm(C - CA) + (C - Nn) / np.linalg.norm(C - Nn)
+            O.append(C + B_CO * v / np.linalg.norm(v))
+        return np.array(O)
+
+    def clearance(P, inner):
+        c = own.query(inner)[0].min()          # latch and domain: not the residues at the two joins (bonded to them)
+        for R in swings:
+            c = min(c, binder.query((P - hinge_c) @ R.T + hinge_c)[0].min())
+        return min(c, penta.query((P - hinge_c) @ swings[-1].T + hinge_c)[0].min())
+
+    best, tried, closed_n = None, 0, 0
+    for n in LINKER_LENGTHS:
+        for _ in range(LINKER_TRIES):
+            tried += 1
+            pick = rng.choice(len(GLY_BASINS), size=n + 1, p=[w for *_, w in GLY_BASINS])
+            pp = [(GLY_BASINS[i][0] + rng.normal(0, 15), GLY_BASINS[i][1] + rng.normal(0, 15)) for i in pick]
+            X, ok = close(np.array([q[0] for q in pp[:n]] + [q[1] for q in pp[:n]] + [pp[n][0]]))
+            if not ok:
+                continue
+            closed_n += 1
+            tor = torsions(X)
+            if not all(gly_allowed(ph, ps) for ph, ps in tor):
+                continue
+            Xn = X[:-3]                                           # the new residues (the last three are the domain's own)
+            O = oxygens(X)
+            P = np.vstack([Xn, O])
+            res_of = np.r_[np.repeat(np.arange(n), 3), np.arange(n)]
+            pairs = cKDTree(P).query_pairs(3.0, output_type="ndarray")
+            if len(pairs) and (np.abs(res_of[pairs[:, 0]] - res_of[pairs[:, 1]]) >= 3).any():
+                continue                                          # touches itself further along the chain
+            inner = P[(res_of > 0) & (res_of < n - 1)]
+            c = clearance(P, inner)
+            if c < LINKER_CLEAR:
+                continue
+            # most room (up to 6 A counts), then the most typical angles: distance to the nearest basin centre
+            typ = np.mean([min(np.hypot((ph - bp + 180) % 360 - 180, (ps - bs + 180) % 360 - 180) for bp, bs, _ in GLY_BASINS)
+                           for ph, ps in tor])
+            score = min(c, 6.0) - typ / 30.0
+            if best is None or score > best[0]:
+                best = (score, X, P, c, tor, n)
+    if best is None:
+        raise SystemExit("linker: no closed, allowed loop keeps %.1f A from everything (%d tries, %d closed)"
+                         % (LINKER_CLEAR, tried, closed_n))
+    _, X, P, c, tor, n = best
+    O = oxygens(X)
+
     ch = gemmi.Chain(name)
     ch.add_residue(a)
-    for i in range(1, n + 1):
-        q = p0 + (p1 - p0) * i / (n + 1)
+    for j in range(n):
         res = gemmi.Residue(); res.name = "GLY"
-        for an, el, pos in (("N", "N", q - 1.2 * u), ("CA", "C", q), ("C", "C", q + 1.2 * u), ("O", "O", q + 1.2 * u + 1.2 * w)):
-            at = gemmi.Atom(); at.name = an; at.element = gemmi.Element(el); at.pos = gemmi.Position(*pos)
-            res.add_atom(at)
+        for an, el, pos in (("N", "N", X[3 * j]), ("CA", "C", X[3 * j + 1]), ("C", "C", X[3 * j + 2]), ("O", "O", O[j])):
+            q = gemmi.Atom(); q.name = an; q.element = gemmi.Element(el); q.pos = gemmi.Position(*pos)
+            res.add_atom(q)
         ch.add_residue(res)
     ch.add_residue(b)
     for i, r in enumerate(ch, 1):
         r.seqid = gemmi.SeqId(i, " ")
     st[0].add_chain(ch)
-    return n
+    return dict(residues=n, end_to_end=round(float(np.linalg.norm(at_(b, "CA") - CAa)), 1), clearance=round(float(c), 2),
+                closure_rmsd=round(float(np.sqrt(((X[-3:] - target) ** 2).sum(1).mean())), 3),
+                phi_psi=[[round(float(ph)), round(float(ps))] for ph, ps in tor], tried=tried, closed=closed_n)
 
 
-bridge("J", st[0]["F"], st[0]["L"])                   # binder C terminus -> latch
-n_link = linker("K", st[0]["L"], st[0]["P"])                   # latch C terminus -> target-binding domain
-print("linker: %d residues between latch and domain" % n_link)
+link = linker("K", st[0]["L"], st[0]["P"])                     # latch C terminus -> target-binding domain
+print("linker: %(residues)d Gly, ends %(end_to_end).1f A apart, closed to %(closure_rmsd).3f A, %(clearance).2f A from everything "
+      "(%(closed)d of %(tried)d starts closed)" % link)
+print("linker phi/psi:", link["phi_psi"])
 
 # Clash view: with the latch closed and PD-L1 on its domain, which residues of binder and PD-L1 overlap? (heavy atoms
 # closer than CLASH_A; the binder file has no side chains, so this is a lower bound.)
@@ -197,10 +347,41 @@ for r in st[0]["F"]:                                  # B-factor: 1 = GvpA-bindi
 for r in st[0]["T"]:                                  # PD-L1: 1 = in clash with the binder
     for a in r:
         a.b_iso = 1.0 if r.seqid.num in clash_t else 0.0
-for name in ("L", "P", "A", "B", "C", "D", "E", "G", "J", "K"):
+for name in ("A", "B", "C", "D", "E", "G"):
     for r in st[0][name]:
         for a in r:
             a.b_iso = 0.0
+
+# One unbroken cartoon. A cartoon stops at the end of its chain, so parts that are chains of their own show a seam where they
+# join (a cap, a kink, a step in thickness). The viewer therefore draws the polypeptide as ONE chain wherever its parts sit
+# together, and as separate pieces only while one part moves against another. Every chain below runs binder -> latch ->
+# linker -> domain without a break (the joins are the 3.8 A CA-CA bonds of the design), with the part that each residue
+# belongs to in the B-factor column: 0 binder, 1 GvpA-binding site, 2 clash with PD-L1 (all three binder residues, as above),
+# 3 latch, 4 linker and target-binding domain. The viewer paints by it.
+F_, L_, K_, P_ = (list(st[0][c]) for c in "FLKP")
+hinge_res, gly = F_[-1:], K_[1:-1]                      # K runs latch end, 11 Gly, domain start: the Gly are its own
+PARTS = {  # chain, what it is drawn for, residues (code: B-factor to give them; None keeps the binder's own)
+    "R": ("arm", [(hinge_res, None), (L_, 3), (gly, 4), (P_, 4)]),   # latch + linker + domain, from the hinge: swings as one block
+    "S": ("latch piece", [(hinge_res, None), (L_, 3)]),              # the latch alone: steps 2 and the clash view
+    "U": ("domain piece", [(L_[-1:], 3), (gly, 4), (P_, 4)]),        # linker + domain: the clash view
+    "V": ("binder + latch", [(F_, None), (L_, 3)]),                  # at rest after step 2
+    "W": ("binder + latch + linker + domain", [(F_, None), (L_, 3), (gly, 4), (P_, 4)]),  # at rest in step 3
+}
+for cname, (_, parts) in PARTS.items():
+    ch = gemmi.Chain(cname)
+    for res, code in parts:
+        for r in res:
+            nr = ch.add_residue(r)
+            if code is not None:
+                for a in nr:
+                    a.b_iso = float(code)
+    for i, r in enumerate(ch, 1):
+        r.seqid = gemmi.SeqId(i, " ")
+    st[0].add_chain(ch)
+P_latch, P_tbd = xyz(st[0]["L"]), xyz(st[0]["P"])        # for the camera frames below
+for c in "JKLP":                                         # replaced by the chains above (J: not any more, K: the linker is inside them)
+    if any(x.name == c for x in st[0]):
+        st[0].remove_chain(c)
 for ch in st[0]:
     for r in ch:
         r.subchain = ch.name
@@ -214,8 +395,8 @@ st.assign_label_seq_id()
 names = {v[0]: v[2] for v in CHAINS.values()}
 names.update({c: "GvpA, wall-binding site (pentamer)" for c in "ABCDE"})
 names["G"] = "GvpA (B. megaterium, PDB 7R1C), one copy per wall subunit"
-names["J"] = "Bridge: binder C terminus to latch"
-names["K"] = "Linker: latch C terminus to target-binding domain (schematic, straight)"
+for c, (what, _) in PARTS.items():                    # the linker (11 Gly) is schematic: it is drawn, its fold is not known
+    names[c] = "Unbroken cartoon, " + what + " (the linker between latch and domain is drawn, not predicted)"
 sub_of = {ch.name: ch[0].subchain for ch in st[0]}
 desc = {e.name: names[ch] for e in st.entities for ch, sub in sub_of.items() if sub in e.subchains}
 
@@ -291,11 +472,25 @@ def assembly(aid, details, op_ids, chains):
 
 one = add_ops([np.eye(4)])
 assembly("binder", names["F"], one, "F")
-assembly("latch", names["L"], one, "LJ")
-assembly("tbd", names["P"], one, "PK")
+assembly("latch", names["S"], one, "S")
+assembly("tbd", names["U"], one, "U")
+assembly("arm", names["R"], one, "R")
+assembly("cont2", names["V"], one, "V")
+assembly("cont3", names["W"], one, "W")
 assembly("target", names["T"], one, "T")
 assembly("gvpa", "GvpA pentamer the binder docks onto", one, "ABCDE")
-assembly("wall", "wall of the gas vesicle: %d GvpA copies" % len(wall_ops), add_ops(wall_ops), "G")
+# the wall in blocks of WALL_BLOCK neighbouring subunits (along each helical filament, tips last): Mol* draws a block of a
+# few dozen copies faster than one object of 1725 (whose per-copy highlight data no longer fits the GPU's cache), and a
+# block out of the picture is skipped as a whole. Same copies, same picture.
+WALL_BLOCK = 32
+order = sorted(range(len(keep)), key=lambda j: (fil[keep[j]], pos[keep[j]] < 0, pos[keep[j]]))
+wall_ids = add_ops([wall_ops[j] for j in order])
+wall_blocks = []
+for b0 in range(0, len(wall_ids), WALL_BLOCK):
+    bid = "wall-%02d" % (b0 // WALL_BLOCK)
+    assembly(bid, "wall of the gas vesicle: GvpA copies %d-%d" % (b0 + 1, min(b0 + WALL_BLOCK, len(wall_ids))),
+             wall_ids[b0:b0 + WALL_BLOCK], "G")
+    wall_blocks.append(bid)
 
 loop = blk.init_mmcif_loop("_pdbx_struct_assembly.", ["id", "details", "oligomeric_details", "oligomeric_count"])
 for aid, det, n in assemblies:
@@ -313,13 +508,13 @@ doc.write_file(path, gemmi.cif.Style.Pdbx)
 with open(path) as f:
     body = f.read()
 with open(path, "w") as f:
-    # chains P and T most likely come from AlphaFold Server predictions (file names fold_pdl1_*): confirm, see README.md
-    f.write("# Chains P and T (PD-L1 binder, PD-L1) are probably derived from AlphaFold Server predictions. If so, this\n"
+    # the PD-L1 binder and PD-L1 most likely come from AlphaFold Server predictions (file names fold_pdl1_*): confirm, see README.md
+    f.write("# The target-binding domain (PD-L1 binder, in chains R, U, V, W) and PD-L1 (chain T) are probably derived from AlphaFold Server predictions. If so, this\n"
             "# information is subject to the AlphaFold Server Output Terms of Use found at\n"
             "# alphafoldserver.com/output-terms (non-commercial use).\n" + body)
 
 # ------------------------------------------------------------------ camera frames
-P_binder, P_latch, P_tbd, P_target = (xyz(st[0][c]) for c in "FLPT")
+P_binder, P_target = (xyz(st[0][c]) for c in "FT")
 P_pent = np.vstack(pent)
 away_dir = P_binder.mean(0) - P_pent.mean(0)
 away_dir /= np.linalg.norm(away_dir)
@@ -379,9 +574,10 @@ manifest = {
     "clash": {"binder_residues": len(clash_f), "target_residues": len(clash_t), "atom_pairs": n_pairs, "max_A": CLASH_A},
     "away": away.round(2).tolist(),
     "frames": frames,
-    "counts": {a: n for a, _, n in assemblies},
+    "wall": wall_blocks,
+    "counts": {"wall copies": len(wall_ids), **{a: n for a, _, n in assemblies if not a.startswith("wall-")}},
     "geometry": {**{k: bh[k] for k in ("iface_covered_closed", "iface_covered_open", "n_iface")},
-                 "placement": place["metrics"] if place else None},
+                 "placement": place["metrics"] if place else None, "linker": link},
 }
 with open(os.path.join(OUT, "latch-viewer.json"), "w") as f:
     json.dump(manifest, f, indent=1)

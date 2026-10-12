@@ -8,7 +8,8 @@
  *   - notes: boxes tied to a residue, placed in 3D, with a line to it;
  *   - which of the viewer's buttons are shown;
  *   - colour and display mode of the selection (click residues in 3D, or drag over the sequence view);
- *   - the sequence view, where the proteins are named.
+ *   - the sequence view, where the proteins are named;
+ *   - export / import of the whole scene as one JSON file (see SCENE below).
  * Text is written in a small markup, see render(): "# " label, "## " title, "[pine] " legend key, **bold**, *italic*.
  */
 (function start() {
@@ -26,13 +27,32 @@
 
   var dev = false, plugin = null, pv, S, V3;
 
+  /* A scene file is one JSON object that rebuilds the viewer on any device: no path, no URL of ours.
+       { format: SCENE, version: 1, viewer: <?v= key>, config: <cfg above>,
+         structure: { pdb } | { file, text | base64 }, camera: <Mol* snapshot> }
+     config is this file's; structure and camera come from the viewer if it has any of its own (host.__pvScene, the
+     "open" viewer). The other viewers carry their structure in their folder, so their scene is the config alone. */
+  var SCENE = 'protein-viewer-scene';
+
   /* every colour the site has (tokens.css), under the palette's names: nothing else can be picked */
   var PALETTE = { cayenne: '--clr-ring-core', tangerine: '--clr-title', peach: '--clr-title-shadow', frost: '--clr-frosted-blue',
                   pine: '--clr-pine-blue', cyan: '--clr-light-cyan', grey: '--clr-muted', ink: '--clr-ink', white: '--clr-body' };
+  var MORE = {                                          // the "more colors" button: more swatches for the selection (not usable in legend keys)
+    Teal: 'F0FBFE DDF8F6 CAF8FB AFE2E3 8CDEE5 83CECE 49D2DF 5FB7B9 248F9A 3C8285',
+    Peach: 'F9E5DA F8D8C6 F7CCA7 F7C6AC F0BB96',
+    Orange: 'F5AB7F F59C69 FB946D F3894F DC6B3C F56D2D DD501B CA3A14',
+    'Red and pink': 'FDF0EE F5CEC1 F4ABAC F07E80 EB595C',
+    Green: 'E6F5E8 B7E1BE 72A052'
+  };
+  /* colours for "by chain": blue and orange first, only a few clearly different steps of each (picked for distance in Lab),
+     then red / pink / green, then the steps that were left out. ponytail: more chains than this repeat the list */
+  var CHAIN = ('248F9A DD501B AFE2E3 F5AB7F 49D2DF F3894F 72A052 EB595C F4ABAC B7E1BE F07E80 F7CCA7 5FB7B9 FB946D DC6B3C ' +
+               'F56D2D 8CDEE5 3C8285 CA3A14 F59C69 F0BB96 83CECE F7C6AC').split(' ').map(function (h) { return parseInt(h, 16); });
   var MODES = {                                         // the representations the viewers already draw with
     cartoon: ['Cartoon', { sizeFactor: 0.3 }],
     'gaussian-surface': ['Surface', { quality: 'custom', resolution: 1.6, radiusOffset: 0.8, smoothness: 1.6 }],
     'molecular-surface': ['Molecular surface', { probeRadius: 1.4 }],
+    'cartoon-surface': ['Cartoon + surface', null],     // not a Mol* type: a cartoon with a second, see-through representation over it
     spacefill: ['Spheres', { sizeFactor: 1 }]
   };
   var LOOK = { celShaded: true, material: { metalness: 0, roughness: 1, bumpiness: 0 } };   // as in the viewers
@@ -155,6 +175,7 @@
     Array.prototype.forEach.call(host.querySelectorAll('.gvv-tool, .gvv-chips'), function (b) {
       b.hidden = cfg.hide.indexOf(b.getAttribute('data-tool') || 'chips') >= 0;
     });
+    items.forEach(function (b) { if (!b.note) b.el.hidden = cfg.hide.indexOf(b.id) >= 0; });   // the text box and the legend
   }
   applyHide();
 
@@ -208,18 +229,26 @@
         Object.keys(PALETTE).join(', ') + '</p>' +
       '<label class="pv-check" data-el="scope" hidden><input type="checkbox" data-el="every"> Show on every step</label>' +
       '<div class="pv-row"><button type="button" data-act="resetBox">Reset this box</button>' +
-        '<button type="button" data-act="dropNote" data-el="drop" hidden>Delete note</button></div>' +
+        '<button type="button" data-act="dropNote" data-el="drop" title="A deleted text box or legend comes back under Show" hidden>Delete</button></div>' +
     '</section>' +
-    '<section><h3>Buttons</h3><div data-el="buttons"></div></section>' +
+    '<section><h3>Show</h3><div data-el="buttons"></div></section>' +
     '<section><h3>Selection</h3>' +
       '<p class="pv-help" data-el="sel">The 3D model is not loaded yet.</p>' +
       '<div class="pv-row">' + Object.keys(PALETTE).map(function (n) {
         return '<button type="button" class="pv-swatch" data-act="colour" data-v="' + n + '" title="' + n + '" aria-label="' + n +
                '" style="background: var(' + PALETTE[n] + ')"></button>';
+      }).join('') + '<button type="button" data-act="more" aria-pressed="false">More colors</button></div>' +
+      '<div data-el="more" hidden>' + Object.keys(MORE).map(function (g) {
+        return '<p class="pv-help">' + g + '</p><div class="pv-row">' + MORE[g].split(' ').map(function (h) {
+          return '<button type="button" class="pv-swatch" data-act="colour" data-v="#' + h + '" title="#' + h + '" aria-label="#' + h +
+                 '" style="background: #' + h + '"></button>';
+        }).join('') + '</div>';
       }).join('') + '</div>' +
       '<div class="pv-row"><button type="button" data-act="scheme" data-v="ss">Secondary structure</button>' +
         '<button type="button" data-act="scheme" data-v="plddt" title="Reads the B-factor column as pLDDT">pLDDT</button>' +
         '<button type="button" data-act="scheme" data-v="hydro">Hydropathy</button>' +
+        '<button type="button" data-act="scheme" data-v="chain" title="Every chain its own colour">By chain</button>' +
+        '<button type="button" data-act="scheme" data-v="sequence" title="Chains with the same sequence share a colour">By sequence</button>' +
         '<button type="button" data-act="uncolour">Original colours</button></div>' +
       '<div class="pv-row">' + Object.keys(MODES).map(function (m) {
         return '<button type="button" data-act="mode" data-v="' + m + '">' + MODES[m][0] + '</button>';
@@ -228,15 +257,23 @@
         '<button type="button" data-act="unselect">Clear selection</button></div>' +
     '</section>' +
     '<section><h3>Sequence</h3><div class="pv-row"><button type="button" data-act="seq" aria-pressed="false">Sequence view</button></div></section>' +
-    '<section><h3>Edits of this viewer</h3><div class="pv-row"><button type="button" data-act="export">Export</button>' +
-      '<button type="button" data-act="import">Import</button><button type="button" data-act="wipe">Reset all</button></div></section>');
+    '<section><h3>Scene</h3>' +
+      '<p class="pv-help">One JSON file with the structure (an uploaded file travels inside it), colours, text boxes, notes and camera. ' +
+        'Import it on any device, in this viewer.</p>' +
+      '<div class="pv-row"><button type="button" data-act="export">Export scene</button>' +
+      '<button type="button" data-act="import">Import scene</button><button type="button" data-act="wipe">Reset all</button></div></section>');
   document.body.appendChild(panel);
   function $(name) { return panel.querySelector('[data-el="' + name + '"]'); }
 
-  Array.prototype.forEach.call(host.querySelectorAll('.gvv-tool, .gvv-chips'), function (b) {
+  var ticks = {};                                         // name -> its checkbox, so a Delete can untick it
+  var toggles = Array.prototype.map.call(host.querySelectorAll('.gvv-tool, .gvv-chips'), function (b) {
     var name = b.getAttribute('data-tool') || 'chips';
-    var l = el('label', 'pv-check', '<input type="checkbox"> ');
-    l.append(name === 'chips' ? 'Option chips (bottom left)' : b.getAttribute('aria-label'));
+    return [name, name === 'chips' ? 'Option chips (bottom left)' : b.getAttribute('aria-label')];
+  }).concat(['card', 'legend'].filter(function (id) { return boxes[id]; }).map(function (id) { return [id, boxes[id].label]; }));
+  toggles.forEach(function (t) {
+    var name = t[0], l = el('label', 'pv-check', '<input type="checkbox"> ');
+    ticks[name] = l.firstChild;
+    l.append(t[1]);
     l.firstChild.checked = cfg.hide.indexOf(name) < 0;
     l.firstChild.addEventListener('change', function () {
       cfg.hide = cfg.hide.filter(function (n) { return n !== name; }).concat(this.checked ? [] : [name]);
@@ -250,7 +287,8 @@
     $('which').textContent = it ? it.label : 'nothing picked';
     $('text').disabled = !it;
     $('text').value = it ? it.text() : '';
-    $('scope').hidden = $('drop').hidden = !(it && it.note);
+    $('scope').hidden = !(it && it.note);
+    $('drop').hidden = !it;
     if (it && it.note) $('every').checked = it.note.step == null;
   }
   $('text').addEventListener('input', function () { if (picked) { picked.setText(this.value); placeNotes(); save(); } });
@@ -263,12 +301,22 @@
       else { delete cfg.box[picked.id]; delete cfg.text[picked.key]; picked.draw(); place(picked); pick(picked); }
     },
     dropNote: function () {
+      if (!picked.note) {                                 // the text box and the legend are repainted by the viewer: hide, not remove
+        var t = ticks[picked.id];
+        t.checked = false; t.dispatchEvent(new Event('change'));
+        return pick(null);
+      }
       cfg.notes.splice(cfg.notes.indexOf(picked.note), 1);
       items.splice(items.indexOf(picked), 1);
       picked.el.remove(); if (picked.frame) picked.frame.remove();
       pick(null); placeNotes();
     },
-    colour: function (v) { paint({ color: hex(PALETTE[v]) }); },
+    colour: function (v) { paint({ color: PALETTE[v] ? hex(PALETTE[v]) : parseInt(v.slice(1), 16) }); },
+    more: function () {
+      var m = $('more'), b = panel.querySelector('[data-act="more"]');
+      b.setAttribute('aria-pressed', m.hidden ? 'true' : 'false');
+      m.hidden = !m.hidden;
+    },
     scheme: function (v) { paint({ scheme: v }); },
     uncolour: function () { paint({ clear: true }); },
     mode: function (v) { setMode(v); },
@@ -276,17 +324,18 @@
     unselect: function () { if (plugin) plugin.managers.structure.selection.clear(); },
     seq: function () { cfg.seq = !cfg.seq; drawSeq(); },
     export: function () {
+      var k = host.getAttribute('data-pv-key'), own = host.__pvScene && host.__pvScene.get();
       var a = el('a');
-      a.href = URL.createObjectURL(new Blob([JSON.stringify(cfg, null, 1)], { type: 'application/json' }));
-      a.download = STORE.replace(':', '-') + '.json';
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(
+        Object.assign({ format: SCENE, version: 1, viewer: k }, own, { config: cfg }), null, 1)], { type: 'application/json' }));
+      a.download = k + '-scene.json';
       a.click();
     },
     import: function () {
       var f = el('input');
-      f.type = 'file'; f.accept = 'application/json';
+      f.type = 'file'; f.accept = 'application/json,.json';
       f.onchange = function () {
-        f.files[0].text().then(function (t) { JSON.parse(t); localStorage.setItem(STORE, t); location.reload(); })
-          .catch(function (e) { alert('Not a config file: ' + e.message); });
+        f.files[0].text().then(importScene).catch(function (e) { alert('Could not import: ' + e.message); });
       };
       f.click();
     },
@@ -297,6 +346,41 @@
       location.reload();
     }
   };
+  /** a scene file, or a bare config from an earlier export. The structure is loaded first, then the edits go over it */
+  async function importScene(text) {
+    var s = JSON.parse(text), k = host.getAttribute('data-pv-key');
+    if (!s || typeof s !== 'object' || Array.isArray(s)) throw new Error('not a scene file');
+    if (s.format !== SCENE) s = { config: s };            // before scene files, an export was the config alone
+    if (s.viewer && s.viewer !== k) {
+      throw new Error('this scene was made in the "' + s.viewer + '" viewer. Open ?v=' + s.viewer + ' and import it there.');
+    }
+    if (host.__pvScene && (s.structure || s.camera)) await host.__pvScene.set(s);
+    setConfig(s.config);
+    save();
+  }
+  /** replace every edit in place (cfg keeps its identity: closures hold it) and redraw what depends on it */
+  function setConfig(next) {
+    var fresh = { box: {}, text: {}, hide: [], paint: [], mode: {}, notes: [], names: {}, seq: false };
+    next = next && typeof next === 'object' ? next : {};
+    Object.keys(fresh).forEach(function (k) {             // a key of the wrong kind is dropped, not trusted
+      var v = next[k], ok = v != null && typeof v === typeof fresh[k] && Array.isArray(v) === Array.isArray(fresh[k]);
+      cfg[k] = ok ? v : fresh[k];
+    });
+    cfg.notes = cfg.notes.filter(function (n) { return n && typeof n.text === 'string'; });
+    pick(null);
+    for (var i = items.length; i--;) {                    // the old notes go, the new ones are made
+      if (!items[i].note) continue;
+      items[i].el.remove();
+      if (items[i].frame) items[i].frame.remove();
+      items.splice(i, 1);
+    }
+    cfg.notes.forEach(noteItem);
+    items.forEach(function (b) { if (!b.note) { b.draw(); place(b); } });
+    Object.keys(ticks).forEach(function (n) { ticks[n].checked = cfg.hide.indexOf(n) < 0; });
+    applyHide();
+    version++; single = null;                             // paint and sequence view are rebuilt from cfg
+    if (plugin) sync();
+  }
   panel.addEventListener('click', function (e) {
     var b = e.target.closest('[data-act]');
     if (!b) return;
@@ -306,7 +390,7 @@
 
   /* ------------------------------------------------------------ the 3D part -- */
   /* what the viewer has built: [{ name, ref, cell, sref, skey, structure, on }] */
-  var idx = null, skeys = {};
+  var idx = null, skeys = {}, order = null;
   /** a name for a structure that survives a reload: its assembly id, or the file it was read from */
   function structKey(c) {
     var ref = c.transform.ref, cells = plugin.state.data.cells, p = c.transform.params;
@@ -321,8 +405,8 @@
   function index() {
     if (idx) return idx;
     var cells = plugin.state.data.cells;
-    idx = [];
-    Object.keys(pv.built).forEach(function (name) {       // latch-top10 nests one level: built[tag] = { closed, open, ghost }
+    idx = []; order = null;
+    Object.keys(pv.built).forEach(function (name) {       // a value may nest one level: built[tag] = { closed, open, ghost }
       var v = pv.built[name], refs = typeof v === 'string' ? [[name, v]] : Object.keys(v).map(function (k) { return [name + '_' + k, v[k]]; });
       refs.forEach(function (nr) {
         var c = cells.get(nr[1]), sc = c && cells.get(c.transform.parent);
@@ -374,11 +458,34 @@
       var k = ((KD[t.comp[i]] || 0) + 4.5) / 9;
       return k < .5 ? mix(hex('--gv-philic'), hex('--gv-neutral'), k * 2) : mix(hex('--gv-neutral'), hex('--gv-phobic'), k * 2 - 1);
     },
+    chain: function (r, u) { return chainColour('chain', u); },
+    sequence: function (r, u) { return chainColour('sequence', u); },
     plddt: function (r, u, t, i) {                        // the B-factor column, in AlphaFold's four bands
       var b = u.model.atomicConformation.B_iso_or_equiv.value(u.elements[t.start[i]]);
       return hex(PALETTE[b > 90 ? 'pine' : b > 70 ? 'frost' : b > 50 ? 'peach' : 'cayenne']);
     }
   };
+  function chainKey(by, u) {
+    return by === 'sequence' ? table(u).seq : u.model.atomicHierarchy.chains.label_asym_id.value(u.chainIndex[u.elements[0]]);
+  }
+  /** the colour of a unit's chain. Chains are numbered in the order they were built in, hidden steps included, so
+      showing another step does not recolour; by 'sequence' every distinct sequence is one number, by 'chain' every label */
+  function chainColour(by, u) {
+    var reps = index();
+    if (!order) {
+      order = { chain: new Map(), sequence: new Map() };
+      reps.forEach(function (r) {
+        r.structure.units.forEach(function (v) {
+          if (v.kind !== 0) return;
+          Object.keys(order).forEach(function (b) {
+            var k = chainKey(b, v);
+            if (!order[b].has(k)) order[b].set(k, order[b].size);
+          });
+        });
+      });
+    }
+    return CHAIN[order[by].get(chainKey(by, u)) % CHAIN.length];
+  }
   async function needSS(structure) {
     if (!cfg.paint.some(function (o) { return o.scheme === 'ss'; })) return;
     ssProp = ssProp || plugin.customStructureProperties.get('molstar_computed_secondary_structure');
@@ -442,22 +549,27 @@
       layers.push({ bundle: S.StructureElement.Bundle.fromLoci(L(r.structure, els)), color: c, clear: false });
     });
     var b = plugin.build();
-    if (nodes[r.ref]) b.to(nodes[r.ref]).update({ layers: layers });
-    else nodes[r.ref] = b.to(r.ref).apply(pv.lib.plugin.StateTransforms.Representation.OverpaintStructureRepresentation3DFromBundle,
-                                          { layers: layers }, { tags: 'pv-paint' }).ref;
+    [r.ref, skins[r.ref]].forEach(function (ref) {        // the cartoon and, in "Cartoon + surface", the surface over it
+      if (!ref || !plugin.state.data.cells.has(ref)) return;
+      if (nodes[ref]) b.to(nodes[ref]).update({ layers: layers });
+      else nodes[ref] = b.to(ref).apply(pv.lib.plugin.StateTransforms.Representation.OverpaintStructureRepresentation3DFromBundle,
+                                        { layers: layers }, { tags: 'pv-paint' }).ref;
+    });
     await b.commit();
   }
 
   /* ---- display mode: per component, by the name its viewer built it under ---- */
-  var was = {}, now = {};
+  var was = {}, now = {}, skins = {};                     // skins: component's ref -> the see-through surface drawn over its cartoon
+  var SKIN = 'cartoon-surface', SKIN_ALPHA = 0.4;
   async function applyMode(r) {
-    var want = cfg.mode[r.name] || null;
+    var want = cfg.mode[r.name] || null, cells = plugin.state.data.cells;
     if ((now[r.ref] || null) === want) return;
     var old = r.cell.transform.params.type;
     if (!was[r.ref]) was[r.ref] = old;
-    var type = want
-      ? { name: want, params: Object.assign({}, plugin.representation.structure.registry.get(want).defaultValues, LOOK, MODES[want][1]) }
-      : was[r.ref];
+    var kind = want === SKIN ? 'cartoon' : want;
+    var type = !want ? was[r.ref]
+      : kind === was[r.ref].name ? was[r.ref]             // the viewer's own cartoon, as it drew it
+      : { name: kind, params: Object.assign({}, plugin.representation.structure.registry.get(kind).defaultValues, LOOK, MODES[kind][1]) };
     now[r.ref] = want;
     var at = r.cell.obj.data.repr.state.transform.slice();   // where its viewer has put it: a new type starts at the origin again
     await plugin.build().to(r.ref).update(function (p) {
@@ -467,6 +579,34 @@
     var repr = r.cell.obj.data.repr;
     repr.setState({ transform: at });
     plugin.canvas3d.update(repr);
+    if (skins[r.ref] && (want !== SKIN || !cells.has(skins[r.ref]))) {
+      if (cells.has(skins[r.ref])) await plugin.build().delete(skins[r.ref]).commit();
+      skins[r.ref] = null;
+    }
+    if (want === SKIN && !skins[r.ref]) {                 // the surface takes the cartoon's colour theme, so paint applies to both
+      var theme = cells.get(r.ref).transform.params.colorTheme;
+      var s = await plugin.builders.structure.representation.addRepresentation(r.sref, { type: 'gaussian-surface',
+        typeParams: Object.assign({}, MODES['gaussian-surface'][1], LOOK, { alpha: SKIN_ALPHA }) });
+      await plugin.build().to(s.ref).update(function (p) { p.colorTheme = theme; return p; }).commit();
+      skins[r.ref] = s.ref;
+      delete painted[r.ref];                              // paint the new surface too
+    }
+  }
+  function skinFollow() {                                 // ... and so does its pose: the viewers move parts with the representation's transform
+    var cells = plugin.state.data.cells;
+    Object.keys(skins).forEach(function (ref) {
+      var a = skins[ref] && cells.get(ref), b = skins[ref] && cells.get(skins[ref]);
+      if (!a || !b || !a.obj || !b.obj) return;
+      var m = a.obj.data.repr.state.transform, n = b.obj.data.repr.state.transform;
+      if (m.some(function (v, i) { return v !== n[i]; })) {
+        b.obj.data.repr.setState({ transform: m.slice() });
+        plugin.canvas3d.requestDraw();
+      }
+    });
+  }
+  function skinVisibility(r) {                            // the viewers show and hide the cartoon; the surface follows it
+    var s = skins[r.ref], c = s && plugin.state.data.cells.get(s);
+    if (c && !!c.state.isHidden !== !r.on) plugin.state.data.updateCellState(s, { isHidden: !r.on });
   }
   function setMode(type) {
     if (!plugin) return;
@@ -483,7 +623,7 @@
   function sync() {
     queue = queue.then(async function () {
       idx = null;
-      for (var reps = index(), i = 0; i < reps.length; i++) { await applyMode(reps[i]); await applyPaint(reps[i]); }
+      for (var reps = index(), i = 0; i < reps.length; i++) { await applyMode(reps[i]); await applyPaint(reps[i]); skinVisibility(reps[i]); }
       drawSeq(); placeNotes();
     }).catch(function (e) { console.error('[dev-mode]', e); });
   }
@@ -665,6 +805,9 @@
       var p = px(V3.add(V3(), at, n.off));
       it.at = at; it.x = p[0]; it.y = p[1]; it.z = p[2];     // where it is drawn, for a drag to start from
       e.style.cssText = 'left:' + p[0] + 'px;top:' + p[1] + 'px' + (n.w ? ';width:' + n.w + 'px;max-width:none' : '') + (n.h ? ';height:' + n.h + 'px' : '');
+      // above the canvas only where nothing is drawn at the box's centre, or what is there lies behind it (one answer per box)
+      var hit = plugin.canvas3d.identify([p[0] + e.offsetWidth / 2, p[1] + e.offsetHeight / 2]);
+      e.classList.toggle('is-front', !hit || !hit.position || p[2] <= V3.transformMat4(V3(), hit.position, pvm)[2]);
       var x = Math.min(Math.max(a[0], p[0]), p[0] + e.offsetWidth), y = Math.min(Math.max(a[1], p[1]), p[1] + e.offsetHeight);
       lines += '<line x1="' + x + '" y1="' + y + '" x2="' + a[0] + '" y2="' + a[1] + '"/><circle cx="' + a[0] + '" cy="' + a[1] + '" r="3"/>';
     });
@@ -709,6 +852,7 @@
       clearTimeout(selTimer); selTimer = setTimeout(readSelection, 30);
     });
     plugin.canvas3d.didDraw.subscribe(placeNotes);
+    plugin.canvas3d.didDraw.subscribe(skinFollow);
     setDev(dev);
     sync();
   }

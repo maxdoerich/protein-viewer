@@ -361,6 +361,7 @@
   pointer-events: none;
   white-space: nowrap;
 }
+.gvv-side.is-front { z-index: 2; }   /* in front of the protein: above the canvas */
 .gvv-side span { font-size: calc(var(--fs-body) * .75); }
 .gvv-side--out strong { color: var(--gv-philic); }
 .gvv-side--in strong { color: var(--gv-phobic); }

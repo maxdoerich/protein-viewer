@@ -142,13 +142,72 @@
    ]
   }
  },
+ "wall": [
+  "wall-00",
+  "wall-01",
+  "wall-02",
+  "wall-03",
+  "wall-04",
+  "wall-05",
+  "wall-06",
+  "wall-07",
+  "wall-08",
+  "wall-09",
+  "wall-10",
+  "wall-11",
+  "wall-12",
+  "wall-13",
+  "wall-14",
+  "wall-15",
+  "wall-16",
+  "wall-17",
+  "wall-18",
+  "wall-19",
+  "wall-20",
+  "wall-21",
+  "wall-22",
+  "wall-23",
+  "wall-24",
+  "wall-25",
+  "wall-26",
+  "wall-27",
+  "wall-28",
+  "wall-29",
+  "wall-30",
+  "wall-31",
+  "wall-32",
+  "wall-33",
+  "wall-34",
+  "wall-35",
+  "wall-36",
+  "wall-37",
+  "wall-38",
+  "wall-39",
+  "wall-40",
+  "wall-41",
+  "wall-42",
+  "wall-43",
+  "wall-44",
+  "wall-45",
+  "wall-46",
+  "wall-47",
+  "wall-48",
+  "wall-49",
+  "wall-50",
+  "wall-51",
+  "wall-52",
+  "wall-53"
+ ],
  "counts": {
+  "wall copies": 1725,
   "binder": 1,
   "latch": 1,
   "tbd": 1,
+  "arm": 1,
+  "cont2": 1,
+  "cont3": 1,
   "target": 1,
-  "gvpa": 1,
-  "wall": 1725
+  "gvpa": 1
  },
  "geometry": {
   "iface_covered_closed": 12,
@@ -162,6 +221,60 @@
    "swing": 11.43,
    "open": 0.51,
    "closed": 1.26
+  },
+  "linker": {
+   "residues": 11,
+   "end_to_end": 25.3,
+   "clearance": 4.89,
+   "closure_rmsd": 0.015,
+   "phi_psi": [
+    [
+     58,
+     -113
+    ],
+    [
+     -100,
+     145
+    ],
+    [
+     -93,
+     166
+    ],
+    [
+     153,
+     159
+    ],
+    [
+     -154,
+     136
+    ],
+    [
+     -79,
+     -17
+    ],
+    [
+     49,
+     170
+    ],
+    [
+     -90,
+     152
+    ],
+    [
+     -87,
+     80
+    ],
+    [
+     -155,
+     -154
+    ],
+    [
+     -68,
+     -164
+    ]
+   ],
+   "tried": 90,
+   "closed": 68
   }
  }
 }

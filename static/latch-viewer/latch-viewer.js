@@ -5,8 +5,10 @@
  * (MIT, vendored in ../molstar/) is only fetched once the figure scrolls near the viewport.
  *
  * Data (built by proteins/latch_animation/tools/prep_viewer.py):
- *   latch-assembly.cif   every part once, as its own mmCIF assembly: binder, latch, tbd (target-binding
- *                        domain), target, gvpa (pentamer), wall (1725 copies via assembly operators)
+ *   latch-assembly.cif   every part as its own mmCIF assembly: binder, latch, tbd (target-binding domain, with the
+ *                        linker), target, gvpa (pentamer), wall (1725 copies via assembly operators); and the
+ *                        polypeptide in unbroken chains: cont2 (binder + latch), cont3 (+ linker + domain), arm
+ *                        (latch + linker + domain from the hinge)
  *   latch-viewer.json    hinge, fly-in vector, dock offset, camera frames
  * They load from this script's folder, or from data-base="…/" on the mount element.
  *
@@ -17,6 +19,11 @@
  *           axis, angle and centre are in latch-viewer.json); then the target flies in and binds the open domain.
  *           The chip "Bind with latch closed" shuts the block again with the target on it, to look at the clash;
  *   step 5  the wall fades in and the construct, which has stood off the wall until now, docks onto GvpA.
+ *
+ * One cartoon: Mol* ends a cartoon at the end of its chain, so parts that are chains of their own show a seam where they
+ * join. Where the parts sit together (steps 2 and 3 at rest) the polypeptide is drawn as one unbroken chain (cont2, cont3);
+ * the pieces (binder, latch, tbd, arm) are only used while one part moves against another, and the unbroken chain fades in
+ * over them when the move is done. Across the hinge itself (open state) the cartoon is, truly, in two pieces.
  * Colours are --lv-* properties in latch-viewer.css, read back at start-up.
  */
 (function () {
@@ -58,8 +65,8 @@
 
   /* ---------------------------------------------------------------- steps -- */
   /* `show` names components (= assemblies of latch-assembly.cif). The block is what swings in step 4. */
-  var BLOCK = ['latch', 'tbd', 'target', 'targetX'];                  // what swings (targetX: the clash view's PD-L1)
-  var CONSTRUCT = ['binder', 'binderX'].concat(BLOCK);
+  var BLOCK = ['latch', 'tbd', 'arm', 'target', 'targetX'];           // what swings (targetX: the clash view's PD-L1)
+  var CONSTRUCT = ['binder', 'binderX', 'cont2', 'cont3'].concat(BLOCK);
   var CLASH_STEP = 3;                                                // the step that has the clash view
 
   var STEPS = [
@@ -73,24 +80,24 @@
       title: 'The latch blocks the site',
       text: 'A latch is fused to the end of the binder. It folds back over the binding site and covers it, so the ' +
             'construct cannot bind GvpA yet. The latch is a designed backbone: it has no amino-acid sequence yet.',
-      show: ['binder', 'latch'],
+      show: ['cont2'], anim: ['binder', 'latch'],                // at rest one chain; the latch swings in as a piece
       legend: [['--lv-binder', 'GvpA binder'], ['--lv-site', 'GvpA-binding site'], ['--lv-latch', 'latch']] },
     { key: 'tbd', label: '+ Binding domain', icon: 'tbd', frame: 'tbd',
       title: 'A target-binding domain at the latch’s free end',
       text: 'A second domain is joined to the free end of the latch by a short flexible linker and recognises the ' +
             'analyte. Here it is a binder against PD-L1, which stands in for any target: swap the domain and the ' +
             'sensor senses something else.',
-      show: ['binder', 'latch', 'tbd'],
+      show: ['cont3'], anim: ['cont2'],                          // the chain with the domain fades in over the one without
       legend: [['--lv-binder', 'GvpA binder'], ['--lv-latch', 'latch'], ['--lv-tbd', 'target-binding domain']] },
     { key: 'target', label: '+ Target', icon: 'target', frame: 'mechanism',
       title: 'The latch opens, then the target binds',
       text: 'With the latch closed, PD-L1 cannot sit on its domain: it would run into the GvpA binder. So the latch ' +
             'opens first. Latch and domain swing off the binding site as one block, a hinge motion placed so that ' +
             'nothing collides (design intent, not a simulation). Then PD-L1 binds the open state and holds it open.',
-      show: ['binder', 'latch', 'tbd', 'target'],
+      show: ['binder', 'arm', 'target'],                         // open: the binder and the block are two pieces
       toggle: { key: 'clash', label: 'Bind with latch closed', icon: 'clash',
-                text: 'Latch shut, PD-L1 on its domain: the spheres of PD-L1 and the GvpA binder overlap and the ' +
-                      'residues in the overlap are marked. This is the state the design rules out, so PD-L1 can only ' +
+                text: 'Latch shut, PD-L1 on its domain: PD-L1 runs into the GvpA binder, and the residues of both that ' +
+                      'overlap are marked in red-orange. This is the state the design rules out, so PD-L1 can only ' +
                       'bind once the latch is open. (The binder model has no side chains, so the real overlap is larger.) ' +
                       'Drag to turn it.' },
       legend: [['--lv-binder', 'GvpA binder'], ['--lv-latch', 'latch'], ['--lv-tbd', 'target-binding domain'],
@@ -101,7 +108,7 @@
       text: 'The open construct binds GvpA in the vesicle wall and stabilises it: the readout is a shift in collapse ' +
             'pressure. Shown is a patch of the wall of a Bacillus megaterium vesicle (Huber et al., Cell 2023; Zenodo ' +
             '10.5281/zenodo.6458345) with the five GvpA the binder was designed against in light blue.',
-      show: ['binder', 'latch', 'tbd', 'target', 'gvpa', 'wall'],
+      show: ['binder', 'arm', 'target', 'gvpa', 'wall'],
       legend: [['--lv-binder', 'GvpA binder'], ['--lv-latch', 'latch'], ['--lv-tbd', 'target-binding domain'],
                ['--lv-target', 'target protein'], ['--lv-gvpa', 'GvpA it binds'], ['--lv-wall', 'vesicle wall']] }
   ];
@@ -164,6 +171,17 @@
     var base = host.getAttribute('data-base') || HERE;
     var state = { step: -1, busy: Promise.resolve(), token: 0, clash: false };
 
+    var queue = [];
+    var idle = window.requestIdleCallback
+      ? function (f, o) { window.requestIdleCallback(f, o); }
+      : function (f) { setTimeout(f, 50); };
+    /** background builds (see boot), and: the reader is about to look at step i, so build its parts first */
+    function prefer(i, clash) {
+      var first = [];
+      needed(i).concat(clash ? ['binderX', 'targetX', 'latch', 'tbd'] : []).forEach(function (n) { if (!built[n]) first.push(n); });
+      queue = first.concat(queue.filter(function (n) { return first.indexOf(n) < 0; }));
+    }
+
     /* ---- markup ---- */
     host.innerHTML = '';
     host.classList.add('gvv', 'lv');
@@ -189,6 +207,8 @@
       b.type = 'button';
       b.title = s.title;
       b.addEventListener('click', function () { go(i); });
+      b.addEventListener('pointerenter', function () { prefer(i); });
+      b.addEventListener('focus', function () { prefer(i); });
       li.appendChild(b);
       steps.appendChild(li);
     });
@@ -251,9 +271,23 @@
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (es) {
         if (es.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
-      }, { rootMargin: '600px 0px' });
+      }, { rootMargin: '150% 0px' });
       io.observe(host);
     } else start();
+
+    /* once the page itself has loaded, fetch Mol* and the data at low priority, so the download is done before the
+       reader gets here (prefetch reuses the HTTP cache; browsers without it simply load on boot, as before) */
+    function prefetch() {
+      if (started) return;                       // already loading for real
+      [MOLSTAR + 'molstar.js', MOLSTAR + 'molstar.css', base + 'latch-viewer.json', base + 'latch-assembly.cif']
+        .forEach(function (href) {
+          var l = document.createElement('link');
+          l.rel = 'prefetch'; l.href = href;
+          document.head.appendChild(l);
+        });
+    }
+    if (document.readyState === 'complete') idle(prefetch, { timeout: 3000 });
+    else window.addEventListener('load', function () { idle(prefetch, { timeout: 3000 }); });
 
     function fail(msg) {
       veil.classList.add('is-error');
@@ -323,13 +357,30 @@
         setTimeout(function () { viewer.handleResize(); frame(STEPS[state.step], 0); }, 60);
       });
 
-      /* build what the later steps need while the reader looks at step 1, so a click is instant */
-      var idle = window.requestIdleCallback || function (f) { setTimeout(f, 300); };
-      idle(async function () {
-        for (var name of ['latch', 'tbd', 'target', 'gvpa', 'wall']) {
+      // Mol* draws nothing while the scene is still; the one thing that keeps it drawing is the spin, so that stops
+      // while the figure is scrolled away and goes on when it is back. (Not canvas3d.pause(): its resume() can leave
+      // two frame loops running.)
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
+          state.offscreen = !es[es.length - 1].isIntersecting;
+          if (state.spin) applySpin();
+        }).observe(stage);
+      }
+
+      /* build what the later steps need while the reader looks at step 1, so a click is instant, in the order the steps
+         need them (the clash view's parts last: they only matter once its chip is pressed), each in an idle moment.
+         Every build takes ~30 ms (the wall comes in 54 blocks), so none of them is felt. Pointing at (or tabbing to) a
+         step button or the clash chip moves its parts to the front. */
+      queue = expand(['latch', 'cont2', 'cont3', 'arm', 'target', 'gvpa', 'wall', 'tbd', 'binderX', 'targetX']);
+      (async function () {
+        await new Promise(function (ok) { idle(ok, { timeout: 250 }); });
+        while (queue.length) {
+          var name = queue.shift();
+          if (built[name]) continue;
+          await new Promise(function (ok) { idle(ok, { timeout: 250 }); });
           try { await ensure(name); } catch (e) { console.warn('[latch-viewer] prebuild', name, e); }
         }
-      });
+      })();
     }
 
     function readColours() {
@@ -375,35 +426,40 @@
       return Object.assign({ type: 'cartoon', typeParams: Object.assign({ sizeFactor: size || 0.3 }, LOOK) }, uniform(c));
     }
 
+    // The prep script stores the part of each residue in the B-factor column: 0 binder, 1 GvpA-binding site, 2 clash with
+    // PD-L1 (the clash view), 3 latch, 4 linker and target-binding domain. The theme runs high to low along its list, so the
+    // highest value comes first. One thickness for every chain, so that an unbroken chain has no step where one part meets
+    // the next (the pieces are drawn the same, so the hand-over between them does not show).
+    function chain(clash) {
+      return { type: 'cartoon', typeParams: Object.assign({ sizeFactor: 0.34 }, LOOK),
+        color: 'uncertainty', colorParams: { domain: [0, 4],
+          list: { kind: 'interpolate', colors: [COLORS['--lv-tbd'], COLORS['--lv-latch'],
+            COLORS[clash ? '--lv-clash' : '--lv-binder'], COLORS['--lv-site'], COLORS['--lv-binder']] } } };
+    }
+
     var COMPONENTS = {
-      // the prep script stores 1 in the B-factor column on the GvpA-binding site and 2 on the residues that
-      // clash with PD-L1 (clash view); the theme runs high to low along its list, so the highest value comes first
-      binder: function () {
-        return rep('binder', { type: 'cartoon', typeParams: Object.assign({ sizeFactor: 0.3 }, LOOK),
-          color: 'uncertainty', colorParams: { domain: [0, 2],
-            list: { kind: 'interpolate', colors: [COLORS['--lv-binder'], COLORS['--lv-site'], COLORS['--lv-binder']] } } });
-      },
-      // the clash view draws binder and PD-L1 as spheres, so an overlap shows as one body pushed into the other
-      binderX: function () {
-        return rep('binder', { type: 'spacefill', typeParams: Object.assign({ sizeFactor: 1 }, LOOK),
-          color: 'uncertainty', colorParams: { domain: [0, 2],
-            list: { kind: 'interpolate', colors: [COLORS['--lv-clash'], COLORS['--lv-site'], COLORS['--lv-binder']] } } });
-      },
+      binder: function () { return rep('binder', chain(false)); },
+      // the clash view keeps the cartoon and paints the residues that overlap PD-L1 in the clash colour
+      binderX: function () { return rep('binder', chain(true)); },
       targetX: function () {
-        return rep('target', { type: 'spacefill', typeParams: Object.assign({ sizeFactor: 1 }, LOOK),
+        return rep('target', Object.assign({ type: 'cartoon', typeParams: Object.assign({ sizeFactor: 0.3 }, LOOK),
           color: 'uncertainty', colorParams: { domain: [0, 1],
-            list: { kind: 'interpolate', colors: [COLORS['--lv-clash'], COLORS['--lv-target']] } } });
+            list: { kind: 'interpolate', colors: [COLORS['--lv-clash'], COLORS['--lv-target']] } } }));
       },
-      latch: function () { return rep('latch', cartoon(COLORS['--lv-latch'], 0.34)); },
-      tbd: function () { return rep('tbd', cartoon(COLORS['--lv-tbd'], 0.36)); },   // a little fatter: it carries the thin linker
+      latch: function () { return rep('latch', chain(false)); },          // binder's last residue + latch
+      tbd: function () { return rep('tbd', chain(false)); },              // latch's last residue + linker + domain
+      arm: function () { return rep('arm', chain(false)); },              // latch + linker + domain, from the hinge
+      cont2: function () { return rep('cont2', chain(false)); },          // binder + latch, unbroken
+      cont3: function () { return rep('cont3', chain(false)); },          // + linker + domain, unbroken
       target: function () { return rep('target', cartoon(COLORS['--lv-target'])); },
       gvpa: function () { return rep('gvpa', cartoon(COLORS['--lv-gvpa'], 0.34)); },
-      wall: function () {
-        return rep('wall', Object.assign({ type: 'gaussian-surface',
-          typeParams: Object.assign({ quality: 'custom', resolution: 1.6, radiusOffset: 0.8, smoothness: 1.6 }, LOOK) },
-          uniform(COLORS['--lv-wall'])));
-      }
     };
+    // one block of the wall (see expand)
+    function wallBlock(id) {
+      return rep(id, Object.assign({ type: 'gaussian-surface',
+        typeParams: Object.assign({ quality: 'custom', resolution: 1.6, radiusOffset: 0.8, smoothness: 1.6 }, LOOK) },
+        uniform(COLORS['--lv-wall'])));
+    }
 
     var structuresP = {};
     function structure(id) {
@@ -423,7 +479,7 @@
     function ensure(name) {
       if (built[name]) return Promise.resolve(built[name]);
       if (!pending[name]) {
-        pending[name] = COMPONENTS[name]().then(function (ref) {
+        pending[name] = (COMPONENTS[name] ? COMPONENTS[name]() : wallBlock(name)).then(function (ref) {
           built[name] = ref;
           // whatever it was created as, it shows only if the current step wants it, and sits where it rests
           if (state.step >= 0) {
@@ -442,10 +498,29 @@
       if (cell && !!cell.state.isHidden === on) plugin.state.data.updateCellState(built[name], { isHidden: !on });
     }
 
-    /** the component names a step shows; the clash view swaps binder and PD-L1 for their sphere versions */
+    /** `wall` stands for the wall's blocks (latch-viewer.json `wall`: 54 assemblies of 32 GvpA each) */
+    function expand(names) {
+      var out = [];
+      names.forEach(function (n) { out = out.concat(n === 'wall' ? (manifest ? manifest.wall : []) : [n]); });
+      return out;
+    }
+
+    /** the component names a step shows at rest; the clash view swaps binder and PD-L1 for their painted versions,
+        and the block (arm) for its pieces, so that the latch alone can be dimmed */
     function wanted(i) {
-      var set = STEPS[i].show;
-      if (i === CLASH_STEP && state.clash) set = set.map(function (n) { return n === 'binder' ? 'binderX' : n === 'target' ? 'targetX' : n; });
+      var set = expand(STEPS[i].show);
+      if (i === CLASH_STEP && state.clash) {
+        set = [].concat.apply([], set.map(function (n) {
+          return n === 'binder' ? ['binderX'] : n === 'arm' ? ['latch', 'tbd'] : n === 'target' ? ['targetX'] : [n];
+        }));
+      }
+      return set;
+    }
+
+    /** ... and what has to be built to get there: also the pieces its move runs on before the chain takes over */
+    function needed(i) {
+      var set = wanted(i);
+      (STEPS[i].anim || []).forEach(function (n) { if (set.indexOf(n) < 0) set.push(n); });
       return set;
     }
 
@@ -475,10 +550,15 @@
     function setSpin(on) {
       state.spin = on;
       bSpin.setAttribute('aria-pressed', on ? 'true' : 'false');
+      applySpin();
+    }
+
+    function applySpin() {
       if (!plugin) return;
+      var on = state.spin && !state.offscreen;
       var tb = plugin.canvas3d.props.trackball;
       plugin.canvas3d.setProps({ trackball: Object.assign({}, tb, {
-        animate: on ? { name: 'spin', params: { speed: 0.25, axis: [0, -1, 0] } } : { name: 'off', params: {} } }) });
+        animate: on ? { name: 'spin', params: { speed: 0.08, axis: V3.create(0, -1, 0) } } : { name: 'off', params: {} } }) });
     }
 
     /* ---- the step UI (works before and after the 3D part loads) ---- */
@@ -499,6 +579,8 @@
         c.type = 'button';
         c.setAttribute('aria-pressed', toggled ? 'true' : 'false');
         c.addEventListener('click', function () { toggleClash(); });
+        c.addEventListener('pointerenter', function () { prefer(i, true); });
+        c.addEventListener('focus', function () { prefer(i, true); });
         chips.appendChild(c);
       }
       legend.innerHTML = '';
@@ -536,8 +618,14 @@
     function setPose(name, rot, fly, away) {
       var cell = built[name] && plugin.state.data.cells.get(built[name]);
       if (!cell || !cell.obj) return;
-      cell.obj.data.repr.setState({ transform: pose(name, rot, fly, away) });
-      plugin.canvas3d.update(cell.obj.data.repr);
+      var repr = cell.obj.data.repr, m = pose(name, rot, fly, away);
+      repr.setState({ transform: m });
+      plugin.canvas3d.update(repr);
+      // Mol* frustum-culls each mesh by its bounding sphere, which does not follow `transform`: zoomed in, a part whose
+      // sphere had slid out of view was dropped while it was still on screen. The sphere moves with the part.
+      repr.renderObjects.forEach(function (o) {
+        V3.transformMat4(o.values.boundingSphere.ref.value.center, o.values.invariantBoundingSphere.ref.value.center, m);
+      });
     }
 
     function setRest(name, i) {
@@ -549,45 +637,61 @@
     function ease(k) { return k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; }   // in-out cubic
     function nextFrame() { return new Promise(function (r) { requestAnimationFrame(function () { r(); }); }); }
 
-    /* ---- fading: a part enters by its alpha going from 0 to 1 ---- */
-    var cur = {};                                     // the alpha each component was last set to
+    /* ---- fading: a part enters by its opacity going from 0 to 1 ----
+       Set as the representation's alphaFactor: Mol* draws with alpha x alphaFactor in every pass, so this is the same
+       picture as changing the `alpha` parameter, without a state transaction (and its rebuild check) on every frame. */
+    var cur = {};                                     // the opacity each component was last set to
     // never exactly 0: Mol* leaves a fully transparent part out of the visible bounds, which can clamp the camera
     function setAlpha(n, a) {
       a = Math.max(a, 0.01);
       if (!built[n] || (cur[n] == null ? 1 : cur[n]) === a) return Promise.resolve();
+      var cell = plugin.state.data.cells.get(built[n]);
+      if (!cell || !cell.obj) return Promise.resolve();
       cur[n] = a;
-      return plugin.build().to(built[n]).update(function (old) { old.type.params.alpha = a; return old; }).commit();
+      cell.obj.data.repr.setState({ alphaFactor: a });
+      plugin.canvas3d.update(cell.obj.data.repr);
+      return Promise.resolve();
     }
     function fade(names, a) { return Promise.all(names.map(function (n) { return setAlpha(n, a); })); }
 
     /* ---- transitions (forward only; going back just switches) ---- */
+    /* `enter` starts invisible and is shown by a track; `keep` is visible while the move runs and gone after it; `move` is
+       posed by the tracks. What the step shows at rest (STEPS[i].show) is what is left when the move is done. */
     var PLANS = {
       latch: {
-        enter: ['latch'], move: [],
+        enter: ['latch', 'cont2'], keep: ['binder'], move: [],
         tracks: function () {
-          // it swings in from the open pose onto the site, fading in as it goes
-          return [{ ms: 1800,
-            start: function () { setPose('latch', 1, 0, 1); setVisible('latch', true); },
-            tick: function (k) { setPose('latch', 1 - ease(k), 0, 1); return setAlpha('latch', Math.min(1, k * 3)); } }];
+          var SWING = 1800;
+          return [
+            // it swings in from the open pose onto the site, fading in as it goes ...
+            { ms: SWING,
+              start: function () { setPose('latch', 1, 0, 1); setVisible('latch', true); },
+              tick: function (k) { setPose('latch', 1 - ease(k), 0, 1); return setAlpha('latch', Math.min(1, k * 3)); } },
+            // ... and, once it sits, the two pieces hand over to the unbroken chain
+            { delay: SWING, ms: 350,
+              start: function () { setPose('cont2', 0, 0, 1); setVisible('cont2', true); },
+              tick: function (k) { return setAlpha('cont2', ease(k)); } }
+          ];
         }
       },
       tbd: {
-        enter: ['tbd'], move: [],
+        enter: ['cont3'], keep: ['cont2'], move: [],
         tracks: function () {
+          // the chain that goes on into linker and domain fades in over the one that ended at the latch
           return [{ ms: 1000,
-            start: function () { setVisible('tbd', true); },
-            tick: function (k) { return setAlpha('tbd', ease(k)); } }];
+            start: function () { setPose('cont3', 0, 0, 1); setVisible('cont3', true); },
+            tick: function (k) { return setAlpha('cont3', ease(k)); } }];
         }
       },
       target: {
-        enter: ['target'], move: ['latch', 'tbd'],
+        enter: ['target'], move: ['arm'],
         tracks: function () {
           var SWING = 2000, PAUSE = 350, FLY = 1900;
           return [
-            // 1. the latch opens: latch + domain swing off the site, PD-L1 is not there yet
+            // 1. the latch opens: latch + linker + domain swing off the site as one block, PD-L1 is not there yet
             { ms: SWING,
-              start: function () { setPose('latch', 0, 0, 1); setPose('tbd', 0, 0, 1); setPose('target', 1, 1, 1); },
-              tick: function (k) { ['latch', 'tbd'].forEach(function (n) { setPose(n, ease(k), 0, 1); }); } },
+              start: function () { setPose('arm', 0, 0, 1); setPose('target', 1, 1, 1); },
+              tick: function (k) { setPose('arm', ease(k), 0, 1); } },
             // 2. PD-L1 comes in to the open domain (the way in is the closed frame's, swung with the block)
             { delay: SWING + PAUSE, ms: FLY,
               start: function () { setPose('target', 1, 1, 1); setVisible('target', true); },
@@ -602,9 +706,9 @@
             { ms: 900,
               start: function () {
                 CONSTRUCT.forEach(function (n) { setPose(n, 1, 0, 1); });
-                setVisible('gvpa', true); setVisible('wall', true);
+                expand(['gvpa', 'wall']).forEach(function (n) { setVisible(n, true); });
               },
-              tick: function (k) { return fade(['gvpa', 'wall'], ease(k)); } },
+              tick: function (k) { return fade(expand(['gvpa', 'wall']), ease(k)); } },
             { delay: 700, ms: 2600,
               tick: function (k) { CONSTRUCT.forEach(function (n) { setPose(n, 1, 0, 1 - ease(k)); }); } }
           ];
@@ -612,8 +716,29 @@
       }
     };
 
+    /* Mol*'s temporal anti-aliasing adds a jittered sample per frame while the camera holds still. During an animation
+       the scene changes every frame, so it restarts every frame and only its first, unjittered sample is ever shown: the
+       same picture as without it, at a third more GPU time. Off while things move, back on the moment they stop, so the
+       still image refines exactly as before. */
+    var calm = 0, aaMode = null;
+    function hush(on) {
+      var c3 = plugin.canvas3d, ms = c3.props.multiSample;
+      if (on && calm++ === 0) {
+        aaMode = ms.mode;
+        c3.setProps({ multiSample: Object.assign({}, ms, { mode: 'off' }) });
+      } else if (!on && --calm === 0) {
+        c3.setProps({ multiSample: Object.assign({}, ms, { mode: aaMode }) });
+        c3.requestDraw();
+      }
+    }
+
     /** run tracks {delay, ms, start(), tick(k)} in one frame loop; false if overtaken */
     async function run(tracks, token) {
+      hush(true);
+      try { return await frames(tracks, token); } finally { hush(false); }
+    }
+
+    async function frames(tracks, token) {
       var t0 = performance.now(), done = false;
       while (!done) {
         if (token !== state.token) return false;
@@ -641,15 +766,15 @@
       if (!plugin) return;
       var token = ++state.token;
       var want = wanted(i);
-      await Promise.all(want.map(ensure));
+      await Promise.all(needed(i).map(ensure));
       if (token !== state.token) return;
       await fade(Object.keys(cur), 1);                                 // a fade cut short
       var plan = animate && !stillMotion() ? PLANS[STEPS[i].key] : null;
-      var enter = plan ? plan.enter : [], move = plan ? plan.move : [];
+      var enter = plan ? expand(plan.enter) : [], move = plan ? expand(plan.move) : [], keep = plan && plan.keep || [];
       if (enter.length) await fade(enter, 0);                          // invisible first, then they fade in
       if (token !== state.token) return;
       Object.keys(built).forEach(function (n) {
-        setVisible(n, want.indexOf(n) >= 0 && enter.indexOf(n) < 0);
+        setVisible(n, (want.indexOf(n) >= 0 && enter.indexOf(n) < 0) || keep.indexOf(n) >= 0);
         if (enter.indexOf(n) < 0 && move.indexOf(n) < 0) setRest(n, i);
       });
       if (ready) ready();
@@ -657,7 +782,10 @@
       try {
         if (plan && !(await run(plan.tracks(), token))) return;
       } finally { state.playing = false; }
-      Object.keys(built).forEach(function (n) { setRest(n, i); });
+      Object.keys(built).forEach(function (n) {
+        setVisible(n, want.indexOf(n) >= 0);                           // the pieces the chain took over from go
+        setRest(n, i);
+      });
     }
 
     /** the clash view: the block swings shut with PD-L1 on its domain, binder and PD-L1 turn into spheres; and back */
@@ -699,10 +827,10 @@
       state.busy = (async function () {
         var animate = !first && from >= 0 && i > from;
         state.revealing = animate && !stillMotion();   // parts built now stay hidden until they fly in
-        var needsBuild = wanted(i).some(function (n) { return !built[n]; });
+        var needsBuild = needed(i).some(function (n) { return !built[n]; });
         if (needsBuild && !first) veilBuild(true);
         try {
-          await Promise.all(wanted(i).map(ensure));
+          await Promise.all(needed(i).map(ensure));
         } finally { veilBuild(false); }
         if (state.step !== i) return;
         await apply(i, animate, function () { frame(STEPS[i], first ? 0 : 1100); });
