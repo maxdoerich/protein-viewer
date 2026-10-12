@@ -31,6 +31,7 @@ static/             what a browser loads; every viewer finds Mol* at ../molstar/
   molstar/          vendored Mol* 5.13 (MIT)
   gv-viewer/        gv-viewer.js/.css  (the base: layout, step buttons, card, legend, tools)
                     gv-assembly.cif, gv-shell.json, emd-14238.mrc, gv-viewer.json  (generated)
+                    gv-snapshot.js  (the "Save image" button, for every viewer: a 3840 px PNG of the current frame)
   latch-viewer/     latch-viewer.js/.css  + latch-assembly.cif, latch-viewer.json  (generated)
   latch-anim5/      latch-anim.js/.css    + latch-assembly.cif, latch-anim.json    (generated)
   latch-top10/      latch-top10.js/.css   + dNN_closed/open.pdb, designs.json      (generated)
@@ -82,6 +83,14 @@ others: polymer only (protein and nucleic acid; water and ligands are left out),
 the same text box / legend / buttons, all editable in developer mode. Edits are kept in `pv-config:open`: the text of
 a box belongs to the structure it was written for, a colour to the sequence it was applied to, a display mode to
 every structure. The last PDB ID is remembered and fetched again on the next visit; an uploaded file is not.
+
+## Save image
+
+The camera button among the round buttons saves the current frame as a PNG, 3840 px on its long side whatever the
+size on screen (same proportions as the figure, so the same framing). It holds the protein, the background, the text
+box, legend and notes; no buttons. Mol* draws the protein at that size; the boxes are rasterised from their computed
+styles, with the page's web font inlined. The text box is left out on a phone, where it sits under the figure, not on it.
+Add `static/gv-viewer/gv-snapshot.js` after the viewer script to get the button on another page.
 
 ## Put a viewer on another page
 

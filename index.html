@@ -58,9 +58,10 @@ document.getElementById('note').innerHTML = 'Background, data sources and honest
 cur.css.concat('dev/dev-mode.css').forEach(function (f) {
   var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'static/' + f; document.head.appendChild(l);
 });
-/* the viewer, then the developer mode (static/dev/dev-mode.js): it applies the edits made with it and, behind the
-   button above, offers the tools to make them. async = false keeps the two in this order. */
-[cur.js, 'dev/dev-mode.js'].forEach(function (f) {
+/* the viewer, its snapshot button (static/gv-viewer/gv-snapshot.js), then the developer mode (static/dev/dev-mode.js):
+   it applies the edits made with it and, behind the button above, offers the tools to make them. async = false keeps
+   the three in this order. */
+[cur.js, 'gv-viewer/gv-snapshot.js', 'dev/dev-mode.js'].forEach(function (f) {
   var s = document.createElement('script'); s.src = 'static/' + f; s.async = false; document.head.appendChild(s);
 });
 </script>

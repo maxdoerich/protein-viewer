@@ -146,6 +146,7 @@
   transition: background-color .2s ease, color .2s ease, transform .2s ease;
 }
 .gvv-tool .gvv-icon { width: 55%; height: 55%; }
+.gvv-tool:disabled { opacity: .5; cursor: progress; }
 .gvv-tool:hover { background: var(--gv-cyan); transform: scale(1.06); }
 .gvv-tool[aria-pressed="true"] { background: var(--gv-pine); color: var(--clr-on-dark); }
 
