@@ -54,6 +54,7 @@
     radial-gradient(ellipse 70% 60% at 50% 45%, var(--clr-body) 0 40%, transparent 100%),
     linear-gradient(180deg, var(--gv-cyan), var(--gv-cyan) 55%, var(--clr-body));
 }
+.gvv.is-clear .gvv-stage { background: none; }   /* the snapshot reads the stage's computed background, so it is clear too */
 /* the scene is drawn on a transparent canvas ABOVE the text boxes (card, legend, notes: z-index 0), so a box
    never covers the protein; buttons stay on top of it */
 .gvv-canvas { position: absolute; inset: 0; z-index: 1; touch-action: none; }

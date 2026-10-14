@@ -8,6 +8,8 @@
  *   - notes: boxes tied to a residue, placed in 3D, with a line to it;
  *   - which of the viewer's buttons are shown;
  *   - colour and display mode of the selection (click residues in 3D, or drag over the sequence view);
+ *   - the structures of the scene, in the open viewer (host.__pvObjects): select, align, rename, delete one, or make
+ *     a new one from the selection;
  *   - the sequence view, where the proteins are named;
  *   - export / import of the whole scene as one JSON file (see SCENE below).
  * Text is written in a small markup, see render(): "# " label, "## " title, "[pine] " legend key, **bold**, *italic*.
@@ -25,12 +27,13 @@
   try { Object.assign(cfg, JSON.parse(localStorage.getItem(STORE) || '{}')); } catch (e) { console.warn('[dev-mode]', e); }
   function save() { localStorage.setItem(STORE, JSON.stringify(cfg)); }
 
-  var dev = false, plugin = null, pv, S, V3;
+  var dev = false, plugin = null, pv, S, V3, M4;
+  var objs = host.__pvObjects;                          // the open viewer's list of structures; the others have none
 
   /* A scene file is one JSON object that rebuilds the viewer on any device: no path, no URL of ours.
        { format: SCENE, version: 1, viewer: <?v= key>, config: <cfg above>,
-         structure: { pdb } | { file, text | base64 }, camera: <Mol* snapshot> }
-     config is this file's; structure and camera come from the viewer if it has any of its own (host.__pvScene, the
+         structures: [{ name, pose, pdb | file + text | base64 }], camera: <Mol* snapshot> }
+     config is this file's; structures and camera come from the viewer if it has any of its own (host.__pvScene, the
      "open" viewer). The other viewers carry their structure in their folder, so their scene is the config alone. */
   var SCENE = 'protein-viewer-scene';
 
@@ -232,6 +235,13 @@
         '<button type="button" data-act="dropNote" data-el="drop" title="A deleted text box or legend comes back under Show" hidden>Delete</button></div>' +
     '</section>' +
     '<section><h3>Show</h3><div data-el="buttons"></div></section>' +
+    '<section data-el="objs" hidden><h3>Structures</h3>' +
+      '<p class="pv-help">Everything in the scene. Select one whole, align it to another or to the current selection, ' +
+        'rename it, delete it. Fetch or upload more above the viewer.</p>' +
+      '<div data-el="list"></div>' +
+      '<div class="pv-row"><button type="button" data-act="extract" ' +
+        'title="Copy the selected residues into a structure of their own">New structure from selection</button></div>' +
+    '</section>' +
     '<section><h3>Selection</h3>' +
       '<p class="pv-help" data-el="sel">The 3D model is not loaded yet.</p>' +
       '<div class="pv-row">' + Object.keys(PALETTE).map(function (n) {
@@ -321,6 +331,17 @@
     uncolour: function () { paint({ clear: true }); },
     mode: function (v) { setMode(v); },
     note: function () { addNote(); },
+    objSelect: function (id) {
+      var r = shown().filter(function (x) { return x.name === id; })[0];
+      if (r) plugin.managers.structure.selection.fromLoci('set', S.StructureElement.Loci.all(r.structure));
+    },
+    objDelete: function (id) { objs.remove(id); },
+    extract: function () {
+      if (!plugin) return;
+      objs.extract().then(function (n) {
+        if (!n) alert('Select residues first: click them in the viewer, or use Select on a structure.');
+      }).catch(function (e) { alert('Could not make a structure: ' + e.message); });
+    },
     unselect: function () { if (plugin) plugin.managers.structure.selection.clear(); },
     seq: function () { cfg.seq = !cfg.seq; drawSeq(); },
     export: function () {
@@ -354,7 +375,7 @@
     if (s.viewer && s.viewer !== k) {
       throw new Error('this scene was made in the "' + s.viewer + '" viewer. Open ?v=' + s.viewer + ' and import it there.');
     }
-    if (host.__pvScene && (s.structure || s.camera)) await host.__pvScene.set(s);
+    if (host.__pvScene && (s.structure || s.structures || s.camera)) await host.__pvScene.set(s);
     setConfig(s.config);
     save();
   }
@@ -394,6 +415,7 @@
   /** a name for a structure that survives a reload: its assembly id, or the file it was read from */
   function structKey(c) {
     var ref = c.transform.ref, cells = plugin.state.data.cells, p = c.transform.params;
+    if (pv.skey && pv.skey[ref]) return pv.skey[ref];     // the open viewer names its structures itself: files can share a name
     if (skeys[ref]) return skeys[ref];
     if (p && p.type && p.type.params && p.type.params.id) return (skeys[ref] = p.type.params.id);
     for (; c; c = c.transform.parent === c.transform.ref ? null : cells.get(c.transform.parent)) {
@@ -759,6 +781,151 @@
     preview();
   });
 
+  /* ---- structures (the open viewer): the list, and aligning one to another ---- */
+  function drawObjs() {
+    var l = objs.list(), box = $('list');
+    $('objs').hidden = false;
+    box.innerHTML = l.length ? '' : '<p class="pv-help">No structure yet.</p>';
+    l.forEach(function (o) {
+      var id = esc(o.id), row = el('div', 'pv-obj',
+        '<input class="pv-obj-name" aria-label="Structure name">' +
+        '<div class="pv-row"><button type="button" data-act="objSelect" data-v="' + id + '">Select</button>' +
+        '<select data-align="' + id + '" aria-label="Align to"><option value="">Align to…</option>' +
+          '<option value="sel">the selection</option>' + l.filter(function (x) { return x.id !== o.id; }).map(function (x) {
+            return '<option value="o:' + esc(x.id) + '">' + esc(x.name) + '</option>';
+          }).join('') + '</select>' +
+        '<button type="button" data-act="objDelete" data-v="' + id + '">Delete</button></div>');
+      row.firstChild.value = o.name;
+      row.firstChild.addEventListener('input', function () {
+        objs.rename(o.id, this.value);
+        Array.prototype.forEach.call(box.querySelectorAll('option'), function (op) {   // the other rows name it too
+          if (op.value === 'o:' + o.id) op.textContent = row.firstChild.value;
+        });
+      });
+      box.appendChild(row);
+    });
+  }
+  $('list').addEventListener('change', function (e) {
+    var s = e.target, to = s.value;
+    if (!to || !s.hasAttribute('data-align')) return;
+    s.value = '';
+    align(s.getAttribute('data-align'), to).catch(function (err) { alert('Could not align: ' + err.message); });
+  });
+
+  /** the residues of a shown structure, with its pose on: their one-letter codes and the position of each one's CA
+      (C4' in nucleic acids; its first atom otherwise). keep: unit id -> the residues (as numbered in table()) to take */
+  function trace(r, keep) {
+    var P = r.cell.obj.data.repr.state.transform, out = { seq: '', xyz: [] };
+    r.structure.units.forEach(function (u) {
+      var only = keep && keep.get(u.id);
+      if (u.kind !== 0 || (keep && !only)) return;
+      var t = table(u), names = u.model.atomicHierarchy.atoms.label_atom_id;
+      for (var i = 0; i < t.res.length; i++) {
+        if (only && !only.has(i)) continue;
+        var k = t.start[i];
+        for (var j = t.start[i]; j < t.start[i + 1]; j++) {
+          var n = names.value(u.elements[j]);
+          if (n === 'CA' || n === "C4'") { k = j; break; }
+        }
+        out.seq += t.seq[i];
+        out.xyz.push(V3.transformMat4(V3(), u.conformation.position(u.elements[k], V3()), P));
+      }
+    });
+    return out;
+  }
+  /** Smith-Waterman on two one-letter sequences: [[i, j], …] of the residues it pairs up. ponytail: a matrix of
+      n * m bytes, so a few thousand residues each is the end of it; take a chain, or the selection, first */
+  function match(a, b) {
+    if (a === b) return Array.from(a, function (c, i) { return [i, i]; });          // the same construct, another pose
+    var n = a.length, m = b.length, W = m + 1;
+    if (n * m > 4e7) throw new Error('too many residues to pair up: select a chain of each first');
+    var tb = new Uint8Array((n + 1) * W), up = new Int32Array(W), now = new Int32Array(W), best = 0, bi = 0, bj = 0;
+    for (var i = 1; i <= n; i++) {
+      for (var j = 1; j <= m; j++) {
+        var d = up[j - 1] + (a[i - 1] === b[j - 1] ? 2 : -1), v = up[j] - 2, h = now[j - 1] - 2, s = Math.max(0, d, v, h);
+        now[j] = s;
+        tb[i * W + j] = s === 0 ? 0 : s === d ? 1 : s === v ? 2 : 3;                // 1 pair, 2 skip in a, 3 skip in b
+        if (s > best) { best = s; bi = i; bj = j; }
+      }
+      var swap = up; up = now; now = swap;
+    }
+    var out = [];
+    for (var x = bi, y = bj, k; (k = tb[x * W + y]);) {
+      if (k === 1) { out.push([x - 1, y - 1]); x--; y--; } else if (k === 2) x--; else y--;
+    }
+    return out.reverse();
+  }
+  /** the rigid motion (a Mat4) that takes points a onto points b with the least squared distance: Horn's method,
+      the quaternion is the top eigenvector of a 4 x 4 matrix of the correlations, found by Jacobi sweeps */
+  function superpose(a, b) {
+    var n = a.length, ca = V3(), cb = V3(), S = [0, 0, 0, 0, 0, 0, 0, 0, 0], i, j, k;
+    for (i = 0; i < n; i++) { V3.add(ca, ca, a[i]); V3.add(cb, cb, b[i]); }
+    V3.scale(ca, ca, 1 / n); V3.scale(cb, cb, 1 / n);
+    for (i = 0; i < n; i++) {
+      for (j = 0; j < 3; j++) for (k = 0; k < 3; k++) S[3 * j + k] += (a[i][j] - ca[j]) * (b[i][k] - cb[k]);
+    }
+    var N = [[S[0] + S[4] + S[8], S[5] - S[7], S[6] - S[2], S[1] - S[3]],
+             [S[5] - S[7], S[0] - S[4] - S[8], S[1] + S[3], S[6] + S[2]],
+             [S[6] - S[2], S[1] + S[3], -S[0] + S[4] - S[8], S[5] + S[7]],
+             [S[1] - S[3], S[6] + S[2], S[5] + S[7], -S[0] - S[4] + S[8]]];
+    var Q = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+    for (var sweep = 0; sweep < 50; sweep++) {
+      var moved = false;
+      for (var p = 0; p < 3; p++) for (var q = p + 1; q < 4; q++) {
+        if (Math.abs(N[p][q]) < 1e-12) continue;
+        moved = true;
+        var th = (N[q][q] - N[p][p]) / (2 * N[p][q]), t = (th < 0 ? -1 : 1) / (Math.abs(th) + Math.sqrt(th * th + 1));
+        var c = 1 / Math.sqrt(t * t + 1), s = t * c;
+        for (k = 0; k < 4; k++) {                                                   // N <- J' N J, Q <- Q J
+          var x = N[k][p], y = N[k][q];
+          N[k][p] = c * x - s * y; N[k][q] = s * x + c * y;
+        }
+        for (k = 0; k < 4; k++) {
+          var x2 = N[p][k], y2 = N[q][k];
+          N[p][k] = c * x2 - s * y2; N[q][k] = s * x2 + c * y2;
+          var x3 = Q[k][p], y3 = Q[k][q];
+          Q[k][p] = c * x3 - s * y3; Q[k][q] = s * x3 + c * y3;
+        }
+      }
+      if (!moved) break;
+    }
+    var top = 0;
+    for (i = 1; i < 4; i++) if (N[i][i] > N[top][top]) top = i;
+    var w = Q[0][top], qx = Q[1][top], qy = Q[2][top], qz = Q[3][top];
+    var R = [[1 - 2 * (qy * qy + qz * qz), 2 * (qx * qy - w * qz), 2 * (qx * qz + w * qy)],
+             [2 * (qx * qy + w * qz), 1 - 2 * (qx * qx + qz * qz), 2 * (qy * qz - w * qx)],
+             [2 * (qx * qz - w * qy), 2 * (qy * qz + w * qx), 1 - 2 * (qx * qx + qy * qy)]];
+    var m = M4.identity();
+    for (i = 0; i < 3; i++) {
+      for (j = 0; j < 3; j++) m[4 * j + i] = R[i][j];
+      m[12 + i] = cb[i] - (R[i][0] * ca[0] + R[i][1] * ca[1] + R[i][2] * ca[2]);
+    }
+    return m;
+  }
+  /** move structure `id` onto another ("o:<id>") or onto the selected residues ("sel"): its residues are paired with
+      theirs by sequence, then the pose is the superposition of the pairs */
+  async function align(id, to) {
+    var me = shown().filter(function (r) { return r.name === id; })[0];
+    if (!me) throw new Error('that structure is not shown');
+    var target = { seq: '', xyz: [] };
+    shown().forEach(function (r) {
+      if (r === me || (to !== 'sel' && 'o:' + r.name !== to)) return;
+      var keep = null;
+      if (to === 'sel') {                                 // only what is selected of it
+        keep = new Map();
+        sel.at.forEach(function (a) { if (a.s === r.skey) keep.set(a.u, new Set(a.r)); });
+        if (!keep.size) return;
+      }
+      var t = trace(r, keep);
+      target.seq += t.seq; target.xyz = target.xyz.concat(t.xyz);
+    });
+    if (!target.seq) throw new Error(to === 'sel' ? 'select residues of another structure first.' : 'there is nothing to align to.');
+    var mine = trace(me), pairs = match(mine.seq, target.seq);
+    if (pairs.length < 3) throw new Error('fewer than 3 residues of the two match.');
+    var m = superpose(pairs.map(function (p) { return mine.xyz[p[0]]; }), pairs.map(function (p) { return target.xyz[p[1]]; }));
+    objs.pose(id, M4.mul(M4(), m, me.cell.obj.data.repr.state.transform));
+  }
+
   /* ---- notes: a box at a 3D point (its residue + an offset), behind the scene like every box; the line to its
      residue is drawn above the scene, or it would end at the protein's outline ----
      { id, s, u, a: atom, off: [x, y, z] Å, text, step: the step it belongs to (null: every step), w, h px } */
@@ -844,6 +1011,7 @@
 
   function ready() {
     pv = host.__pv; plugin = pv.plugin; S = pv.lib.structure; V3 = pv.lib.math.LinearAlgebra.Vec3;
+    M4 = pv.lib.math.LinearAlgebra.Mat4;
     var ev = plugin.state.data.events;
     ev.cell.stateUpdated.subscribe(touch);               // a part was shown or hidden
     ev.object.created.subscribe(touch);                  // ... or built
@@ -856,6 +1024,7 @@
     setDev(dev);
     sync();
   }
+  if (objs) { host.addEventListener('pv:objects', drawObjs); drawObjs(); }
   setDev(localStorage.getItem('pv-dev') === '1');
   if (host.__pv) ready(); else host.addEventListener('pv:ready', ready);
 })();

@@ -111,6 +111,22 @@
   cursor: nwse-resize; pointer-events: auto; touch-action: none;
 }
 
+/* the list of structures (open viewer) */
+.pv-obj { display: flex; flex-direction: column; gap: var(--space-1); padding-top: var(--space-2); border-top: 1px solid var(--clr-frosted-blue); }
+.pv-obj-name {
+  padding: 0 var(--space-1);
+  border: 0; border-bottom: 1px solid var(--clr-frosted-blue);
+  font: var(--fw-bold) var(--fs-body) var(--font-family-primary);
+  color: var(--clr-ink);
+}
+.pv-panel select {
+  min-width: 0;
+  padding: var(--space-1);
+  border: 1px solid var(--clr-pine-blue); border-radius: var(--radius-box);
+  background: var(--clr-body);
+  font: inherit; color: var(--clr-pine-blue);
+}
+
 /* the sequence view, under the viewer */
 .pv-seq { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-3); }
 .pv-seq[hidden] { display: none; }

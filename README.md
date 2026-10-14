@@ -61,12 +61,17 @@ page shows the edited viewer and nothing else. **Export scene** / **Import scene
   molecular surface, spheres, or cartoon + surface: the cartoon with a see-through surface over it). With nothing selected it applies to everything shown. A drag over the sequence means
   every copy of that protein; a click in the scene means that one copy.
 - **Sequence view**: one row per protein on screen, with a name field.
+- **Structures** (open viewer): the list of what is in the scene. Per structure: *Select* (the whole of it), *Align to…*
+  (another structure, or the current selection: residues are paired by sequence, then the structure is moved by the
+  least-squares superposition of their CA atoms), a name field, *Delete*. *New structure from selection* copies the
+  selected residues into a structure of their own, in place, so it can be aligned, painted or deleted separately.
 
 pLDDT is read from the B-factor column. **None of the bundled files has it there**: the prep scripts use that column
 for hydropathy (`gv-viewer`) or part / site flags (the latch viewers), so the scheme is only right for a model whose
 B-factors are pLDDT.
 
-A viewer takes part by setting `host.__pv = { plugin, lib, built }` and firing `pv:ready` (see the end of each
+A viewer takes part by setting `host.__pv = { plugin, lib, built }` (the open viewer adds `skey`, the unique name of each
+structure, and `host.__pvObjects` for the list above) and firing `pv:ready` (see the end of each
 `boot()`); `index.html` loads `dev/dev-mode.css` and `dev/dev-mode.js` after it and marks the mount with `data-pv-key`.
 
 ## Scene files
@@ -76,27 +81,31 @@ device (no server, no path):
 
 ```json
 { "format": "protein-viewer-scene", "version": 1, "viewer": "open",
-  "structure": { "pdb": "1CRN" },                       // or { "file": "x.pdb", "text": "…" } / { "file": "x.bcif", "base64": "…" }
+  "structures": [                                       // open viewer: every structure of the scene, with its name and its pose (4×4)
+    { "name": "1CRN", "pose": [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1], "pdb": "1CRN" }
+  ],                                                    // or "file": "x.pdb", "text": "…" / "file": "x.bcif", "base64": "…" 
   "camera":    { "position": [...], "target": [...], … },
   "config":    { "box": {…}, "text": {…}, "hide": [], "paint": [], "mode": {}, "notes": [], "names": {}, "seq": false } }
 ```
 
 - `config` is everything edited in developer mode: text and legend (text, position, size), notes, colours, display
   modes, hidden buttons, protein names. Every step's edits are in it; which step is on screen is not.
-- `structure` and `camera` exist for the **open** viewer only. An uploaded file travels *inside* the JSON (text, or
-  base64 for `.bcif`), so the file is as big as the structure. The other viewers keep their structure in their folder,
+- `structures` and `camera` exist for the **open** viewer only. An uploaded file (or a structure made from a
+  selection) travels *inside* the JSON (text, or base64 for `.bcif`), so the file is as big as the structures.
+  A file with a single `"structure": {…}`, as written before there were several, still imports. The other viewers keep their structure in their folder,
   so their scene is the config alone.
 - A scene imports into the viewer it was made in (`viewer`); anywhere else it says which `?v=` to open.
 - A config exported before scene files existed (no `format`) still imports.
 
 ## Open a structure
 
-`?v=open`: type a PDB ID and **Fetch**, or **Upload file**. The structure replaces the one shown, and is drawn like the
-others: polymer only (protein and nucleic acid; water and ligands are left out), cartoon, secondary-structure colours,
+`?v=open`: type a PDB ID and **Fetch**, or **Upload file** (several at once are fine). Each one is *added* to the scene
+(delete one from developer mode's list of structures), and drawn like the others: polymer only (protein and nucleic acid; water and ligands are left out), cartoon, secondary-structure colours,
 the same text box / legend / buttons, all editable in developer mode. Edits are kept in `pv-config:open`: the text of
-a box belongs to the structure it was written for, a colour to the sequence it was applied to, a display mode to
-every structure. The last PDB ID is remembered and fetched again on the next visit; an uploaded file is not (export a
-scene to keep it: the file goes inside).
+a box belongs to the structure it was written for (the one added last), a colour to the sequence it was applied to
+(or to the residues clicked, in that structure), a display mode to the structure it was applied to. The PDB IDs
+fetched (with their names and poses) are remembered and fetched again on the next visit; an uploaded file or a
+structure made from a selection is not (export a scene to keep them: the files go inside).
 
 ## Save image
 

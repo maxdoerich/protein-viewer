@@ -106,7 +106,8 @@
 
     var out = document.createElement('canvas'), ctx = out.getContext('2d');
     out.width = W; out.height = H;
-    ctx.drawImage(await raster(host, stage, BOXES, true, W, H), 0, 0);
+    var back = await raster(host, stage, BOXES, true, W, H);       // null: transparent background and no boxes
+    if (back) ctx.drawImage(back, 0, 0);
     ctx.drawImage(shot.canvas, 0, 0, W, H);
     var lines = await raster(host, stage, '.pv-leaders', false, W, H);       // developer mode's note lines
     if (lines) ctx.drawImage(lines, 0, 0);
@@ -119,9 +120,31 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
   }
 
+  var CLEAR_ICON = '<svg class="gvv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" ' +
+                   'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+                   '<rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3" /><path d="M4 12h16M12 4v16" opacity=".4" /></svg>';
+
+  /** toggles .is-clear on the viewer: the CSS drops the stage background, and the snapshot (which reads it) follows */
+  function mountClear(host, tools) {
+    if (tools.querySelector('[data-tool="clear"]')) return;
+    var b = document.createElement('button');
+    b.className = 'gvv-tool';
+    b.type = 'button';
+    b.innerHTML = CLEAR_ICON;
+    b.setAttribute('data-tool', 'clear');
+    b.setAttribute('aria-label', 'Transparent background');
+    b.setAttribute('aria-pressed', 'false');
+    b.title = 'Transparent background (for the saved image)';
+    b.addEventListener('click', function () {
+      b.setAttribute('aria-pressed', String(host.classList.toggle('is-clear')));
+    });
+    tools.insertBefore(b, tools.querySelector('[data-tool="expand"]'));
+  }
+
   function mount(host) {
     var tools = host.querySelector('.gvv-tools');
     if (!tools || tools.querySelector('[data-tool="snapshot"]')) return;
+    mountClear(host, tools);
     var b = document.createElement('button');
     b.className = 'gvv-tool';
     b.type = 'button';

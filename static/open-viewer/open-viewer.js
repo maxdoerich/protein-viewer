@@ -3,10 +3,12 @@
  * colours, and the developer mode (static/dev/dev-mode.js), whose edits are kept per structure.
  *
  * Mounted onto every [data-open-viewer] element. Mol* 5.13 is vendored in ../molstar/. Only the polymer is drawn
- * (protein and nucleic acid as cartoon); water and ligands are left out. The last PDB ID fetched is remembered and
- * fetched again on the next visit, so the developer mode's edits (text, notes, colours) have their structure back;
- * an uploaded file is not kept. For a scene file (developer mode's Export / Import) the structure travels with it: the
- * PDB ID, or the uploaded file's own content, never a path. See host.__pvScene at the end of mount().
+ * (protein and nucleic acid as cartoon); water and ligands are left out. Every fetch or upload adds a structure to the
+ * scene; developer mode lists them (host.__pvObjects, at the end of mount()) to select, align, rename, delete, or
+ * copy a selection into a structure of its own. The PDB IDs fetched are remembered and fetched again on the next
+ * visit, so the developer mode's edits (text, notes, colours) have their structures back; an uploaded file is not kept.
+ * For a scene file (developer mode's Export / Import) the structures travel with it: the PDB ID, or the file's own
+ * content, never a path. See host.__pvScene at the end of mount().
  */
 (function () {
   'use strict';
@@ -90,7 +92,7 @@
     var bar = el('form', 'ov-bar',
       '<input class="ov-id" placeholder="PDB ID, e.g. 1CRN" maxlength="4" size="10" autocomplete="off" spellcheck="false" aria-label="PDB ID">' +
       '<button class="ov-btn ov-btn--go">Fetch</button>' +
-      '<label class="ov-btn">Upload file<input type="file" accept=".pdb,.ent,.cif,.mmcif,.bcif" hidden></label>' +
+      '<label class="ov-btn">Upload file<input type="file" accept=".pdb,.ent,.cif,.mmcif,.bcif" multiple hidden></label>' +
       '<span class="ov-msg" role="status"></span>');
     var stage = el('div', 'gvv-stage');
     var canvas = el('div', 'gvv-canvas');
@@ -151,8 +153,8 @@
     }
     function paintEmpty() {
       paint('Open a structure', 'No structure yet',
-        'Enter a PDB ID above and press Fetch, or upload a .pdb or .cif file. It is drawn as a cartoon in these colours; ' +
-        'turn on Developer mode to change its text, colours and display.', LEGEND);
+        'Enter a PDB ID above and press Fetch, or upload a .pdb or .cif file; every one adds to the scene. They are drawn ' +
+        'as cartoons in these colours; turn on Developer mode to align them, change their text, colours and display.', LEGEND);
     }
     function say(t, err) { msg.textContent = t; msg.classList.toggle('is-error', !!err); }
     paintEmpty();
@@ -165,8 +167,7 @@
     if (!webglOk()) return fail('This 3D figure needs WebGL, which this browser has switched off.');
 
     /* ---- Mol*, set up as the other viewers do ---- */
-    var viewer, plugin, lib, COLORS, built = {}, focus = null;
-    var current = null;                                       // what is shown, as a scene file keeps it: { pdb } | { file, text | base64 }
+    var viewer, plugin, lib, COLORS, built = {}, skey = {}, focus = null;
 
     var booted, inView = true;
     /** Mol* is fetched (5 MB) on first need, as in the other viewers: when the figure nears the viewport */
@@ -193,7 +194,7 @@
       styleCanvas();
       veil.hidden = true;
       host.classList.add('is-ready');
-      host.__pv = { plugin: plugin, lib: lib, built: built };       // what static/dev/dev-mode.js works on
+      host.__pv = { plugin: plugin, lib: lib, built: built, skey: skey };   // what static/dev/dev-mode.js works on
       host.dispatchEvent(new CustomEvent('pv:ready'));
       if (!inView) applyView();
 
@@ -266,8 +267,12 @@
         animate: on ? { name: 'spin', params: { speed: 0.25, axis: [0, -1, 0] } } : { name: 'off', params: {} } }) });
     }
 
-    /* ---- one structure at a time: the polymer as cartoon, coloured by secondary structure as GvpA is ---- */
+    /* ---- the structures in the scene, in the order they were added: each the polymer as cartoon, coloured by secondary
+       structure as GvpA is. { id, name, what, title, text, desc, data, root, poly, repr, sphere }: id is what dev-mode
+       keeps its edits under (a file name, made unique), name what its list shows and the user may change, desc how a
+       scene file keeps it, data the cell to delete to remove it. built[id] is its cartoon, skey[root | poly] its id. ---- */
     var LOOK = { celShaded: true, material: { metalness: 0, roughness: 1, bumpiness: 0 } };
+    var objs = [], restoring = false;
     function cartoon() {
       var c = COLORS, ss = { alphaHelix: c['--gv-helix'], threeTenHelix: c['--gv-helix'], piHelix: c['--gv-helix'],
         betaStrand: c['--gv-strand'], betaTurn: c['--gv-loop'], coil: c['--gv-loop'], bend: c['--gv-loop'],
@@ -275,10 +280,53 @@
       return { type: 'cartoon', typeParams: Object.assign({ sizeFactor: 0.32 }, LOOK),
         color: 'secondary-structure', colorParams: { saturation: 0, lightness: 0, colors: { name: 'custom', params: ss } } };
     }
+    function byId(id) { return objs.filter(function (o) { return o.id === id; })[0]; }
+    function unique(id) {
+      for (var k = id, n = 2; byId(k); n++) k = id + '#' + n;
+      return k;
+    }
+    function forget(map) { Object.keys(map).forEach(function (k) { delete map[k]; }); }
+    function reprOf(o) { return plugin.state.data.cells.get(o.repr).obj.data.repr; }
+    /** where a structure sits: the representation's matrix, as the other viewers move parts (dev-mode follows it) */
+    function poseOf(o) { return reprOf(o).state.transform; }
+    function setPose(o, m) { var r = reprOf(o); r.setState({ transform: m }); plugin.canvas3d.update(r); }
+    function validPose(p) { return Array.isArray(p) && p.length === 16 && p.every(Number.isFinite) ? p : undefined; }
 
-    /** `source` gives { data, format } once Mol* is up: a download cell, or the file's own bytes; `desc` is `current`
-        if it works. Resolves to whether it did (a failure is shown on the page, not thrown). */
-    async function show(what, source, desc) {
+    /** the PDB IDs, to fetch again on the next visit. ponytail: an uploaded or copied structure is not kept, only
+        scene files carry those */
+    function save() {
+      if (restoring) return;
+      try {
+        localStorage.setItem(LAST, JSON.stringify(objs.filter(function (o) { return o.desc.pdb; }).map(function (o) {
+          return { pdb: o.desc.pdb, name: o.name, pose: Array.from(poseOf(o)) };
+        })));
+      } catch (e) { /* private window: no memory, no harm */ }
+    }
+    /** the text box says what was added last */
+    function paintLast() {
+      var o = objs[objs.length - 1];
+      if (o) paint(o.what, o.title, o.text, LEGEND); else paintEmpty();
+    }
+    /** the camera takes in every structure where it sits now; the memory and dev-mode's list follow */
+    function changed(ms) {
+      focus = null;
+      if (objs.length) {
+        var V = lib.math.LinearAlgebra.Vec3, c = V(), cs = objs.map(function (o) {
+          return { c: V.transformMat4(V(), o.sphere.center, poseOf(o)), r: o.sphere.radius };
+        });
+        cs.forEach(function (s) { V.add(c, c, s.c); });
+        V.scale(c, c, 1 / cs.length);
+        focus = { center: c, radius: Math.max.apply(null, cs.map(function (s) { return V.distance(c, s.c) + s.r; }).concat(5)) };
+      }
+      frame(ms);
+      save();
+      host.dispatchEvent(new CustomEvent('pv:objects'));
+    }
+
+    /** `source` gives { data, format } once Mol* is up: a download cell, or the file's own bytes. What it reads is added
+        to the scene. `desc` is how a scene file keeps it; `extra` is { key: the file name, name, pose }. Resolves to
+        whether it worked (a failure is shown on the page, not thrown). */
+    async function show(what, source, desc, extra) {
       if (show.busy) return false;
       show.busy = true;
       say('Loading ' + what + '…');
@@ -286,32 +334,35 @@
       veil.classList.add('is-soft');
       veil.hidden = false;
       host.classList.add('is-busy');
+      var made;
       try {
         await boot();
-        await plugin.clear();
-        current = null;
-        Object.keys(built).forEach(function (k) { delete built[k]; });
-        focus = null;
         var s = await source();
+        made = s.data.ref;
         var traj = await plugin.builders.structure.parseTrajectory(s.data, s.format);
         var model = await plugin.builders.structure.createModel(traj);
         var struct = await plugin.builders.structure.createStructure(model);
         var poly = await plugin.builders.structure.tryCreateComponentStatic(struct, 'polymer');
         if (!poly) throw new Error('no protein or nucleic-acid chains in ' + what);
-        built.polymer = (await plugin.builders.structure.representation.addRepresentation(poly, cartoon())).ref;
-        var sphere = poly.data.boundary.sphere;
-        focus = { center: sphere.center, radius: Math.max(sphere.radius, 5) };
-        frame(0);
-        var m = struct.data.model;
-        paint(what, m.entryId || m.label || what,
-          struct.data.polymerResidueCount + ' residues, ' + struct.data.elementCount + ' atoms. Drag to turn it.', LEGEND);
-        say(what);
-        current = desc;
+        var repr = await plugin.builders.structure.representation.addRepresentation(poly, cartoon());
+        var m = struct.data.model, sphere = poly.data.boundary.sphere;
+        var o = { id: unique(extra.key), what: what, title: m.entryId || m.label || what, desc: desc, data: made,
+                  root: struct.ref, poly: poly.ref, repr: repr.ref,
+                  sphere: { center: sphere.center, radius: Math.max(sphere.radius, 5) },
+                  text: struct.data.polymerResidueCount + ' residues, ' + struct.data.elementCount + ' atoms. Drag to turn it.' };
+        o.name = extra.name || desc.pdb || extra.key;
+        built[o.id] = o.repr; skey[o.root] = skey[o.poly] = o.id;
+        if (extra.pose) setPose(o, extra.pose);
+        objs.push(o);
+        paintLast();
+        changed(0);
+        say(objs.length > 1 ? what + ' added: ' + objs.length + ' structures' : what);
         return true;
       } catch (e) {
         console.error('[open-viewer]', e);
         say('Could not load ' + what + '. Check the ID, or that the file is a PDB / mmCIF file.', true);
-        paintEmpty();
+        if (made) plugin.build().delete(made).commit().catch(function () {});     // what it had built before it failed
+        paintLast();
         return false;
       } finally {
         show.busy = false;
@@ -320,54 +371,113 @@
       }
     }
 
-    function fetchId(id) {
+    function fetchId(id, extra) {
       id = id.toLowerCase();
       return show('PDB ' + id.toUpperCase(), async function () {
         var data = await plugin.builders.data.download(
           { url: 'https://www.ebi.ac.uk/pdbe/entry-files/download/' + id + '.bcif', isBinary: true, label: id.toUpperCase() },
           { state: { isGhost: true } });
-        try { localStorage.setItem(LAST, id); } catch (e) { /* private window: no memory, no harm */ }
         return { data: data, format: 'mmcif' };
-      }, { pdb: id.toUpperCase() });
+      }, { pdb: id.toUpperCase() }, Object.assign({ key: id + '.bcif' }, extra));
     }
-    /** a file's name and content: text, or bytes for .bcif. The content is kept (in `current`) for a scene file */
-    function openData(name, data) {
+    /** a file's name and content: text, or bytes for .bcif. The content is kept in the structure's desc, for a scene file */
+    function openData(name, data, extra) {
       var ext = name.split('.').pop().toLowerCase(), bin = typeof data !== 'string';
       return show(name, async function () {
         if (!FORMAT[ext]) throw new Error('unsupported extension .' + ext);
         return { data: await plugin.builders.data.rawData({ data: data, label: name }, { state: { isGhost: true } }),
                  format: FORMAT[ext] };
-      }, bin ? { file: name, base64: b64(data) } : { file: name, text: data });
+      }, bin ? { file: name, base64: b64(data) } : { file: name, text: data }, Object.assign({ key: name }, extra));
     }
     async function openFile(f) {
-      openData(f.name, /\.bcif$/i.test(f.name) ? new Uint8Array(await f.arrayBuffer()) : await f.text());
+      return openData(f.name, /\.bcif$/i.test(f.name) ? new Uint8Array(await f.arrayBuffer()) : await f.text());
     }
 
-    /* ---- scene file (developer mode: Export / Import): the structure and the camera; the edits are dev-mode's ---- */
+    async function remove(id) {
+      var o = byId(id);
+      if (!o || show.busy) return;
+      show.busy = true;
+      try {
+        objs.splice(objs.indexOf(o), 1);
+        delete built[o.id]; delete skey[o.root]; delete skey[o.poly];
+        await plugin.build().delete(o.data).commit();     // the whole chain, down to its cartoon (and any surface over it)
+        paintLast();
+        changed(700);
+      } finally { show.busy = false; }
+    }
+    /** the selected residues, copied into a structure of their own, one per structure they lie in. They are written
+        out as mmCIF and read back in, so the copy is an uploaded file in every way: it can be moved, painted, and
+        travels in a scene file. It starts where its source sits. Resolves to how many were made. */
+    async function extract() {
+      if (!plugin) return 0;
+      var L = lib.structure.StructureElement.Loci, picks = [], n = 0;
+      plugin.managers.structure.selection.entries.forEach(function (e, ref) {
+        var src = objs.filter(function (o) { return o.root === ref; })[0];
+        if (src && !L.isEmpty(e.selection)) picks.push([src, L.toStructure(e.selection)]);
+      });
+      for (var i = 0; i < picks.length; i++) {
+        var src = picks[i][0], name = src.name + ' selection';
+        var text = lib.structure.to_mmCIF('selection', picks[i][1], false);
+        if (await openData(name + '.cif', text, { name: name, pose: Array.from(poseOf(src)) })) n++;
+      }
+      return n;
+    }
+
+    /* ---- scene file (developer mode: Export / Import): the structures and the camera; the edits are dev-mode's.
+       { structures: [{ name, pose: Mat4, pdb | file + text | base64 }], camera }. A scene of one structure, from before
+       there were several ({ structure: { pdb | file … } }), still imports. ---- */
     var plain = function (k, v) { return ArrayBuffer.isView(v) ? Array.from(v) : v; };
+    function load(d) {
+      var extra = { name: typeof d.name === 'string' ? d.name : undefined, pose: validPose(d.pose) };
+      if (d.pdb) {
+        if (!PDB_ID.test(d.pdb)) throw new Error('"' + d.pdb + '" is not a PDB ID');
+        idInput.value = String(d.pdb).toUpperCase();
+        return fetchId(d.pdb, extra);
+      }
+      if (d.file && (d.text != null || d.base64)) {
+        return openData(String(d.file).replace(/^.*[\\/]/, ''), d.base64 ? unb64(d.base64) : String(d.text), extra);
+      }
+      throw new Error('the scene has a structure this viewer cannot read');
+    }
     host.__pvScene = {
       get: function () {
         var cam = plugin && focus && plugin.canvas3d.camera.getSnapshot();
-        return { structure: current || undefined, camera: cam ? JSON.parse(JSON.stringify(cam, plain)) : undefined };
+        return {
+          structures: objs.length ? objs.map(function (o) {
+            return Object.assign({ name: o.name, pose: Array.from(poseOf(o)) }, o.desc);
+          }) : undefined,
+          camera: cam ? JSON.parse(JSON.stringify(cam, plain)) : undefined
+        };
       },
       set: async function (s) {
-        var d = s.structure;
-        if (d) {
-          var ok;
-          if (d.pdb) {
-            if (!PDB_ID.test(d.pdb)) throw new Error('"' + d.pdb + '" is not a PDB ID');
-            idInput.value = String(d.pdb).toUpperCase();
-            ok = await fetchId(d.pdb);
-          } else if (d.file && (d.text != null || d.base64)) {
-            ok = await openData(String(d.file).replace(/^.*[\\/]/, ''), d.base64 ? unb64(d.base64) : String(d.text));
-          } else throw new Error('the scene has a structure this viewer cannot read');
-          if (!ok) throw new Error('the structure of this scene could not be loaded');
+        var list = s.structures || (s.structure && [s.structure]);
+        if (list) {
+          if (!Array.isArray(list)) throw new Error('the scene has no list of structures');
+          await boot();
+          await plugin.clear();
+          objs = []; forget(built); forget(skey);
+          restoring = true;                                   // one save at the end, not one per structure
+          try {
+            for (var i = 0; i < list.length; i++) {
+              if (!list[i] || typeof list[i] !== 'object') throw new Error('the scene has a structure this viewer cannot read');
+              if (!(await load(list[i]))) throw new Error('a structure of this scene could not be loaded');
+            }
+          } finally { restoring = false; save(); }
         }
         if (s.camera && plugin && focus) {
           plugin.canvas3d.camera.setState(s.camera, 0);
           plugin.canvas3d.requestDraw();
         }
       }
+    };
+
+    /* ---- what developer mode's list of structures works with (static/dev/dev-mode.js); pv:objects says it changed ---- */
+    host.__pvObjects = {
+      list: function () { return objs.map(function (o) { return { id: o.id, name: o.name }; }); },
+      rename: function (id, name) { var o = byId(id); if (o) { o.name = name; save(); } },
+      remove: remove,
+      extract: extract,
+      pose: function (id, m) { var o = byId(id); if (o) { setPose(o, m); changed(700); } }
     };
 
     bar.addEventListener('submit', function (e) {
@@ -377,18 +487,30 @@
       fetchId(v);
     });
     fileInput.addEventListener('change', function () {
-      var f = fileInput.files[0];
+      var fs = Array.from(fileInput.files);
       fileInput.value = '';                                   // so picking the same file again still fires
-      if (f) openFile(f);
+      fs.reduce(function (p, f) { return p.then(function () { return openFile(f); }); }, Promise.resolve());
     });
 
-    var last = null, started = false;
-    try { last = localStorage.getItem(LAST); } catch (e) { /* none */ }
-    if (last && PDB_ID.test(last)) idInput.value = last.toUpperCase();
+    var last = [], started = false;
+    try {                                                     // a list; before there were several, one ID
+      var mem = localStorage.getItem(LAST);
+      last = !mem ? [] : mem.charAt(0) === '[' ? JSON.parse(mem) : [{ pdb: mem }];
+    } catch (e) { /* none */ }
+    last = Array.isArray(last) ? last.filter(function (l) { return l && PDB_ID.test(l.pdb); }) : [];
+    if (last.length) idInput.value = String(last[last.length - 1].pdb).toUpperCase();
     function start() {
       if (started) return;
       started = true;
-      boot().then(function () { if (last && PDB_ID.test(last)) fetchId(last); }, function (err) {
+      boot().then(async function () {
+        var ok = true;
+        restoring = true;                                     // one failed fetch must not drop the others from the memory
+        for (var i = 0; i < last.length; i++) {
+          ok = (await fetchId(last[i].pdb, { name: last[i].name, pose: validPose(last[i].pose) })) && ok;
+        }
+        restoring = false;
+        if (ok) save();
+      }, function (err) {
         console.error('[open-viewer]', err);
         fail('The 3D viewer could not be loaded. Reload the page to try again.');
       });
