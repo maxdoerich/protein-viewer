@@ -17,6 +17,12 @@ Huber et al. (Zenodo 10.5281/zenodo.6458345), and from a GvpC structure predicte
 under the [AlphaFold Server Output Terms of Use](https://alphafoldserver.com/output-terms): non-commercial use only, with a
 conspicuous notice (the first lines of that file; repeat it in any figure caption).
 
+**GvpC charge viewer.** `static/charge-viewer/gvpc-charge.cif` is derived by `proteins/gvpc_charge/tools/prep_viewer.py`
+from PDB 8GBS (Dutka et al., Structure 2023; CC0, kept as `proteins/gvpc_charge/data/8gbs.cif`), with GvpC side chains
+from the AlphaFold DB model AF-P09413-F1 v6 (`proteins/gv_animation/data/ana_gvpc_afdb.cif`,
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): cite Jumper et al., Nature (2021) and Varadi et al., Nucleic
+Acids Res. (2024)), and potentials computed with UCSF ChimeraX 1.12 (cite Meng et al., Protein Sci. (2023)).
+
 ## Still to confirm
 
 - Zenodo 10.5281/zenodo.6458345: check the licence on the record and add it above.

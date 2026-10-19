@@ -16,6 +16,7 @@ wiki so they can be developed on their own. Nothing here depends on the wiki's g
 | `gv` | `static/gv-viewer/` | four steps: one GvpA → a patch in its EMD-14238 density → the 1730-copy vesicle → + GvpC |
 | `hydro4` | same, `data-preview="hydro4"` | four GvpA coloured by hydropathy, inside / outside of the wall |
 | `latch` | `static/latch-viewer/` | five steps of one biosensor construct: binder → + latch → + domain → + target (latch opens) → on the wall |
+| `charge` | `static/charge-viewer/` | four GvpA + one GvpC repeat of PDB 8GBS, surfaces coloured by Coulombic potential (the vault's ChimeraX image); a chip removes / adds GvpC; the text box gives GvpC's net charge. GvpC's side chains are AlphaFold's on the 8GBS backbone (`proteins/gvpc_charge/README.md`) |
 | `open` | `static/open-viewer/` | any structure: fetch a PDB ID (PDBe) or upload a `.pdb` / `.cif` / `.mmcif` / `.bcif` file; drawn as a cartoon in the family's colours, with the same text box, legend, buttons and developer mode |
 
 ## Layout
@@ -30,12 +31,14 @@ static/             what a browser loads; every viewer finds Mol* at ../molstar/
                     gv-assembly.cif, gv-shell.json, emd-14238.mrc, gv-viewer.json  (generated)
                     gv-snapshot.js  (the "Save image" button, for every viewer: a 3840 px PNG of the current frame)
   latch-viewer/     latch-viewer.js/.css  + latch-assembly.cif, latch-viewer.json  (generated)
+  charge-viewer/    charge-viewer.js/.css  + gvpc-charge.cif, charge-viewer.json  (generated)
   open-viewer/      open-viewer.js/.css  (fetch by PDB ID / upload a file; no data of its own; the bar above it is its only CSS)
   dev/              dev-mode.js/.css: the developer mode of index.html (below)
 proteins/           how the data is made (one README per folder, with the honest limits of each figure)
   gv_animation/     prep_data.py (raw PDB/EMDB/Zenodo → data/), prep_viewer.py (→ static/gv-viewer/),
                     build_gv_animation.py (the 60 s Blender 5.1 + Molecular Nodes film), captions.txt
   latch_animation/  prep_viewer.py (→ static/latch-viewer/), place_domain.py, data/
+  gvpc_charge/      prep_viewer.py (a ChimeraX script → static/charge-viewer/), data/8gbs.cif
 ```
 
 The other CSS files layer on `gv-viewer.css`, so it always loads first, then `latch-viewer.css`, then the viewer's own.
@@ -126,7 +129,7 @@ Same wiring as `index.html`: `tokens.css`, the CSS files, the script, and a moun
 <script src="static/gv-viewer/gv-viewer.js"></script>
 ```
 
-Mount attributes: `data-latch-viewer`, `data-open-viewer`; `data-base="…/"` loads the data from
+Mount attributes: `data-latch-viewer`, `data-charge-viewer`, `data-open-viewer`; `data-base="…/"` loads the data from
 another folder (a CDN). Mol* is only fetched when the figure nears the viewport.
 
 ## Rebuild the data
@@ -136,6 +139,7 @@ Needs `numpy scipy gemmi` (and `mrcfile` for `prep_data.py`). Run from anywhere;
 ```sh
 python proteins/gv_animation/tools/prep_viewer.py       # → static/gv-viewer/        (from proteins/gv_animation/data/)
 python proteins/latch_animation/tools/prep_viewer.py    # → static/latch-viewer/
+/Applications/ChimeraX-1.12.app/Contents/bin/ChimeraX --nogui --exit --script proteins/gvpc_charge/tools/prep_viewer.py   # → static/charge-viewer/
 ```
 
 `<final-folder>` is the Drylab PC-search output (`…/Biosensing-Animation/final`), **not in this repo**.

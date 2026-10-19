@@ -1,0 +1,21 @@
+/* GvpA + GvpC charge viewer: see charge-viewer.js. Loads after gv-viewer.css, which styles the stage, text box, legend
+   and buttons; this file adds the charge scale and the method line. Tokens only. */
+.cv {
+  /* the potential scale, as in the ChimeraX image: Cayenne Red (negative) - white - Pine Blue (positive) */
+  --cv-negative: var(--gv-cayenne);
+  --cv-zero:     var(--clr-body);
+  --cv-positive: var(--gv-pine);
+}
+.cv-scale {
+  background: linear-gradient(90deg, var(--cv-negative), var(--cv-zero), var(--cv-positive));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--clr-text) 25%, transparent);
+}
+.cv-unit { color: var(--clr-muted); }
+.cv .gvv-text strong { color: var(--clr-text); }
+.cv .gvv-chips { flex-wrap: wrap; }
+.cv-method {
+  margin: 0;
+  font-size: calc(var(--fs-body) * .72);
+  line-height: var(--lh-snug);
+  color: var(--clr-muted);
+}

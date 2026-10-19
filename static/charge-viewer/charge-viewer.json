@@ -1,0 +1,82 @@
+{
+ "source": "PDB 8GBS (GvpA x4, GvpC 85-117 backbone) + AF-P09413-F1 side chains; ChimeraX coulombic",
+ "range": [
+  -10,
+  10
+ ],
+ "gvpc": {
+  "residues": [
+   85,
+   117
+  ],
+  "sequence": "HKELQETSQQFLSATAQARIAQAEKQAQELLAF",
+  "net": -1,
+  "charged": [
+   {
+    "res": "K86",
+    "q": 1
+   },
+   {
+    "res": "E87",
+    "q": -1
+   },
+   {
+    "res": "E90",
+    "q": -1
+   },
+   {
+    "res": "R103",
+    "q": 1
+   },
+   {
+    "res": "E108",
+    "q": -1
+   },
+   {
+    "res": "K109",
+    "q": 1
+   },
+   {
+    "res": "E113",
+    "q": -1
+   }
+  ],
+  "af_rmsd_ca": 0.99,
+  "rotamers_replaced": [
+   "L88",
+   "R103",
+   "Q106"
+  ],
+  "clashes_left": []
+ },
+ "potential": {
+  "GvpA": {
+   "min": -14.85,
+   "mean": -1.92,
+   "max": 11.17
+  },
+  "GvpC": {
+   "min": -10.77,
+   "mean": -1.19,
+   "max": 8.28
+  }
+ },
+ "centre": [
+  114.295,
+  148.592,
+  165.198
+ ],
+ "radius": 51.73,
+ "view": {
+  "dir": [
+   0.0473,
+   0.0247,
+   -0.9986
+  ],
+  "up": [
+   0.0963,
+   0.9949,
+   0.0291
+  ]
+ }
+}
