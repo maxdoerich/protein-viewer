@@ -1,0 +1,17 @@
+/* GvpA + GvpC charge viewer: see charge-viewer.js. Loads after gv-viewer.css, which styles the stage, text box, legend
+   and buttons; this file adds the charge scale and keeps the legend in front of the protein. Tokens only. */
+.cv {
+  /* the potential scale, as in the ChimeraX image: Cayenne Red (negative) - white - Pine Blue (positive) */
+  --cv-negative: var(--gv-cayenne);
+  --cv-zero:     var(--clr-body);
+  --cv-positive: var(--gv-pine);
+}
+.cv-scale {
+  background: linear-gradient(90deg, var(--cv-negative), var(--cv-zero), var(--cv-positive));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--clr-text) 25%, transparent);
+}
+.cv-unit { color: var(--clr-muted); }
+.cv .gvv-chips { flex-wrap: wrap; }
+/* the family draws the protein over its boxes (canvas z-index 1, legend 0); here the charge scale, chip and buttons
+   all stay in front of the protein */
+.cv .gvv-legend { z-index: 2; }
