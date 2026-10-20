@@ -8,10 +8,9 @@
   --lv-site:   var(--gv-frost);       /* ... its GvpA-binding site: the same colour as the GvpA it docks onto */
   --lv-latch:  var(--gv-cayenne);     /* the latch that blocks the site */
   --lv-tbd:    var(--gv-peach);       /* the target-binding domain at the latch's free end */
-  --lv-target: var(--clr-muted);      /* the target protein: a neutral grey, it is not part of the construct */
-  --lv-gvpa:   var(--gv-frost);       /* the GvpA pentamer the binder docks onto */
+  --lv-target: var(--gv-frost);       /* the target protein (PD-L1): the middle blue */
   --lv-wall:   var(--gv-cyan);        /* the rest of the vesicle wall */
-  /* residues of binder and PD-L1 that overlap with the latch shut (the latch is dimmed then). Reddish orange, redder than the
+  /* residues of binder and PD-L1 that overlap with the latch shut. Reddish orange, redder than the
      latch's cayenne so that it stands out on the binder's teal and the latch's orange alike; not one of the six palette colours. */
   --lv-clash:  #E0361A;
 }

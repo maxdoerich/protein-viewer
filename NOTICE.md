@@ -13,6 +13,8 @@ Carried over from the wiki's `NOTICE.md`; only what this folder ships.
 Huber et al. (Zenodo 10.5281/zenodo.6458345), and from a GvpC structure predicted with AlphaFold Server (job
 `Ser_GvpC_single`, kept as `proteins/gv_animation/data/gvpc_af.cif`). The latch viewer (`latch-viewer/`) reuses that wall and GvpC, plus the team's RFdiffusion designs from the Drylab PC search.
 
+`static/gvpc-viewer/` (the GvpC repeat on four GvpA, `proteins/gvpc_animation/`) is built from `SerGvpCR3_4GvpA_trimmed_repacked.cif`, a model supplied by the team; its GvpC chain is treated as AlphaFold Server output (below).
+
 **AlphaFold Server output.** The GvpC chain of `gv-assembly.cif` is a Derivative of AlphaFold Server output, provided
 under the [AlphaFold Server Output Terms of Use](https://alphafoldserver.com/output-terms): non-commercial use only, with a
 conspicuous notice (the first lines of that file; repeat it in any figure caption).

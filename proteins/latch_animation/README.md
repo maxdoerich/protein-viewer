@@ -10,7 +10,8 @@ Same look and tools as the gas-vesicle viewer (`proteins/gv_animation/`, `static
 | what | where |
 |---|---|
 | viewer script, colours | `static/latch-viewer/latch-viewer.js`, `latch-viewer.css` (layout comes from `gv-viewer.css`, load it first) |
-| built data | `static/latch-viewer/latch-assembly.cif`, `latch-viewer.json` (generated, don't edit) |
+| built data | `static/latch-viewer/latch-assembly.cif`, `latch-viewer.json`, `latch-wall.ply.gz` (generated, don't edit) |
+| wall mesh | `tools/prep_wall.py` (run after `prep_viewer.py`) |
 | inputs | `data/*.pdb`, `data/geometry.json` (trimmed copies of the Drylab film folder) |
 | builder | `tools/prep_viewer.py` |
 | domain placement (search) | `tools/place_domain.py` → `data/placement.json` (read by the builder) |
@@ -20,6 +21,7 @@ Same look and tools as the gas-vesicle viewer (`proteins/gv_animation/`, `static
 python tools/prep_viewer.py --trim "<vault>/iGEM/Drylab-Binder-Design/Blocking-Peptide-Target-Domain/Scripts/latch_anim/rank016/film"
 python tools/place_domain.py         # only if the constraints or the inputs change: ~15 min on 8 cores, writes data/placement.json
 python tools/prep_viewer.py          # ~4 min (linker search); needs numpy + scipy + gemmi; also reads ../gv_animation/data/ for the wall
+python tools/prep_wall.py            # wall + pentamer -> one surface mesh, strips them from the cif; also needs scikit-image
 ```
 `--trim` is only needed when the Drylab pipeline produced new geometry (new binder, other target). It keeps the closed latch
 (last trajectory frame) and the first model of the others; everything else in the film folder is not used.
@@ -66,7 +68,7 @@ Code stays in `static/`; the page loads it with a few lines of `::js`, like the 
   a residue belongs to (0 binder, 1 binding site, 2 clash, 3 latch, 4 linker + domain); the viewer paints by it.
 - **One cartoon (`latch-viewer.js`).** Where the parts sit together (steps 2 and 3 at rest) the viewer draws V or W, one
   chain from the binder through latch and linker into the domain. Where one part moves against another (the latch swinging
-  in, the block swinging open, the clash view's dimmed latch) it draws pieces (F, S, U, R), and the unbroken chain fades in
+  in, the block swinging open, the clash view's shut block) it draws pieces (F, S, U, R), and the unbroken chain fades in
   over them when the move is done. Across the hinge, once the block is open, the cartoon is really in two pieces.
 - Every part is its own mmCIF assembly; every move is one matrix per part (no mesh sequences, no trajectory).
 - Latch, domain and target are **one rigid block**. It swings by `block_hinge` of `film_geometry.json` (120° about the
@@ -83,11 +85,13 @@ Code stays in `static/`; the page loads it with a few lines of `::js`, like the 
 - Clash colouring: the prep script stores 2 in the B-factor column of binder residues that clash and 1 on PD-L1 residues
   that clash (heavy atoms < 2.8 Å); the viewer's clash view paints them (`--lv-clash` in `latch-viewer.css`).
 - Wall: the 1730-copy shell of the Huber 2023 model (Zenodo 10.5281/zenodo.6458345). The pentamer is fitted onto five
-  consecutive wall subunits, those five are left out of the wall and replaced by the pentamer. The Drylab film takes the
+  consecutive wall subunits, and those five are left out of the wall (`prep_viewer.py` writes the pentamer for them). The Drylab film takes the
   fit with 1.08 Å rmsd, which lands 245 Å from the vesicle's equator where the wall curves into the cone. The viewer
-  accepts 1.7 Å (1.6 Å found) and gets a flat piece of the cylinder. The 1725 remaining copies are written as 54
-  assemblies of 32 neighbouring subunits (`wall-00` …, listed in `latch-viewer.json` `wall`): Mol* draws blocks of a few
-  dozen copies much faster than one object of 1725, and skips blocks that are out of the picture. Same copies, same picture.
+  accepts 1.7 Å (1.6 Å found) and gets a flat piece of the cylinder. `prep_wall.py` then turns the 1725 remaining
+  copies and those five into **one coarse surface mesh** (3 Å grid, 4 Å blur, ~750k triangles, `latch-wall.ply.gz`, ascii
+  PLY): no atoms, no residues, so nothing in the wall can be picked and the viewer holds no structure for it. It strips
+  chains A–E and G and the `gvpa` / `wall-*` assemblies from `latch-assembly.cif`, and sets `wallMesh` in
+  `latch-viewer.json`. Coarser: raise `STEP` / `SIGMA` at the top of the script.
 - The construct stands off the wall by 65 Å (`away`) until step 5, as in the film.
 - Binding-site residues are marked by B-factor = 1 in chain F; the viewer colours by it.
 

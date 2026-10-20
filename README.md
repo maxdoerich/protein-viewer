@@ -16,6 +16,7 @@ wiki so they can be developed on their own. Nothing here depends on the wiki's g
 | `gv` | `static/gv-viewer/` | four steps: one GvpA → a patch in its EMD-14238 density → the 1730-copy vesicle → + GvpC |
 | `hydro4` | same, `data-preview="hydro4"` | four GvpA coloured by hydropathy, inside / outside of the wall |
 | `latch` | `static/latch-viewer/` | five steps of one biosensor construct: binder → + latch → + domain → + target (latch opens) → on the wall |
+| `gvpc` | `static/gvpc-viewer/` | two steps: four GvpA + one GvpC repeat coloured by sequence → zoom onto GvpC, GvpA see-through, GvpC residues coloured by job (anchor / interface / other) |
 | `open` | `static/open-viewer/` | any structure: fetch a PDB ID (PDBe) or upload a `.pdb` / `.cif` / `.mmcif` / `.bcif` file; drawn as a cartoon in the family's colours, with the same text box, legend, buttons and developer mode |
 
 ## Layout
@@ -29,13 +30,15 @@ static/             what a browser loads; every viewer finds Mol* at ../molstar/
   gv-viewer/        gv-viewer.js/.css  (the base: layout, step buttons, card, legend, tools)
                     gv-assembly.cif, gv-shell.json, emd-14238.mrc, gv-viewer.json  (generated)
                     gv-snapshot.js  (the "Save image" button, for every viewer: a 3840 px PNG of the current frame)
-  latch-viewer/     latch-viewer.js/.css  + latch-assembly.cif, latch-viewer.json  (generated)
+  latch-viewer/     latch-viewer.js/.css  + latch-assembly.cif, latch-viewer.json, latch-wall.ply.gz  (generated)
+  gvpc-viewer/      gvpc-viewer.js/.css  + gvpc-assembly.cif, gvpc-viewer.json  (generated)
   open-viewer/      open-viewer.js/.css  (fetch by PDB ID / upload a file; no data of its own; the bar above it is its only CSS)
   dev/              dev-mode.js/.css: the developer mode of index.html (below)
 proteins/           how the data is made (one README per folder, with the honest limits of each figure)
   gv_animation/     prep_data.py (raw PDB/EMDB/Zenodo → data/), prep_viewer.py (→ static/gv-viewer/),
                     build_gv_animation.py (the 60 s Blender 5.1 + Molecular Nodes film), captions.txt
-  latch_animation/  prep_viewer.py (→ static/latch-viewer/), place_domain.py, data/
+  gvpc_animation/   prep_viewer.py (→ static/gvpc-viewer/), data/
+  latch_animation/  prep_viewer.py (→ static/latch-viewer/), prep_wall.py (wall mesh), place_domain.py, data/
 ```
 
 The other CSS files layer on `gv-viewer.css`, so it always loads first, then `latch-viewer.css`, then the viewer's own.
@@ -136,6 +139,8 @@ Needs `numpy scipy gemmi` (and `mrcfile` for `prep_data.py`). Run from anywhere;
 ```sh
 python proteins/gv_animation/tools/prep_viewer.py       # → static/gv-viewer/        (from proteins/gv_animation/data/)
 python proteins/latch_animation/tools/prep_viewer.py    # → static/latch-viewer/
+python proteins/gvpc_animation/tools/prep_viewer.py     # → static/gvpc-viewer/     (numpy only)
+python proteins/latch_animation/tools/prep_wall.py      # then: the wall as a mesh (also needs scikit-image)
 ```
 
 `<final-folder>` is the Drylab PC-search output (`…/Biosensing-Animation/final`), **not in this repo**.

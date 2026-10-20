@@ -4,11 +4,11 @@
  * the gas-vesicle viewer (gv-viewer.js, same card, step buttons and tools; load gv-viewer.css first): Mol* 5.13
  * (MIT, vendored in ../molstar/) is only fetched once the figure scrolls near the viewport.
  *
- * Data (built by proteins/latch_animation/tools/prep_viewer.py):
+ * Data (built by proteins/latch_animation/tools/prep_viewer.py, then prep_wall.py):
  *   latch-assembly.cif   every part as its own mmCIF assembly: binder, latch, tbd (target-binding domain, with the
- *                        linker), target, gvpa (pentamer), wall (1725 copies via assembly operators); and the
- *                        polypeptide in unbroken chains: cont2 (binder + latch), cont3 (+ linker + domain), arm
- *                        (latch + linker + domain from the hinge)
+ *                        linker), target; and the polypeptide in unbroken chains: cont2 (binder + latch),
+ *                        cont3 (+ linker + domain), arm (latch + linker + domain from the hinge)
+ *   latch-wall.ply.gz    the vesicle wall, one coarse surface mesh (prep_wall.py): no atoms, not a structure
  *   latch-viewer.json    hinge, fly-in vector, dock offset, camera frames
  * They load from this script's folder, or from data-base="…/" on the mount element.
  *
@@ -107,10 +107,10 @@
       title: 'With the site free, the binder docks onto GvpA',
       text: 'The open construct binds GvpA in the vesicle wall and stabilises it: the readout is a shift in collapse ' +
             'pressure. Shown is a patch of the wall of a Bacillus megaterium vesicle (Huber et al., Cell 2023; Zenodo ' +
-            '10.5281/zenodo.6458345) with the five GvpA the binder was designed against in light blue.',
-      show: ['binder', 'arm', 'target', 'gvpa', 'wall'],
+            '10.5281/zenodo.6458345); the binder sits on the five GvpA it was designed against.',
+      show: ['binder', 'arm', 'target', 'wall'],
       legend: [['--lv-binder', 'GvpA binder'], ['--lv-latch', 'latch'], ['--lv-tbd', 'target-binding domain'],
-               ['--lv-target', 'target protein'], ['--lv-gvpa', 'GvpA it binds'], ['--lv-wall', 'vesicle wall']] }
+               ['--lv-target', 'target protein'], ['--lv-wall', 'vesicle wall']] }
   ];
 
   /* What each step does when it is entered going forward; `enter` fades in, `move` is moved by the plan. */
@@ -369,9 +369,9 @@
 
       /* build what the later steps need while the reader looks at step 1, so a click is instant, in the order the steps
          need them (the clash view's parts last: they only matter once its chip is pressed), each in an idle moment.
-         Every build takes ~30 ms (the wall comes in 54 blocks), so none of them is felt. Pointing at (or tabbing to) a
+         Every build takes ~30 ms (the wall mesh a good deal more, so it goes last), so none of them is felt. Pointing at (or tabbing to) a
          step button or the clash chip moves its parts to the front. */
-      queue = expand(['latch', 'cont2', 'cont3', 'arm', 'target', 'gvpa', 'wall', 'tbd', 'binderX', 'targetX']);
+      queue = ['latch', 'cont2', 'cont3', 'arm', 'target', 'tbd', 'binderX', 'targetX', 'wall'];
       (async function () {
         await new Promise(function (ok) { idle(ok, { timeout: 250 }); });
         while (queue.length) {
@@ -385,7 +385,7 @@
 
     function readColours() {
       var c = {};
-      ['--lv-binder', '--lv-site', '--lv-latch', '--lv-tbd', '--lv-target', '--lv-gvpa', '--lv-wall', '--lv-clash',
+      ['--lv-binder', '--lv-site', '--lv-latch', '--lv-tbd', '--lv-target', '--lv-wall', '--lv-clash',
        '--gv-outline', '--gv-highlight', '--gv-bg'].forEach(function (n) { c[n] = colour(host, n); });
       return c;
     }
@@ -413,7 +413,7 @@
             samples: 32, multiScale: { name: 'off', params: {} }, radius: 5, bias: 0.8, blurKernelSize: 15,
             blurDepthBias: 0.5, resolutionScale: 1, color: COLORS['--gv-outline'], transparentThreshold: 0.4 } },
           outline: { name: 'on', params: {
-            scale: 1, threshold: 0.33, color: COLORS['--gv-outline'], includeTransparent: true } }   // true: the outline stays while a part fades
+            scale: 1, threshold: 0.33, color: COLORS['--gv-outline'], includeTransparent: false } }  // false: no outline on the wall mesh (alpha < 1); parts lose theirs while they fade
         }),
         cameraFog: { name: 'on', params: { intensity: 12 } }
       });
@@ -452,13 +452,31 @@
       cont2: function () { return rep('cont2', chain(false)); },          // binder + latch, unbroken
       cont3: function () { return rep('cont3', chain(false)); },          // + linker + domain, unbroken
       target: function () { return rep('target', cartoon(COLORS['--lv-target'])); },
-      gvpa: function () { return rep('gvpa', cartoon(COLORS['--lv-gvpa'], 0.34)); },
+      wall: wall,
     };
-    // one block of the wall (see expand)
-    function wallBlock(id) {
-      return rep(id, Object.assign({ type: 'gaussian-surface',
-        typeParams: Object.assign({ quality: 'custom', resolution: 1.6, radiusOffset: 0.8, smoothness: 1.6 }, LOOK) },
-        uniform(COLORS['--lv-wall'])));
+    // the wall is a mesh (latch-wall.ply.gz, made by prep_wall.py), not a structure: no atoms, nothing to pick
+    function wall() {
+      var T = lib.plugin.StateTransforms, ghost = { state: { isGhost: true } };
+      return fetch(base + manifest.wallMesh).then(function (res) {
+        if (!res.ok) throw new Error(manifest.wallMesh + ': HTTP ' + res.status);
+        return new Response(res.body.pipeThrough(new DecompressionStream('gzip'))).text();
+      }).then(function (ply) {
+        var b = plugin.state.data.build().toRoot()
+          .apply(T.Data.RawData, { data: ply, label: 'Vesicle wall' }, ghost)
+          .apply(T.Data.ParsePly, {}, ghost)
+          .apply(T.Shape.ShapeFromPly, { label: 'Vesicle wall' }, ghost)
+          .apply(T.Representation.ShapeRepresentation3D,
+            // Smooth shading and a shade darker than the legend swatch, so that the pale mesh shows against the page. alpha just
+            // under 1 puts it among the transparent parts, which the outline leaves out (see the outline in styleCanvas):
+            // on a mesh the outline only draws loose dashes along the rib crests at the wall's rim.
+            { coloring: { name: 'uniform', params: { color: COLORS['--lv-wall'], saturation: 0, lightness: -0.5 } },
+              celShaded: false, material: LOOK.material, alpha: 0.99 },
+            { initialState: { isHidden: true } });
+        return b.commit().then(function () {
+          plugin.state.data.cells.get(b.selector.ref).obj.data.repr.setState({ pickable: false });
+          return b.selector.ref;
+        });
+      });
     }
 
     var structuresP = {};
@@ -479,7 +497,7 @@
     function ensure(name) {
       if (built[name]) return Promise.resolve(built[name]);
       if (!pending[name]) {
-        pending[name] = (COMPONENTS[name] ? COMPONENTS[name]() : wallBlock(name)).then(function (ref) {
+        pending[name] = COMPONENTS[name]().then(function (ref) {
           built[name] = ref;
           // whatever it was created as, it shows only if the current step wants it, and sits where it rests
           if (state.step >= 0) {
@@ -498,17 +516,10 @@
       if (cell && !!cell.state.isHidden === on) plugin.state.data.updateCellState(built[name], { isHidden: !on });
     }
 
-    /** `wall` stands for the wall's blocks (latch-viewer.json `wall`: 54 assemblies of 32 GvpA each) */
-    function expand(names) {
-      var out = [];
-      names.forEach(function (n) { out = out.concat(n === 'wall' ? (manifest ? manifest.wall : []) : [n]); });
-      return out;
-    }
-
     /** the component names a step shows at rest; the clash view swaps binder and PD-L1 for their painted versions,
-        and the block (arm) for its pieces, so that the latch alone can be dimmed */
+        and the block (arm) for its pieces (latch, tbd) */
     function wanted(i) {
-      var set = expand(STEPS[i].show);
+      var set = STEPS[i].show.slice();
       if (i === CLASH_STEP && state.clash) {
         set = [].concat.apply([], set.map(function (n) {
           return n === 'binder' ? ['binderX'] : n === 'arm' ? ['latch', 'tbd'] : n === 'target' ? ['targetX'] : [n];
@@ -700,15 +711,15 @@
         }
       },
       vesicle: {
-        enter: ['gvpa', 'wall'], move: CONSTRUCT,
+        enter: ['wall'], move: CONSTRUCT,
         tracks: function () {
           return [
             { ms: 900,
               start: function () {
                 CONSTRUCT.forEach(function (n) { setPose(n, 1, 0, 1); });
-                expand(['gvpa', 'wall']).forEach(function (n) { setVisible(n, true); });
+                setVisible('wall', true);
               },
-              tick: function (k) { return fade(expand(['gvpa', 'wall']), ease(k)); } },
+              tick: function (k) { return fade(['wall'], ease(k)); } },
             { delay: 700, ms: 2600,
               tick: function (k) { CONSTRUCT.forEach(function (n) { setPose(n, 1, 0, 1 - ease(k)); }); } }
           ];
@@ -770,7 +781,7 @@
       if (token !== state.token) return;
       await fade(Object.keys(cur), 1);                                 // a fade cut short
       var plan = animate && !stillMotion() ? PLANS[STEPS[i].key] : null;
-      var enter = plan ? expand(plan.enter) : [], move = plan ? expand(plan.move) : [], keep = plan && plan.keep || [];
+      var enter = plan ? plan.enter : [], move = plan ? plan.move : [], keep = plan && plan.keep || [];
       if (enter.length) await fade(enter, 0);                          // invisible first, then they fade in
       if (token !== state.token) return;
       Object.keys(built).forEach(function (n) {
@@ -813,7 +824,6 @@
       } finally { state.playing = false; host.classList.remove('is-busy'); }
       if (token !== state.token) return;
       CONSTRUCT.forEach(function (n) { setRest(n, i); });
-      await setAlpha('latch', state.clash ? 0.35 : 1);                 // the shut latch stays in view, but out of the way
     }
 
     function go(i, first) {
