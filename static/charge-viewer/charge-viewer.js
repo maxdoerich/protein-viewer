@@ -1,11 +1,12 @@
 /* GvpA + GvpC charge viewer: four GvpA and one GvpC repeat of PDB 8GBS (Anabaena flos-aquae), their surfaces coloured
  * by Coulombic potential, the same scene as the vault's ChimeraX image. One chip: "Remove GvpC" / "Add GvpC" takes
- * GvpC off the wall and puts it back.
+ * GvpC off the wall and puts it back. No text box and no method line: the wiki's figure caption carries the
+ * description, so the viewer only shows the scene, the charge scale and its buttons.
  *
  * Mounted onto every [data-charge-viewer] element; layers on gv-viewer.css (loaded first), so stage, text box, legend,
  * buttons and developer mode (static/dev/dev-mode.js) are the family's. Mol* 5.13 is vendored in ../molstar/.
- * Data: gvpc-charge.cif (B-factor = the potential at each atom's surface, kcal/(mol·e)) and charge-viewer.json (net
- * charge, charged residues, camera), both written by proteins/gvpc_charge/tools/prep_viewer.py. data-base="…/" loads
+ * Data: gvpc-charge.cif (B-factor = the potential at each atom's surface, kcal/(mol·e)) and charge-viewer.json (scale
+ * range, camera), both written by proteins/gvpc_charge/tools/prep_viewer.py. data-base="…/" loads
  * them from another folder.
  */
 (function () {
@@ -71,7 +72,6 @@
       return !!(c.getContext('webgl2') || c.getContext('webgl'));
     } catch (e) { return false; }
   }
-  function signed(n) { return n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0'; }
 
   /* the parts of the scene, as MolScript (chains as in gvpc-charge.cif: GvpA A1-A4, GvpC C). Names go in bare:
      a quoted "C" matches nothing */
@@ -86,17 +86,14 @@
     host.classList.add('gvv', 'cv');
     var stage = el('div', 'gvv-stage');
     var canvas = el('div', 'gvv-canvas');
-    var card = el('div', 'gvv-card');
-    card.setAttribute('aria-live', 'polite');
     var tools = el('div', 'gvv-tools');
     var chips = el('div', 'gvv-chips');
     var legend = el('ul', 'gvv-legend');
     var hint = el('div', 'gvv-hint', 'Use <kbd>Ctrl</kbd> + scroll to zoom');
     var veil = el('div', 'gvv-veil',
       '<span class="gvv-pulse" aria-hidden="true"></span><span class="gvv-veil-text">Preparing the 3D model…</span>');
-    var method = el('p', 'cv-method');
     stage.append(canvas, tools, chips, legend, hint, veil);
-    host.append(stage, card, method);
+    host.append(stage);
 
     function toolButton(name, label, fn) {
       var b = el('button', 'gvv-tool', icon(name));
@@ -143,39 +140,14 @@
 
     var viewer, plugin, lib, COLORS, manifest, built = {};
 
-    /* ---- the text box, legend and chips say what is on screen ---- */
+    /* ---- the legend and the chip say what is on screen ---- */
     function paint() {
-      var g = manifest && manifest.gvpc;
-      var pos = g ? g.charged.filter(function (c) { return c.q > 0; }).map(function (c) { return c.res; }) : [];
-      var neg = g ? g.charged.filter(function (c) { return c.q < 0; }).map(function (c) { return c.res; }) : [];
-      var title, text;
-      if (state.gvpc) {
-        title = 'GvpC on four GvpA';
-        text = 'One 33-residue GvpC repeat (residues ' + (g ? g.residues.join('–') : '85–117') + ') bound to four GvpA ' +
-          'of the gas vesicle wall, seen from outside. Each surface is coloured by its own electrostatic potential.' +
-          (g ? ' <strong>GvpC net charge: ' + signed(g.net) + '</strong> (' + pos.length + ' positive: ' + pos.join(', ') +
-               '; ' + neg.length + ' negative: ' + neg.join(', ') + ').' : '');
-      } else {
-        title = 'Four GvpA without GvpC';
-        text = 'The same four GvpA with GvpC taken off: the face GvpC binds to, coloured by electrostatic potential. ' +
-          'Add GvpC to put it back.';
-      }
-      card.innerHTML = '<span class="gvv-eyebrow">PDB 8GBS · Anabaena flos-aquae</span>' +
-        '<strong class="gvv-title">' + title + '</strong><span class="gvv-text">' + text + '</span>';
-
       legend.innerHTML = '<li class="gvv-key gvv-key--scale"><span class="gvv-key-label">−10</span>' +
         '<span class="gvv-swatch gvv-swatch--scale cv-scale"></span><span class="gvv-key-label">+10</span></li>' +
         '<li class="cv-unit">Coulombic potential, kcal/(mol·e)</li>';
 
       cGvpc.innerHTML = icon(state.gvpc ? 'remove' : 'add') + '<span>' + (state.gvpc ? 'Remove GvpC' : 'Add GvpC') + '</span>';
       cGvpc.setAttribute('aria-pressed', state.gvpc ? 'true' : 'false');
-
-      method.innerHTML = 'GvpA and the GvpC backbone: PDB 8GBS (Dutka et al. 2023). 8GBS deposits GvpC without side ' +
-        'chains; here they are taken from the AlphaFold DB model AF-P09413-F1 and placed residue by residue on the ' +
-        'deposited backbone' + (g ? ' (Cα RMSD ' + g.af_rmsd_ca.toFixed(2) + ' Å' + (g.rotamers_replaced.length ?
-          '; ' + g.rotamers_replaced.join(', ') + ' as library rotamers where the AlphaFold one ran into GvpA' : '') + ')' : '') +
-        ', so GvpC’s charge distribution is a model. Potential: ChimeraX coulombic (AMBER ff14SB charges, ε = 4r, 1.4 Å ' +
-        'off the surface); GvpA from the four GvpA, GvpC from GvpC alone.';
     }
 
     /* ---- Mol*, set up as the other viewers do ---- */
@@ -324,22 +296,15 @@
     }
     function setGvpc(on) { state.gvpc = on; paint(); return sync(); }
 
-    /* ---- camera: onto the wall's outer face, GvpC across the picture, clear of the text box ---- */
+    /* ---- camera: onto the wall's outer face, GvpC across the picture, centred (no text box to keep clear of) ---- */
     function frame(ms) {
       if (!plugin || !manifest) return;
       var Vec3 = lib.math.LinearAlgebra.Vec3, cam = plugin.canvas3d.camera, v = manifest.view;
       var dir = Vec3.create(v.dir[0], v.dir[1], v.dir[2]), up = Vec3.create(v.up[0], v.up[1], v.up[2]);
-      var right = Vec3.cross(Vec3(), dir, up);
       var target = Vec3.create(manifest.centre[0], manifest.centre[1], manifest.centre[2]);
       var radius = manifest.radius;
       var aspect = stage.clientWidth / Math.max(stage.clientHeight, 1);
       if (aspect < 1) radius /= aspect;
-      var over = getComputedStyle(card).position === 'absolute';   // from 768 up the text box sits over the scene
-      radius *= over ? 1.25 : 1.0;
-      if (over) {
-        Vec3.scaleAndAdd(target, target, right, -0.36 * radius);
-        Vec3.scaleAndAdd(target, target, up, -0.04 * radius);
-      }
       var snap = cam.getInvariantFocus(target, radius, up, dir);
       snap.radiusMax = manifest.radius * 4;
       cam.setState(snap, stillMotion() ? 0 : ms);

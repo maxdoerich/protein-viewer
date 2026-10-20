@@ -3,8 +3,9 @@
 Four GvpA and one GvpC repeat of PDB 8GBS (*Anabaena flos-aquae*; Dutka et al., Structure 31, 518 (2023),
 doi 10.1016/j.str.2023.03.011), each surface coloured by its Coulombic potential. It is the scene of the vault's ChimeraX
 image (`SecondBrain/assets/scripts/chimerax_gvpa_gvpc_charge_2026-10-13.cxc`), with GvpC's charge added and one
-chip, **Remove GvpC / Add GvpC** (GvpC fades off the wall and back). The text box gives GvpC's net charge and its
-charged residues, read from `charge-viewer.json`.
+chip, **Remove GvpC / Add GvpC** (GvpC fades off the wall and back). The viewer carries no text box or method line:
+the description sits in the wiki's caption under the figure. The charge scale, the chip and the buttons are drawn in
+front of the protein. `charge-viewer.json` still records GvpC's net charge and charged residues for that caption.
 
 ## Rebuild
 

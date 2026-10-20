@@ -16,7 +16,7 @@ wiki so they can be developed on their own. Nothing here depends on the wiki's g
 | `gv` | `static/gv-viewer/` | four steps: one GvpA → a patch in its EMD-14238 density → the 1730-copy vesicle → + GvpC |
 | `hydro4` | same, `data-preview="hydro4"` | four GvpA coloured by hydropathy, inside / outside of the wall |
 | `latch` | `static/latch-viewer/` | five steps of one biosensor construct: binder → + latch → + domain → + target (latch opens) → on the wall |
-| `charge` | `static/charge-viewer/` | four GvpA + one GvpC repeat of PDB 8GBS, surfaces coloured by Coulombic potential (the vault's ChimeraX image); a chip removes / adds GvpC; the text box gives GvpC's net charge. GvpC's side chains are AlphaFold's on the 8GBS backbone (`proteins/gvpc_charge/README.md`) |
+| `charge` | `static/charge-viewer/` | four GvpA + one GvpC repeat of PDB 8GBS, surfaces coloured by Coulombic potential (the vault's ChimeraX image); a chip removes / adds GvpC; no text box (the wiki caption describes it), the scale stays in front of the protein. GvpC's side chains are AlphaFold's on the 8GBS backbone (`proteins/gvpc_charge/README.md`) |
 | `open` | `static/open-viewer/` | any structure: fetch a PDB ID (PDBe) or upload a `.pdb` / `.cif` / `.mmcif` / `.bcif` file; drawn as a cartoon in the family's colours, with the same text box, legend, buttons and developer mode |
 
 ## Layout
