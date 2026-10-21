@@ -36,15 +36,15 @@
   var GVPA_SEE_THROUGH = 0.3;
   var STEPS = [
     { key: 'context', label: 'Context', icon: 'context', frame: 'all',
-      title: 'GvpC on four GvpA',
-      text: 'One repeat of GvpC (33 residues) lies on four neighbouring GvpA of the gas vesicle wall. Every sequence has ' +
-            'its own colour: GvpA (four copies) and GvpC.',
+      title: 'Model of the GvpA-GvpC interaction',
+      text: 'One Serratia GvpC repeat (33 residues) on four GvpA chains of the gas vesicle shell. GvpA is coloured ' +
+            'light yellow, GvpC is depicted in orange.',
       show: ['gvpa', 'seq'], alpha: { gvpa: 1 },
       legend: [['--gc-gvpa', 'GvpA'], ['--gc-gvpc', 'GvpC']] },
     { key: 'function', label: 'GvpC residues', icon: 'gvpc', frame: 'gvpc',
-      title: 'What each GvpC residue does',
-      text: 'The camera moves onto GvpC and GvpA turns see-through. The anchor residues (4, 11, 12, 15, 19, 22 of the ' +
-            'repeat) are dark blue, the other interface residues (1, 5, 16, 33) light blue, all remaining residues orange.',
+      title: 'Structure of the wild type Serratia GvpC',
+      text: 'The anchor residues (4, 11, 12, 15, 19, 22 of the repeat) are dark blue, the other interface residues ' +
+            '(1, 5, 16, 33) light blue, all remaining residues orange.',
       show: ['gvpa', 'func'], alpha: { gvpa: GVPA_SEE_THROUGH },
       legend: [['--gc-anchor', 'anchor residues'], ['--gc-site', 'other interface residues'], ['--gc-rest', 'other residues']] }
   ];
