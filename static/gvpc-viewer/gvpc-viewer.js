@@ -1,12 +1,12 @@
-/* GvpC-repeat viewer: two steps. 1: four GvpA and one GvpC repeat, coloured by sequence. 2: the camera flies onto
- * GvpC, GvpA turns see-through, and the GvpC residues take the colour of their job (anchor, other interface, rest).
+/* GvpC-repeat viewer: one structure. Four see-through GvpA and one GvpC repeat, the GvpC residues coloured by their
+ * job (anchor, other interface, surface).
  *
  * Mounted onto every [data-gvpc-viewer] element. Mol* 5.13 is vendored in ../molstar/; the layout, text box, legend and
  * buttons are the gas-vesicle viewer's (gv-viewer.css, loaded first), the colours are --gc-* in gvpc-viewer.css.
  *
  * Data (built by proteins/gvpc_animation/tools/prep_viewer.py), from this script's folder or data-base="…/":
  *   gvpc-assembly.cif  assemblies "gvpa" (chains A-D) and "gvpc" (chain F); B-factor of chain F = the residue's job
- *   gvpc-viewer.json   the two camera frames
+ *   gvpc-viewer.json   the camera frames
  */
 (function () {
   'use strict';
@@ -15,10 +15,6 @@
   var MOLSTAR = HERE + '../molstar/';
 
   var ICON = {
-    // four GvpA side by side, GvpC lying across them
-    context: '<rect x="3" y="12" width="3.6" height="8" rx="1.8" /><rect x="8.2" y="12" width="3.6" height="8" rx="1.8" />' +
-             '<rect x="13.4" y="12" width="3.6" height="8" rx="1.8" /><rect x="18.6" y="12" width="2.4" height="8" rx="1.2" />' +
-             '<path d="M2.5 7.5h19" stroke-width="2.4" />',
     gvpc: '<path d="M2.5 12c1.5-5 3.5-5 4.5 0s3 5 4.5 0 3-5 4.5 0 3 5 4.5 0" stroke-width="2.4" />',
     reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7" /><path d="M4 4v4.5h4.5" />',
     spin: '<ellipse cx="12" cy="12" rx="9" ry="4" /><path d="M12 3v18" stroke-dasharray="2 2.5" />' +
@@ -32,21 +28,15 @@
            ICON[name] + '</svg>';
   }
 
-  /* `show` names components: the three cartoons made in boot(). */
+  /* `show` names components: the two cartoons made in boot(). */
   var GVPA_SEE_THROUGH = 0.3;
   var STEPS = [
-    { key: 'context', label: 'Context', icon: 'context', frame: 'all',
-      title: 'Model of the GvpA-GvpC interaction',
-      text: 'One Serratia GvpC repeat (33 residues) on four GvpA chains of the gas vesicle shell. GvpA is coloured ' +
-            'light yellow, GvpC is depicted in orange.',
-      show: ['gvpa', 'seq'], alpha: { gvpa: 1 },
-      legend: [['--gc-gvpa', 'GvpA'], ['--gc-gvpc', 'GvpC']] },
     { key: 'function', label: 'GvpC residues', icon: 'gvpc', frame: 'gvpc',
       title: 'Structure of the wild type Serratia GvpC',
       text: 'The anchor residues (4, 11, 12, 15, 19, 22 of the repeat) are dark blue, the other interface residues ' +
-            '(1, 5, 16, 33) light blue, all remaining residues orange.',
+            '(1, 5, 16, 33) light blue, all remaining residues (surface residues) orange.',
       show: ['gvpa', 'func'], alpha: { gvpa: GVPA_SEE_THROUGH },
-      legend: [['--gc-anchor', 'anchor residues'], ['--gc-site', 'other interface residues'], ['--gc-rest', 'other residues']] }
+      legend: [['--gc-anchor', 'anchor residues'], ['--gc-site', 'other interface residues'], ['--gc-rest', 'surface residues']] }
   ];
 
   function el(tag, cls, html) {
@@ -92,12 +82,10 @@
       return !!(c.getContext('webgl2') || c.getContext('webgl'));
     } catch (e) { return false; }
   }
-  function ease(k) { return k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; }   // in-out cubic
-  function nextFrame() { return new Promise(function (r) { requestAnimationFrame(function () { r(); }); }); }
 
   function mount(host) {
     var base = host.getAttribute('data-base') || HERE;
-    var state = { step: -1, token: 0, busy: Promise.resolve() };
+    var state = { step: -1, busy: Promise.resolve() };
 
     /* ---- markup ---- */
     host.innerHTML = '';
@@ -126,6 +114,7 @@
       li.appendChild(b);
       steps.appendChild(li);
     });
+    steps.hidden = STEPS.length < 2;
     host.append(stage, card, steps);
 
     function toolButton(name, label, fn) {
@@ -211,7 +200,7 @@
       plugin = viewer.plugin;
       manifest = await manifestP;
       COLORS = {};
-      ['--gc-gvpa', '--gc-gvpc', '--gc-anchor', '--gc-site', '--gc-rest', '--gv-outline', '--gv-highlight', '--gv-bg']
+      ['--gc-gvpa', '--gc-anchor', '--gc-site', '--gc-rest', '--gv-outline', '--gv-highlight', '--gv-bg']
         .forEach(function (n) { COLORS[n] = colour(host, n); });
       styleCanvas();
 
@@ -222,7 +211,6 @@
       var gvpa = await plugin.builders.structure.createStructure(model, { name: 'assembly', params: { id: 'gvpa' } });
       var gvpc = await plugin.builders.structure.createStructure(model, { name: 'assembly', params: { id: 'gvpc' } });
       built.gvpa = await rep(gvpa, uniform(COLORS['--gc-gvpa']));
-      built.seq = await rep(gvpc, uniform(COLORS['--gc-gvpc']));
       // chain F's B-factor is the residue's job: 2 anchor, 1 other interface, 0 the rest. Mol*'s uncertainty scale runs
       // backwards (low value = last colour), hence anchor first.
       built.func = await rep(gvpc, { color: 'uncertainty', colorParams: { domain: [0, 2],
@@ -276,7 +264,7 @@
       });
     }
 
-    /* ---- components: three cartoons, built once, then only shown, hidden or faded ---- */
+    /* ---- components: two cartoons, built once, then only shown, hidden or faded ---- */
     var LOOK = { celShaded: true, material: { metalness: 0, roughness: 1, bumpiness: 0 } };
     function uniform(c) { return { color: 'uniform', colorParams: { value: c } }; }
     async function rep(structure, colourProps) {
@@ -300,7 +288,6 @@
       cell.obj.data.repr.setState({ alphaFactor: a });
       plugin.canvas3d.update(cell.obj.data.repr);
     }
-    function alphaOf(name) { return cur[name] == null ? 1 : cur[name]; }
 
     /* ---- camera ---- */
     function frame(step, ms) {
@@ -338,8 +325,8 @@
         if (j === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
         b.parentNode.classList.toggle('is-done', j < i);
       });
-      steps.style.setProperty('--gvv-progress', String(i / (STEPS.length - 1)));
-      card.innerHTML = '<span class="gvv-eyebrow">Step ' + (i + 1) + ' of ' + STEPS.length + '</span>' +
+      steps.style.setProperty('--gvv-progress', String(i / Math.max(STEPS.length - 1, 1)));
+      card.innerHTML = (STEPS.length > 1 ? '<span class="gvv-eyebrow">Step ' + (i + 1) + ' of ' + STEPS.length + '</span>' : '') +
         '<strong class="gvv-title">' + s.title + '</strong><span class="gvv-text">' + s.text + '</span>';
       legend.innerHTML = '';
       s.legend.forEach(function (k) {
@@ -348,43 +335,18 @@
       });
     }
 
-    /* ---- step 1 -> 2: the camera flies onto GvpC (1.2 s) while GvpA fades to see-through, then the job colours fade in
-       over the sequence colour. Going back just switches. ---- */
-    var FLY = 1200, FADE_A = 900, FADE_C = 800;
     async function go(i, first) {
       if (i === state.step) return state.busy;
-      var from = state.step, s = STEPS[i], token = ++state.token;
+      var s = STEPS[i];
       state.step = i;
       paintStep(i);
       if (!plugin) return state.busy;
-      host.classList.add('is-busy');
-      state.busy = (async function () {
-        var move = !first && i > from && !stillMotion();
-        Object.keys(built).forEach(function (n) {
-          var on = s.show.indexOf(n) >= 0;
-          if (on && !(move && n === 'func')) setVisible(n, true);
-          else if (!on && !(move && n === 'seq')) setVisible(n, false);    // seq stays under the fading colours
-          if (!move) setAlpha(n, on && s.alpha[n] != null ? s.alpha[n] : 1);
-        });
-        frame(s, first ? 0 : 1100);
-        if (!move) return;
-        setAlpha('func', 0);
-        setVisible('func', true);
-        var a0 = alphaOf('gvpa'), t0 = performance.now(), k;
-        do {
-          if (token !== state.token) return;
-          var t = performance.now() - t0;
-          setAlpha('gvpa', a0 + (s.alpha.gvpa - a0) * ease(Math.min(t / FADE_A, 1)));
-          setAlpha('func', ease(Math.min(Math.max(t - FADE_A, 0) / FADE_C, 1)));
-          plugin.canvas3d.requestDraw();
-          k = t < FADE_A + FADE_C;
-          if (k) await nextFrame();
-        } while (k);
-        setVisible('seq', false);
-      })().finally(function () {
-        if (state.step === i) host.classList.remove('is-busy');
+      Object.keys(built).forEach(function (n) {
+        var on = s.show.indexOf(n) >= 0;
+        setVisible(n, on);
+        setAlpha(n, on && s.alpha[n] != null ? s.alpha[n] : 1);
       });
-      return state.busy;
+      frame(s, first ? 0 : 1100);
     }
   }
 

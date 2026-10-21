@@ -1,10 +1,7 @@
 # GvpC repeat viewer: interactive Mol* figure
 
-Two steps, one model (four GvpA, chains A-D, and one 33-residue GvpC repeat, chain F):
-
-1. **Context.** The whole model, coloured by sequence: GvpA (all four copies) and GvpC.
-2. **GvpC residues.** The camera flies onto GvpC, GvpA fades to see-through, and the GvpC residues fade to the colour
-   of their job: anchor residues dark blue (pine), the other interface residues light blue (frost), all others orange.
+One structure (four GvpA, chains A-D, and one 33-residue GvpC repeat, chain F). The camera sits on GvpC, GvpA is see-through, and the GvpC
+residues are coloured by their job: anchor residues dark blue (pine), the other interface residues light blue (frost), surface residues orange.
 
 Residue numbers count inside the repeat (1-33); chain F is numbered 92-124 in the file (`OFFSET = 91`).
 
@@ -24,9 +21,9 @@ Residue numbers count inside the repeat (1-33); chain F is numbered 92-124 in th
 ## Change it
 - **Which residues are anchor / interface:** `ANCHOR` / `INTERFACE` at the top of `tools/prep_viewer.py`, then
   `python tools/prep_viewer.py`. The viewer paints by the B-factor column of chain F (2 anchor, 1 interface, 0 rest).
-- **Colours:** `--gc-*` at the top of `gvpc-viewer.css`. **Timing, how see-through GvpA gets:** `FLY`, `FADE_A`,
-  `FADE_C`, `GVPA_SEE_THROUGH` in `gvpc-viewer.js`. **Camera:** the `frames` in the prep script (`tilt(50°)` for step 1).
-- **Colour per chain instead of per sequence** (step 1): colour the four chains separately in dev mode
+- **Colours:** `--gc-*` at the top of `gvpc-viewer.css`. **How see-through GvpA gets:**
+  `GVPA_SEE_THROUGH` in `gvpc-viewer.js`. **Camera:** the `frames` in the prep script (the `gvpc` frame).
+- **Colour GvpA per chain:** colour the four chains separately in dev mode
   (Selection → colour by chain), or build one assembly per chain in `prep_viewer.py`.
 
 ## Put it on a page

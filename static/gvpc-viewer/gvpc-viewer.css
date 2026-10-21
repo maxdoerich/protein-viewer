@@ -1,17 +1,11 @@
 /* GvpC-repeat viewer: see gvpc-viewer.js.
    Layout, step buttons, card, legend and tools are the gas-vesicle viewer's (gv-viewer.css, loaded first);
-   this file says what the parts are painted in, and shortens the step rail to two. gvpc-viewer.js reads the colours
+   this file says what the parts are painted in. gvpc-viewer.js reads the colours
    back at start-up and hands them to Mol*. Retune a colour here, never in the script. Palette colours by name, tokens only. */
 .gc {
-  --gc-gvpa:   var(--gv-peach);       /* step 1: the four GvpA (see-through in step 2) */
-  --gc-gvpc:   var(--gv-cayenne);     /* step 1: the GvpC repeat, as GvpC is in the vesicle viewer */
-  --gc-anchor: var(--gv-pine);        /* step 2: anchor residues (teal / dark blue) */
-  --gc-site:   var(--gv-frost);       /* step 2: the other interface residues (light blue) */
-  --gc-rest:   var(--gv-tangerine);   /* step 2: all other residues (orange) */
+  --gc-gvpa:   var(--gv-peach);       /* the four GvpA (see-through) */
+  --gc-anchor: var(--gv-pine);        /* anchor residues (teal / dark blue) */
+  --gc-site:   var(--gv-frost);       /* the other interface residues (light blue) */
+  --gc-rest:   var(--gv-tangerine);   /* surface residues (orange) */
 }
 
-/* two steps, not the viewer's four: the rail runs between the centres of two columns */
-.gc .gvv-steps { grid-template-columns: repeat(2, 1fr); }
-.gc .gvv-steps::before { left: 25%; right: 25%; }
-.gc .gvv-steps::after { left: 25%; width: calc(50% * var(--gvv-progress)); }
-.gc .gvv-step-label { text-align: center; }
